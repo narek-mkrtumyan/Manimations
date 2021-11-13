@@ -2,7 +2,7 @@
 
 ## DONE
 ### CircleFromSpinningRadius
-    draw a circle with compass drawing tool (կարկին) effect
+draw a circle with compass drawing tool (կարկին) effect
 
 ## NEEDS TO BE DONE
 
