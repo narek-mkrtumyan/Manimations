@@ -11,6 +11,7 @@ see more about each functions in it's docstrings
 - Sheep starts going around that tree while keeping the rope in tension and eats the grass
 - After 1 round sheep left a brown trace (Circle)
 - Sheep and rope are removed from the scene
+
 ## NEEDS TO BE DONE
 
 ### Functions

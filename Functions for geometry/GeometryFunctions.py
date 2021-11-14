@@ -1,6 +1,8 @@
 from manim import *
 import numpy as np
 
+def distance_between_points(a, b):
+    return np.sqrt(sum((np.array(a)-np.array(b))**2))
 
 class GeometryFunctions(Scene):
 

@@ -47,3 +47,7 @@ class SheepCircle(Scene):
         CircleFromSpinningRadiusSheep(radius=radius, starting_point_angle=starting_point_angle, circle_color=DARK_BROWN)
         self.wait(0.5)
         
+
+# just cheking commit and push with vscode
+# one more line
+# one more extra line
