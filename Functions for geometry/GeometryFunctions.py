@@ -1,8 +1,44 @@
 from manim import *
 import numpy as np
 
-def distance_between_points(a, b):
-    return np.sqrt(sum((np.array(a)-np.array(b))**2))
+
+def LabelPoint(point, label, position=DL*0.5, font_size=25):
+    laebl_point = Text(label, font_size=font_size, color=point.get_color()).next_to(point.get_center(), position)
+    return laebl_point
+
+def DistanceBetweenCoordinates(a, b):
+    return np.sqrt(sum((np.array(a) - np.array(b))**2))
+
+def DistanceBetweenPoints(A, B):
+    return np.sqrt(sum((A.get_center() - B.get_center())**2))
+
+def SegmentLength(AB):
+    a, b = AB.get_start_and_end()
+    return np.sqrt(sum((np.array(a) - np.array(b))**2))
+
+def SegmentsEqualitySign_1(AB, sign_size=0.2, color=WHITE):
+    a, b = AB.get_start_and_end()
+    length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
+    sign = AB.copy()
+    sign = sign.scale(sign_size / length_AB)
+    sign = sign.set_color(color)
+    sign = sign.rotate(PI / 2)
+    return sign
+
+def SegmentsEqualitySign_2(AB, sign_size=0.2, color=WHITE):
+    a, b = AB.get_start_and_end()
+    length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
+    unit_vector = AB.get_unit_vector()
+    sign = AB.copy()
+    sign = sign.scale(sign_size / length_AB)
+    sign = sign.set_color(color)
+    sign = sign.rotate(PI / 2)
+    sign_1 = sign.copy().shift((unit_vector[0] * RIGHT + unit_vector[1] * UP) * 0.05)
+    sign_2 = sign.copy().shift((-unit_vector[0] * RIGHT - unit_vector[1] * UP) * 0.05)
+    sign = VGroup(sign_1, sign_2)
+
+    return sign
+
 
 class GeometryFunctions(Scene):
 
