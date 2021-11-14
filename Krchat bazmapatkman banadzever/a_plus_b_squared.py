@@ -72,7 +72,7 @@ class a_plus_b_squared(Scene):
         (square_a, rect_ver, rect_hor, square_b) = areas
 
 
-        self.add()
+        self.add(points, segments, areas)
 
 
 
