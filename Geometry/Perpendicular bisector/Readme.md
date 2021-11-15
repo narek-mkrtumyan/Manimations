@@ -12,13 +12,13 @@
 
 ### Functions
 - Create_ABC_MoveC_To_PB
-    Creates A B C points, CA and CB segments and calling move_C_to_PB_and_change_colors()
+    - Creates A B C points, CA and CB segments and calls move_C_to_PB_and_change_colors()
 - move_C_to_PB_and_change_colors
-    Moves point C the the PB (perpendicular bisector) of AB
+    - Moves point C the the PB (perpendicular bisector) of AB
 - Add_M_MC
- Puts the equality signs, creates AB, M, MC, colors ACM and BCM and shifts camera to right
+    - Puts the equality signs, creates AB, M, MC, colors ACM and BCM and shifts camera to right
 - move_C_down_and_up
- Moves point C along PB down and up
+    - Moves point C along PB down and up
 
 see more about each functions in it's docstrings
 
