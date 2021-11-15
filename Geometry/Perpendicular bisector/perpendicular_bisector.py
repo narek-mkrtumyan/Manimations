@@ -94,7 +94,7 @@ class PerpBisect(MovingCameraScene):
 
         self.wait(1)
 
-
+# //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         # SOLUTION
@@ -102,6 +102,7 @@ class PerpBisect(MovingCameraScene):
         fc = self.camera.frame_center
 
         solution = Tex()
+
 
 
         
