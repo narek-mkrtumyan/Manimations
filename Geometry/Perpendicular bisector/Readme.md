@@ -11,6 +11,8 @@
 - Էկրանը տեղափոխել աջ, լուծման համար տեղ բացվի
 
 ### Functions
+- Uses some functions from GeometryFunctions.py
+    - more about that functions in Functions for Geometry folder
 - Create_ABC_MoveC_To_PB
     - Creates A B C points
     - Creates CA and CB segments
