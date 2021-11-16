@@ -1,8 +1,6 @@
 from manim import *
-from manim.utils import tex_templates
 import numpy as np
 from Functions.GeometryFunctions.GeometryFunctions import *
-
 
 class PerpBisect(MovingCameraScene):
     def construct(self):
@@ -100,7 +98,8 @@ class PerpBisect(MovingCameraScene):
     # INIT
         fc = self.camera.frame_center
 
-        solution = Tex('$\\begin{cases} AC=BC \\\ AM=BM \\\ CM-ն ընդհանուր է \\end{cases}$', tex_template=tex_armenian).move_to(fc)
+        solution = Tex('$\\begin{cases} AC=BC \\\ AM=BM \\\ CM-ն ընդհանուր է \\end{cases}$',
+         tex_template=armenian_tex_template).move_to(fc)
 
 
 
@@ -109,7 +108,8 @@ class PerpBisect(MovingCameraScene):
 class test(Scene):
     def construct(self):
         
-        solution = Tex('Քանի որ', '$\\begin{cases} AC=BC \\\ AM=BM \\\ CM \\textrm{-ն ընդհանուր է} \\end{cases}$', tex_template=tex_armenian)
+        solution = Tex('Քանի որ', '$\\begin{cases} AC=BC \\\ AM=BM \\\ CM \\textrm{-ն ընդհանուր է} \\end{cases}$',
+         tex_template=armenian_tex_template)
 
         self.add(solution)
 

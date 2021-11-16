@@ -91,7 +91,7 @@ def SegmentsEqualitySign_2(AB, sign_size=0.2, color=WHITE):
     return sign
 
 
-class GeometryFunctions(Scene):
+class CircleFunctions(Scene):
 
     def CircleFromSpinningRadius(self, radius=1, center=[0, 0, 0], starting_point_angle=0, radius_color=WHITE, circle_color=GREEN, run_time=4):
         '''
