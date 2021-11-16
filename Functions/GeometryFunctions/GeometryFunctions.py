@@ -1,6 +1,8 @@
 from manim import *
 import numpy as np
 
+tex_armenian = TexTemplate()
+tex_armenian.add_to_preamble(r"\usepackage{armtex}")
 
 def LabelPoint(point, label, position=DL*0.5, font_size=25):
     laebl_point = Text(label, font_size=font_size, color=point.get_color()).next_to(point.get_center(), position)

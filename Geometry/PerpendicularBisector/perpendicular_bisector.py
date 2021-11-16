@@ -1,4 +1,5 @@
 from manim import *
+from manim.utils import tex_templates
 import numpy as np
 from GeometryFunctions import *
 
@@ -7,8 +8,8 @@ class PerpBisect(MovingCameraScene):
     def construct(self):
 
         # self.camera.frame.save_state()
-        
-        # Points A and B, segment AB and midpoint M
+#   INIT Points, Lines, equality_signs     
+    # Points A and B, segment AB and midpoint M
         a = np.array([-1.5, -1, 0])
         b = np.array([1.5, -1, 0])
         A = Dot(a)
@@ -19,26 +20,26 @@ class PerpBisect(MovingCameraScene):
         M = Dot(AB.get_midpoint())
         label_M = LabelPoint(M, 'M', DOWN*0.75)
 
-        # Point C with coordinates as ValueTrackers
+    # Point C with coordinates as ValueTrackers
         c_x = ValueTracker(-3)
         c_y = ValueTracker(1)
         C = always_redraw(lambda: Dot([c_x.get_value(), c_y.get_value(), 0]))
         label_C = always_redraw(lambda: LabelPoint(C, 'C', UP*0.75))
 
-        # Lines CA CB CM with color using ValueTracker
+    # Lines CA CB CM with color using ValueTracker
         color_frac = ValueTracker(0)
         CA = always_redraw(lambda: Line(C.get_center(), A,
             color=rgb_to_hex(hex_to_rgb(RED)*(1-color_frac.get_value()) + hex_to_rgb(ORANGE)*color_frac.get_value())))
         CB = always_redraw(lambda: Line(C.get_center(), B,
             color=rgb_to_hex(hex_to_rgb(GREEN)*(1-color_frac.get_value()) + hex_to_rgb(ORANGE)*color_frac.get_value())))
 
-        # Equality signs for CA and CB with 2 small lines
+    # Equality signs for CA and CB with 2 small lines
         equality_sign_AM = SegmentsEqualitySign_2(Line(A, M))
         equality_sign_BM = SegmentsEqualitySign_2(Line(B, M))
 
 
-
-        # DRAWING ANIMATION BLOCKS
+  
+# ANIMATION BLOCK FUNCTIONS
 
         def move_C_to_PB_and_change_colors(run_time):
             # Function for animationg moving C to the Perpendicular bisector and changing colos of CA and CB
@@ -76,12 +77,12 @@ class PerpBisect(MovingCameraScene):
             self.play(self.camera.frame.animate.shift(3*RIGHT))
 
 
-        # ANIMATIONS FOR DRAWING
+# ANIMATIONS FOR DRAWING
+    # Create_ABC_MoveC_To_PB
         self.wait(0.5)
-
         Create_ABC_MoveC_To_PB(moving_run_time=5)
-        
-        # NOT ANIMATION: init new mobjects dependent on ValueTracker value
+
+    # NOT ANIMATION: init new mobjects dependent on ValueTracker value
         # Equality signs for CA and CB with 1 small line and segment CM
         equality_sign_CA = always_redraw(lambda: SegmentsEqualitySign_1(CA))
         equality_sign_CB = always_redraw(lambda: SegmentsEqualitySign_1(CB))
@@ -90,18 +91,16 @@ class PerpBisect(MovingCameraScene):
         ACM = Polygon(A.get_center(), C.get_center(), M.get_center(), fill_opacity=0.3).set_fill(ORANGE).set_stroke(width=0)
         BCM = Polygon(B.get_center(), C.get_center(), M.get_center(), fill_opacity=0.3).set_fill(GREEN).set_stroke(width=0)
 
+    # Add_M_MC
         Add_M_MC()
-
         self.wait(1)
 
-# //////////////////////////////////////////////////////////////////////////////////////////////////
+# SOLUTION
 
-
-        # SOLUTION
-
+    # INIT
         fc = self.camera.frame_center
 
-        solution = Tex()
+        solution = Tex('$\\begin{cases} AC=BC \\\ AM=BM \\\ CM-ն ընդհանուր է \\end{cases}$', tex_template=tex_armenian).move_to(fc)
 
 
 
@@ -109,19 +108,8 @@ class PerpBisect(MovingCameraScene):
 
 class test(Scene):
     def construct(self):
-        a = np.array([-1.5, -1, 0])
-        b = np.array([1.5, -1, 0])
-        c = np.array([-3, 1, 0])
-        A = Dot(a)
-        B = Dot(b)
-        C = Dot(c)
-        AB = Line(a, b)
-        CA = Line(c, a)
-        CB = Line(c, b)
+        
+        solution = Tex('Քանի որ', '$\\begin{cases} AC=BC \\\ AM=BM \\\ CM \\textrm{-ն ընդհանուր է} \\end{cases}$', tex_template=tex_armenian)
 
-        M = Dot((a+b) / 2)
-
-        equality_CA = SegmentsEqualitySign_2(CA)
-
-        self.add(CA, equality_CA)
+        self.add(solution)
 

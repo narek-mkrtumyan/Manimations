@@ -1,6 +1,8 @@
 from manim import *
 import numpy as np
 
+tex_armenian = TexTemplate()
+tex_armenian.add_to_preamble(r"\usepackage{armtex}")
 
 def LabelPoint(point, label, position=DL*0.5, font_size=25):
     laebl_point = Text(label, font_size=font_size, color=point.get_color()).next_to(point.get_center(), position)
@@ -19,11 +21,10 @@ def SegmentLength(AB):
 def SegmentsEqualitySign_1(AB, sign_size=0.2, color=WHITE):
     a, b = AB.get_start_and_end()
     length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
-    # sign = AB.copy()
-    # sign = sign.scale(sign_size / length_AB)
-    # sign = sign.set_color(color)
-    # sign = sign.rotate(PI / 2)
-    sign = AB.copy().scale(sign_size / length_AB).set_color(color).rotate(PI / 2)
+    sign = AB.copy()
+    sign = sign.scale(sign_size / length_AB)
+    sign = sign.set_color(color)
+    sign = sign.rotate(PI / 2)
     return sign
 
 def SegmentsEqualitySign_2(AB, sign_size=0.2, color=WHITE):
