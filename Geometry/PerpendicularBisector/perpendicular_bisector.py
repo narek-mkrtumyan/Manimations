@@ -1,5 +1,7 @@
 from manim import *
 import numpy as np
+import sys
+sys.path.append("../../")
 from Functions.GeometryFunctions.GeometryFunctions import *
 
 class PerpBisect(MovingCameraScene):
