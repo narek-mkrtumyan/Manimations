@@ -16,7 +16,7 @@ class PerpBisect(MovingCameraScene):
         B = Dot(b)
         label_A = LabelPoint(A, 'A')
         label_B = LabelPoint(B, 'B', DR*0.5)
-        AB = Line(A, B)
+        AB = Line(A.get_center(), B.get_center())
         M = Dot(AB.get_midpoint())
         label_M = LabelPoint(M, 'M', DOWN*0.75)
 
@@ -28,9 +28,9 @@ class PerpBisect(MovingCameraScene):
 
     # Lines CA CB CM with color using ValueTracker
         color_frac = ValueTracker(0)
-        CA = always_redraw(lambda: Line(C.get_center(), A,
+        CA = always_redraw(lambda: Line(C.get_center(), A.get_center(),
             color=rgb_to_hex(hex_to_rgb(RED)*(1-color_frac.get_value()) + hex_to_rgb(ORANGE)*color_frac.get_value())))
-        CB = always_redraw(lambda: Line(C.get_center(), B,
+        CB = always_redraw(lambda: Line(C.get_center(), B.get_center(),
             color=rgb_to_hex(hex_to_rgb(GREEN)*(1-color_frac.get_value()) + hex_to_rgb(ORANGE)*color_frac.get_value())))
 
     # Equality signs for CA and CB with 2 small lines
