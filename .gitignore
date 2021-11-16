@@ -1,4 +1,8 @@
-__pycache__/
-!480p15/
-media/
+!/.gitignore
+
 random\ tests/
+
+__pycache__/
+
+media/
+!/480p15/
