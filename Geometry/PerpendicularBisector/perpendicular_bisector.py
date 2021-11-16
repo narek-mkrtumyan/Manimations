@@ -2,6 +2,7 @@ from manim import *
 import numpy as np
 import sys
 sys.path.append("../../")
+sys.path.append("../../Functions/GeometryFunctions/GeometryFunctions.py")
 from Functions.GeometryFunctions.GeometryFunctions import *
 
 class PerpBisect(MovingCameraScene):
@@ -39,7 +40,7 @@ class PerpBisect(MovingCameraScene):
 
 
   
-# ANIMATION BLOCK FUNCTIONS
+# FUNCTIONS FOR ANIMATIONS BLOCKS
 
         def move_C_to_PB_and_change_colors(run_time):
             # Function for animationg moving C to the Perpendicular bisector and changing colos of CA and CB
@@ -101,7 +102,8 @@ class PerpBisect(MovingCameraScene):
         fc = self.camera.frame_center
 
         solution = Tex('$\\begin{cases} AC=BC \\\ AM=BM \\\ CM-ն ընդհանուր է \\end{cases}$',
-         tex_template=armenian_tex_template).move_to(fc)
+            tex_template=armenian_tex_template).move_to(fc)
+         
 
 
 
@@ -110,8 +112,22 @@ class PerpBisect(MovingCameraScene):
 class test(Scene):
     def construct(self):
         
-        solution = Tex('Քանի որ', '$\\begin{cases} AC=BC \\\ AM=BM \\\ CM \\textrm{-ն ընդհանուր է} \\end{cases}$',
-         tex_template=armenian_tex_template)
+        solution = Tex('$\\begin{cases} AC=BC \\\ AM=BM \\\ CM \\textrm{-ն ընդհանուր է} \\end{cases}$',
+            tex_template=armenian_tex_template, font_size=30)
+        
+        cover_rect_1 = Rectangle(
+            height=0.4, width=2.8, color=BLACK, fill_opacity=1).move_to(solution.get_center()).shift(0.4*UP, 0.2*RIGHT)
+        cover_rect_2 = Rectangle(
+            height=0.4, width=2.8, color=BLACK, fill_opacity=1).move_to(solution.get_center()).shift(0.2*RIGHT)
+        cover_rect_3 = Rectangle(
+            height=0.4, width=2.8, color=BLACK, fill_opacity=1).move_to(solution.get_center()).shift(0.4*DOWN, 0.2*RIGHT)
 
-        self.add(solution)
+        self.wait(0.5)
+        self.add(solution, cover_rect_1, cover_rect_2, cover_rect_3)
+        self.play(FadeOut(cover_rect_1))
+        self.wait(0.5)
+        self.play(FadeOut(cover_rect_2))
+        self.wait(0.5)
+        self.play(FadeOut(cover_rect_3))
+        self.wait(0.5)
 

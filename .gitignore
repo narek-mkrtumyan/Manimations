@@ -4,5 +4,11 @@ random\ tests/
 
 __pycache__/
 
-media/
-!/480p15/
+images/
+Tex/
+texts/
+partial_movie_files/
+test/
+1080p60/
+2160p60/
+720p30/
