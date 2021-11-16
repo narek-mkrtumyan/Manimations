@@ -1,24 +1,64 @@
 from manim import *
 import numpy as np
 
-tex_armenian = TexTemplate()
-tex_armenian.add_to_preamble(r"\usepackage{armtex}")
+armenian_tex_template = TexTemplate()
+armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")
 
 def LabelPoint(point, label, position=DL*0.5, font_size=25):
-    laebl_point = Text(label, font_size=font_size, color=point.get_color()).next_to(point.get_center(), position)
+    '''
+    Adds label to a point
+
+    Arguments - point(Dot), label(string)
+
+    Optional Arguments - Position relative to the point=DL, font_size=25
+
+    Returns - the Text mobject of label
+    '''
+    laebl_point = Text(label, font_size=font_size, color=point.get_color())
+    laebl_point.next_to(point.get_center(), position)
     return laebl_point
 
 def DistanceBetweenCoordinates(a, b):
+    '''
+    Calculates distance betwwen 2 coordinates
+
+    Arguments - a([x_1, y_1, z_1]), b([x_2, y_2, z_2])
+
+    Returns - Distance (float)
+    '''
     return np.sqrt(sum((np.array(a) - np.array(b))**2))
 
 def DistanceBetweenPoints(A, B):
-    return np.sqrt(sum((A.get_center() - B.get_center())**2))
+    '''
+    Calculates distance betwwen 2 Dots
+
+    Arguments - A(Dot_1), B(Dot_2)
+
+    Returns - Distance (float)
+    '''
+    return DistanceBetweenCoordinates(A.get_center(), B.get_center())
 
 def SegmentLength(AB):
+    '''
+    Calculates the Length of a Segmnet
+
+    Arguments - AB(Line)
+
+    Returns - Length(float)
+    '''
     a, b = AB.get_start_and_end()
-    return np.sqrt(sum((np.array(a) - np.array(b))**2))
+    return DistanceBetweenCoordinates(a, b)
 
 def SegmentsEqualitySign_1(AB, sign_size=0.2, color=WHITE):
+    '''
+    Equality sign with 1 small line for a segment
+
+    Arguments - AB(Line)
+
+    Optional Arguments - sign_size=0.2, Color=WHITE
+
+    Returns - sign Mobject
+    '''
     a, b = AB.get_start_and_end()
     length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
     sign = AB.copy()
@@ -28,6 +68,15 @@ def SegmentsEqualitySign_1(AB, sign_size=0.2, color=WHITE):
     return sign
 
 def SegmentsEqualitySign_2(AB, sign_size=0.2, color=WHITE):
+    '''
+    Equality sign with 2 small lines for a segment
+
+    Arguments - AB(Line)
+
+    Optional Arguments - sign_size=0.2, Color=WHITE
+
+    Returns - sign Mobject
+    '''
     a, b = AB.get_start_and_end()
     length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
     unit_vector = AB.get_unit_vector()

@@ -1,8 +1,6 @@
 from manim import *
 import numpy as np
-import sys
-
-sys.path.append('../../Functions/GeometryFunctions/')
+from Functions.GeometryFunctions.GeometryFunctions import *
 
 
 class SheepCircle(Scene):

@@ -1,7 +1,7 @@
 from manim import *
 from manim.utils import tex_templates
 import numpy as np
-from GeometryFunctions import *
+from Functions.GeometryFunctions.GeometryFunctions import *
 
 
 class PerpBisect(MovingCameraScene):
