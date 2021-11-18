@@ -1,5 +1,20 @@
 !/.gitignore
 
+**/test.mp4
+Geometry/PerpendicularBisector/media/videos/perpendicular_bisector/480p15/test.mp4
+# test.mp4
+# *test.mp4
+# **test.mp4
+# /test.mp4
+# */test.mp4
+
+# test
+# *test
+# **test
+# /test
+# */test
+# **/test
+
 random\ tests/
 
 __pycache__/
