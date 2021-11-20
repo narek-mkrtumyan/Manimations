@@ -45,7 +45,7 @@ def DistanceBetweenPoints(A, B):
 
 def SegmentLength(AB):
     '''
-    Calculates the Length of a Segmnet
+    Calculates the Length of a Segment
 
     Arguments - AB(Line)
 
@@ -55,9 +55,9 @@ def SegmentLength(AB):
     return DistanceBetweenCoordinates(a, b)
 
 
-def SegmentsEqualitySign_1(AB, sign_size=0.2, color=WHITE):
+def SegmentEqualitySign_1(AB, sign_size=0.2, color=WHITE):
     '''
-    Equality sign with 1 small line for a segment
+    Equality sign with 1 small line in the middle of the segment
 
     Arguments - AB(Line)
 
@@ -74,7 +74,7 @@ def SegmentsEqualitySign_1(AB, sign_size=0.2, color=WHITE):
     return sign
 
 
-def SegmentsEqualitySign_2(AB, sign_size=0.2, color=WHITE):
+def SegmentEqualitySign_2(AB, sign_size=0.2, color=WHITE):
     '''
     Equality sign with 2 small lines for a segment
 
@@ -98,11 +98,48 @@ def SegmentsEqualitySign_2(AB, sign_size=0.2, color=WHITE):
     return sign
 
 
-def mathtex_segments_equality(labels, font_size=30, color=WHITE):
+def FilledAngle(line_1, line_2, radius=0.5, quadrant=(1, 1), other_angle=False, stroke_width=0, stroke_color=WHITE, 
+    fill_color=WHITE, fill_opacity=1):
+    '''
+    Returns filled angle
+    '''
+    angle = Angle(line_1, line_2, radius=radius, quadrant=quadrant, other_angle=other_angle)
+
+    intersection_point = line_intersection(line_1.get_start_and_end(), line_2.get_start_and_end())
+
+    angle_points = angle.points
+    side_1_points = Line(intersection_point, angle_points[0]).points
+    side_2_points = Line(angle_points[-1], intersection_point).points
+
+    points = np.concatenate([side_1_points, angle_points, side_2_points])
+
+    filled_angle = VMobject().set_points_as_corners(points)
+    filled_angle.set_stroke(color=stroke_color, width=stroke_width).set_fill(color=fill_color, opacity=fill_opacity)
+
+    return filled_angle
+
+
+def Angle2(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, stroke_width=4, color=WHITE):
+    '''
+    Group of 2 circular arcs representing an angle of two lines
+
+    Arguments - same as Angle() # Expect of **kwargs
+
+    Returns - Vgroup()
+    '''
+    a_1 = Angle(line_1, line_2, radius=radius, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
+    a_2 = Angle(line_1, line_2, radius=radius + 0.1, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
+
+    return Group(a_1, a_2)
+
+
+def MathtexSegmentsEquality(labels, font_size=30, color=WHITE):
     '''
     Writes 2 segments equality (AB=XY) in MathTex as a Group of 5 mobjects
 
     Argument - labels(list of 4 labels)
+
+    Returns - MathTex('AB=CD')
     '''
     label_1_1, label_1_2, label_2_1, label_2_2 = labels
 
@@ -112,18 +149,285 @@ def mathtex_segments_equality(labels, font_size=30, color=WHITE):
     return segments_equality
 
 
-def mathtex_common_segment(labels, font_size=30, color=WHITE):
+def MathtexCommonSegment(labels, font_size=30, color=WHITE):
     '''
     Writes segment is common (AB-ն ընդհանուր է) in MathTex as a Group of 3 Mobjects
 
     Arguments - labels (list of 2 labels)
+
+    Returns - Mathtex('AB-ն ընդհանուր է') # AB is common
     '''
     label_1, label_2 = labels
     
-    segment_common = MathTex(r'' + label_1, r'' + label_2, r'\textrm{-ն ընդհանուր է}', 
+    segment_common = MathTex(r'' + label_1, r'' + label_2, r' \textrm{-ն ընդհանուր է}', 
         tex_template=armenian_tex_template, font_size=font_size, color=color)
     
     return segment_common
+
+
+def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual=False):
+    '''
+    Arranges statments under each other, puts Brace from the left, puts '=>' and conclusion
+    
+    Arguments - statments (some sort of group of statements), conclusion
+    
+    Optional arguments - individual (if True, returning Group will consists from submobjects of statments submobjects
+    (usefull for animating triangles equality))
+
+    Returns - Group of statements, brace and conclusion - ' { statements => conclusion '
+    '''
+    statements = VGroup(*statements).arrange(DOWN, aligned_edge=LEFT)
+
+    brace = Brace(statements, direction=[-1, 0, 0])
+
+    rightarrow = MathTex(r'' + '\Rightarrow', font_size=font_size, color=conclusion.get_color())
+    rightarrow.next_to(statements, RIGHT)
+
+    conclusion.next_to(rightarrow, RIGHT)
+
+    conclude_from_system = Group()
+
+    if individual == True:
+        for i in range(len(statements)):
+            conclude_from_system.add(*statements[i])
+
+        conclude_from_system.add(brace, rightarrow, *conclusion)
+    
+    else:
+        conclude_from_system.add(*statements, brace, rightarrow, conclusion)
+    
+    return conclude_from_system
+
+
+def MathTexTrianglesEquality(abc, xyz, color=WHITE, font_size=30):
+    '''
+    Gives MathTex Mobject of ('ABC=XYZ')
+
+    Arguments - abc('ABC'), xyz('XYZ')
+
+    Returns - MathTex('ABC=XYZ)
+    '''
+    return MathTex(r'\triangle ' + abc + r'\ =\ ' + r'\triangle ' + xyz, font_size=font_size, color=color)
+
+
+def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transform_segment=True, run_time=1):
+            
+    AB = segment_dots_labels[0].copy()
+    A, B = segment_dots_labels[1].copy(), segment_dots_labels[2].copy()
+    label_A, label_B = segment_dots_labels[3].copy(), segment_dots_labels[4].copy()
+    
+    AB_transformed = Dot((statement[0].get_center() + statement[1].get_center())/2,
+        color=AB.get_color(), radius=0)
+    
+    transformation_labels = (
+        ReplacementTransform(label_A, statement[0], rate_func=linear, run_time=run_time),
+        ReplacementTransform(label_B, statement[1], rate_func=linear, run_time=run_time))
+
+    transformation_segment = Transform(Group(AB, A, B), AB_transformed, run_time=run_time, rate_func=linear)
+
+    if transform_segment == False:
+        animation = [*transformation_labels]
+    else:
+        animation = [*transformation_labels, transformation_segment]
+
+    return animation
+
+
+def TransformSegmentsLabelsIntoEquality(segment_dots_labels_1, segment_dots_labels_2, equality, transform_segments=True, run_time=1.5):         
+
+    transformtion_AB = TransformSegmentLabelsIntoStatement(segment_dots_labels_1, equality[0:2],
+        transform_segment=transform_segments, run_time=run_time)
+
+    write_equal = Write(equality[2])
+    
+    transformtion_XY = TransformSegmentLabelsIntoStatement(segment_dots_labels_2, equality[3:5], 
+        transform_segment=transform_segments, run_time=run_time)
+
+    animation = [*transformtion_AB, write_equal, *transformtion_XY]
+
+    return animation
+
+
+def TransformCommonSegmentLabelsIntoStatement(segment_dots_labels, statement, transform_segment=True, run_time=1.5):
+
+    transformation_AB = TransformSegmentLabelsIntoStatement(segment_dots_labels, statement[0:2], 
+        transform_segment=transform_segment, run_time=run_time)
+    
+    write_common = Write(statement[2])
+
+    animation = [*transformation_AB, write_common]
+
+    return animation
+
+
+# ANIMATIONS
+
+
+def PlaySegmentWiggling(self, segment_dots_labels, wiggle_endpoints=True, color=0, scale_factor=1.2, run_time=1.3):
+        '''
+        Whiggles segment AB togeter with A and B (optional), and scales in and out Labels of A and B
+        
+        Arguments - self, AB, A, B, label_A, label_B
+
+        Optional - wiggle_endpoints(Ture or False), color(default is the same as AB), scale_factor(label), run_time
+        '''
+        AB, A, B, label_A, label_B = segment_dots_labels
+        a, b = A.copy(), B.copy()
+
+        if color == 0:
+            ab = AB.copy()
+        else:
+            ab = AB.copy().set_color(color=color)
+        
+        if wiggle_endpoints == True:
+
+            self.play(Wiggle(Group(ab, a, b), rate_func=linear),
+                    label_A.animate(rate_func=there_and_back).scale(scale_factor), 
+                        label_B.animate(rate_func=there_and_back).scale(scale_factor),
+                            run_time=run_time)
+        
+        else:
+
+            self.play(Wiggle(ab, rate_func=linear),
+                    label_A.animate(rate_func=there_and_back).scale(scale_factor), 
+                        label_B.animate(rate_func=there_and_back).scale(scale_factor),
+                            run_time=run_time)
+        
+        self.remove(a, b, ab)
+
+
+
+def PlayTwoSegmentsWiggling(self, segment_dots_labels_1, segment_dots_labels_2, wiggle_endpoints=True, simultaneously=False, color=0,
+        run_time=1.3):
+        '''
+        SegmentWiggling for AB and XY
+        
+        Arguments - self, AB, XY, (A, B, X, Y), (label_A, label_B, label_X, label_Y)
+
+        Optional - wiggle_endpoints, simultaneously(Ture or False), color(same as AB), scale_factor(label), 
+        run_time (for each wiggling)
+        '''
+        scale_factor = 1.2
+
+        A, B = segment_dots_labels_1[1].copy(), segment_dots_labels_1[2].copy()
+        X, Y = segment_dots_labels_2[1].copy(), segment_dots_labels_2[2].copy()
+
+        label_A, label_B = segment_dots_labels_1[3], segment_dots_labels_1[4]
+        label_X, label_Y = segment_dots_labels_2[3], segment_dots_labels_2[4]
+
+        if color == 0:
+            ab, xy = segment_dots_labels_1[0].copy(), segment_dots_labels_2[0].copy()
+        else:
+            ab, xy = segment_dots_labels_1[0].copy().set_color(color=color), segment_dots_labels_2[0].copy().set_color(color=color)
+
+
+        if simultaneously == False:
+        
+            PlaySegmentWiggling(self, segment_dots_labels_1, wiggle_endpoints=wiggle_endpoints, 
+                color=color, scale_factor=scale_factor, run_time=run_time)
+            self.wait(0.2)
+            PlaySegmentWiggling(self, segment_dots_labels_2, wiggle_endpoints=wiggle_endpoints, 
+                color=color, scale_factor=scale_factor, run_time=run_time)
+        
+        else:
+            
+            if wiggle_endpoints == True:
+                
+                self.play(Wiggle(Group(ab, A, B), rate_func=linear),
+                    label_A.animate(rate_func=there_and_back).scale(scale_factor), 
+                        label_B.animate(rate_func=there_and_back).scale(scale_factor),
+                    Wiggle(Group(xy, X, Y), rate_func=linear),
+                        label_X.animate(rate_func=there_and_back).scale(scale_factor), 
+                            label_Y.animate(rate_func=there_and_back).scale(scale_factor),
+                                        run_time=run_time)
+
+            else:
+
+                self.play(Wiggle(ab, rate_func=linear),
+                        label_A.animate(rate_func=there_and_back).scale(scale_factor), 
+                            label_B.animate(rate_func=there_and_back).scale(scale_factor),
+                        Wiggle(xy, rate_func=linear),
+                            label_X.animate(rate_func=there_and_back).scale(scale_factor), 
+                                label_Y.animate(rate_func=there_and_back).scale(scale_factor),
+                                            run_time=run_time)
+            
+            self.remove(A, B, ab, X, Y, xy)
+
+
+
+def PlayTransformSegmentsLabelsIntoEquality(self, animations, transform_segments=True, transform_simultaneously=False):
+
+    if transform_simultaneously == False: 
+
+        if transform_segments == True:
+            self.play(animations[0], animations[1], animations[2])
+            self.play(animations[3])
+            self.play(animations[4], animations[5], animations[6])
+
+        else:
+            self.play(animations[0], animations[1])
+            self.play(animations[2])
+            self.play(animations[3], animations[4])
+    
+    else:
+
+        self.play(animations)
+
+
+
+def PlayTransformCommonSegmentLabelsIntoStatement(self, animations, transform_segment=True):
+
+    if transform_segment == True:
+        self.play(animations[0], animations[1], animations[2])
+        self.play(animations[3])
+    
+    else:
+        self.play(animations[0], animations[1])
+        self.play(animations[2])
+
+
+
+def PlayTwoSegmentsEqualityWiggling(self, pair, equality, run_time=2.5, color=WHITE, wiggle_simultaneously=True, 
+    wiggle_endpoints=True, transform_simultaneously=False, transform_segments=True):
+    '''
+    Wiggles 2 segments and transforms into AB=CD
+
+    Arguments - pair((AB, A, B, label_A, label_B), (CD, C, D, label_C, label_D)) input for TwoSegmentsWiggling;
+    equality(MathTex from 5 Mobjects  AB=CD)
+    '''
+    
+    PlayTwoSegmentsWiggling(self, *pair, color=color,
+            simultaneously=wiggle_simultaneously, wiggle_endpoints=wiggle_endpoints, run_time=run_time/2)
+    
+    PlayTransformSegmentsLabelsIntoEquality(self, 
+        TransformSegmentsLabelsIntoEquality(
+            pair[0], pair[1], equality=equality,
+            transform_segments=transform_segments, run_time=run_time/2),
+            transform_simultaneously=transform_simultaneously, transform_segments=transform_segments)
+
+
+
+def PlaySegmentCommonWiggling(self, segment_dots_labels, statement, run_time=2.5, color=WHITE, wiggle_endpoints=True, transform_segment=True):
+
+    PlaySegmentWiggling(self, segment_dots_labels, wiggle_endpoints=wiggle_endpoints, color=color, run_time=run_time/2)
+
+    PlayTransformCommonSegmentLabelsIntoStatement(self, 
+        TransformCommonSegmentLabelsIntoStatement(
+            segment_dots_labels, statement=statement, transform_segment=transform_segment, run_time=run_time/2))
+
+
+
+
+def PlayBraceConclude(self, conclude_from_system):
+    '''
+    From ConcludeFromStatementsSystem animates drawing Brace, rightarrow and conclusion
+
+    Parameters - conclude_from_system(last three elements must be brace, rightarrow and conclusion respectively)
+    '''
+    self.play(Write(conclude_from_system[-3]))
+    self.play(Write(conclude_from_system[-2]))
+    self.play(Write(conclude_from_system[-1]))
+
 
 
 
@@ -167,169 +471,21 @@ class CircleFunctions(Scene):
 
         return circle
 
-    
-
-class SegmentFunctions(Scene):
-
-
-    def SegmentWiggling(self, AB, A, B, label_A, label_B, wiggle_endpoints=True, color=0, scale_factor=1.2, run_time=1.3):
-        '''
-        Whiggles segment AB togeter with A and B (optional), and scales in and out Labels of A and B
-        
-        Arguments - self, AB, A, B, label_A, label_B
-
-        Optional - wiggle_endpoints(Ture or False), color(default is the same as AB), scale_factor(label), run_time
-        '''
-        a, b = A.copy(), B.copy()
-
-        if color == 0:
-            ab = AB.copy()
-        else:
-            ab = AB.copy().set_color(color=color)
-        
-        if wiggle_endpoints == True:
-
-            self.play(Wiggle(Group(ab, a, b), rate_func=linear),
-                    label_A.animate(rate_func=there_and_back).scale(scale_factor), 
-                        label_B.animate(rate_func=there_and_back).scale(scale_factor),
-                            run_time=run_time)
-        
-        else:
-
-            self.play(Wiggle(ab, rate_func=linear),
-                    label_A.animate(rate_func=there_and_back).scale(scale_factor), 
-                        label_B.animate(rate_func=there_and_back).scale(scale_factor),
-                            run_time=run_time)
-        
-        self.remove(a, b, ab)
 
 
 
-    def TwoSegmentsWiggling(self, AB, CD, endpoints, labels, wiggle_endpoints=True, simultaneously=False, color=0,
-        run_time=1.3):
-        '''
-        SegmentWiggling for AB and CD
-        
-        Arguments - self, AB, CD, (A, B, C, D), (label_A, label_B, label_C, label_D)
-
-        Optional - wiggle_endpoints, simultaneously(Ture or False), color(same as AB), scale_factor(label), run_time (for each wiggling)
-        '''
-        scale_factor = 1.2
-        A, B, C, D = Group(*endpoints).copy()
-        label_A, label_B, label_C, label_D = labels
-
-        if color == 0:
-            ab, cd = AB.copy(), CD.copy()
-        else:
-            ab, cd = AB.copy().set_color(color=color), CD.copy().set_color(color=color)
+class TrianglesCongruence(Scene):
 
 
-        if simultaneously == False:
-        
-            SegmentFunctions.SegmentWiggling(self, AB, A, B, label_A, label_B, wiggle_endpoints=wiggle_endpoints, 
-                color=color, scale_factor=scale_factor, run_time=run_time)
-            self.wait(0.2)
-            SegmentFunctions.SegmentWiggling(self, CD, C, D, label_C, label_D, wiggle_endpoints=wiggle_endpoints, 
-                color=color, scale_factor=scale_factor, run_time=run_time)
-        
-        else:
-            
-            if wiggle_endpoints == True:
-                
-                copy_A = A.copy()
-                copy_B = B.copy()
-                copy_C = C.copy()
-                copy_D = D.copy()
-                self.play(Wiggle(Group(ab, copy_A, copy_B), rate_func=linear),
-                    label_A.animate(rate_func=there_and_back).scale(scale_factor), 
-                        label_B.animate(rate_func=there_and_back).scale(scale_factor),
-                    Wiggle(Group(cd, copy_C, copy_D), rate_func=linear),
-                        label_C.animate(rate_func=there_and_back).scale(scale_factor), 
-                            label_D.animate(rate_func=there_and_back).scale(scale_factor),
-                                        run_time=run_time)
-
-            else:
-
-                self.play(Wiggle(ab, rate_func=linear),
-                        label_A.animate(rate_func=there_and_back).scale(scale_factor), 
-                            label_B.animate(rate_func=there_and_back).scale(scale_factor),
-                        Wiggle(cd, rate_func=linear),
-                            label_C.animate(rate_func=there_and_back).scale(scale_factor), 
-                                label_D.animate(rate_func=there_and_back).scale(scale_factor),
-                                            run_time=run_time)
-            
-            self.remove(A, B, ab, C, D, cd)
-
-
-
-    def animate_segments_equality(self, pair, equality, run_time=2.5, color=WHITE, wiggle_simultaneously=True, 
-        wiggle_endpoints=True, transform_simultaneously=False):
-        '''
-        Wiggles 2 segments and transforms into AB=CD
-
-        Arguments - pair(AB, CD, (A, B, C, D), (label_A, label_B, label_C, label_D)) input for TwoSegmentsWiggling;
-        equality(MathTex from 5 Mobjects  AB=CD)
-        '''
-        
-        SegmentFunctions.TwoSegmentsWiggling(self, *pair, color=color,
-                simultaneously=wiggle_simultaneously, wiggle_endpoints=wiggle_endpoints, run_time=run_time/2)
-        
-        labels = pair[3]
-        label_S_1_1 = labels[0].copy()
-        label_S_1_2 = labels[1].copy()
-        label_S_2_1 = labels[2].copy()
-        label_S_2_2 = labels[3].copy()
-
-        if transform_simultaneously == False:
-            self.play(label_S_1_1.animate(rate_func=linear).move_to(equality[0].get_center()),
-                label_S_1_2.animate(rate_func=linear).move_to(equality[1].get_center()), run_time=run_time/4)
-            self.play(Write(equality[2]))
-            self.play(label_S_2_1.animate(rate_func=linear).move_to(equality[3].get_center()),
-                label_S_2_2.animate(rate_func=linear).move_to(equality[4].get_center()), run_time=run_time/4)
-        else:
-            self.play(label_S_1_1.animate(rate_func=linear).move_to(equality[0].get_center()),
-            label_S_1_2.animate(rate_func=linear).move_to(equality[1].get_center()),
-            Write(equality[2]),
-            label_S_2_1.animate(rate_func=linear).move_to(equality[3].get_center()),
-            label_S_2_2.animate(rate_func=linear).move_to(equality[4].get_center()), run_time=run_time/2)
-
-        self.remove(label_S_1_1, label_S_1_2, label_S_2_1, label_S_2_2)
-        self.add(*[equality[i] for i in range(5)])
-
-
-
-    def animate_segment_common(self, single, statment, run_time=2.5, wiggle_endpoints=True, color=WHITE):
-        '''
-        Wiggles a segments and transforms into - AB is common (AB-ն ընդհանուր է)
-
-        Arguments - single(AB, A, B, label_A, label_B)
-        Statment(AB-ն ընդհանուր է)
-        '''
-        SegmentFunctions.SegmentWiggling(self, *single, wiggle_endpoints=wiggle_endpoints, color=color, 
-            run_time=run_time/2)
-
-        copy_label_A = single[3].copy()
-        copy_label_B = single[4].copy()
-
-        self.play(
-            copy_label_A.animate(rate_func=linear).move_to(statment[0].get_center()), 
-            copy_label_B.animate(rate_func=linear).move_to(statment[1].get_center()), run_time=run_time/2)
-        self.play(Write(statment[2]))
-
-        self.remove(copy_label_A, copy_label_B)
-        self.add(*[statment[i] for i in range(3)])
-
-
-class TriangleFnctions(Scene):
-
-
-    def TriangleEquality3Sides(self, vertices_ABC, sides_ABC, mob_labels_ABC, labels_ABC, 
+    def SSS(self, vertices_ABC, sides_ABC, mob_labels_ABC, labels_ABC, 
         vertices_XYZ, sides_XYZ, mob_labels_XYZ, labels_XYZ, brace_tip=[0, 0, 0],
             common=0, wiggle_endpoints=[True, True, True], wiggle_simultaneously=[True, True, True],
                 transform_simultaneously=[False, False, False], colors=[0, 0, 0],
                     run_times=[2.5, 2.5, 2.5], wait_time=[1, 1, 1]):
             '''
-            Shows and writes equality of two triangles by their 3 sides
+            Shows and writes equality of two triangles by their 3 sides,
+            if there is a common side, that will be shown last,
+            others are animated in order
 
             Arguments - vertices_ABC(A, B, C), sides_ABC (AB, BC, AC(order matters)), mob_labels_ABC(mobjects, preferably from LabelPoint()), 
             labels_ABC('A', 'B', 'C'), same things for second triangle(XYZ), brace_tip(left middle point of system of equalities), 
@@ -338,6 +494,8 @@ class TriangleFnctions(Scene):
             wiggle_simultaneously(2 equal sides(list - True or False for each side)), 
             color(change color of the side while wiggling(list - 0 or color for each side)), 
             run_time(animations of sides(list)), wait_time(pause between animations of sides, or final brace(list))
+
+            Returns - Group of mobjects (same as ConcludeFromSystem)
             '''
         # Read points lables,    
             A, B, C = vertices_ABC
@@ -355,10 +513,10 @@ class TriangleFnctions(Scene):
             fs = label_A.font_size
 
         # pairs (equal sides)
-            ABXY = (AB, XY, (A, B, X, Y), (label_A, label_B, label_X, label_Y))
-            BCYZ = (BC, YZ, (B, C, Y, Z), (label_B, label_C, label_Y, label_Z))
-            CAZX = (CA, ZX, (C, A, Z, X), (label_C, label_A, label_Z, label_X))
-            pairs = [ABXY, BCYZ, CAZX]
+            pair_AB_XY = ((AB, A, B, label_A, label_B), (XY, X, Y, label_X, label_Y))
+            pair_BC_YZ = ((BC, B, C, label_B, label_C), (YZ, Y, Z, label_Y, label_Z))
+            pair_CA_ZX = ((CA, C, A, label_C, label_A), (ZX, Z, X, label_Z, label_X))
+            pairs = [pair_AB_XY, pair_BC_YZ, pair_CA_ZX]
 
         # labels pairs
             abxy_labels = (label_a, label_b, label_x, label_y)
@@ -379,12 +537,12 @@ class TriangleFnctions(Scene):
             labels_singles = [ab_labels, bc_labels, ca_labels]
 
         # MathTex equalities
-            ab_xy = mathtex_segments_equality(labels_pairs[0], font_size=fs)
-            bc_yz = mathtex_segments_equality(labels_pairs[1], font_size=fs)
-            ca_zx = mathtex_segments_equality(labels_pairs[2], font_size=fs)
-            ab_common = mathtex_common_segment(labels_singles[0], font_size=fs)
-            bc_common = mathtex_common_segment(labels_singles[1], font_size=fs)
-            ca_common = mathtex_common_segment(labels_singles[2], font_size=fs)
+            ab_xy = MathtexSegmentsEquality(labels_pairs[0], font_size=fs)
+            bc_yz = MathtexSegmentsEquality(labels_pairs[1], font_size=fs)
+            ca_zx = MathtexSegmentsEquality(labels_pairs[2], font_size=fs)
+            ab_common = MathtexCommonSegment(labels_singles[0], font_size=fs)
+            bc_common = MathtexCommonSegment(labels_singles[1], font_size=fs)
+            ca_common = MathtexCommonSegment(labels_singles[2], font_size=fs)
 
         # Equality system
             
@@ -412,66 +570,66 @@ class TriangleFnctions(Scene):
                 equalities = Group(ab_xy, bc_yz, ca_common)
                 sequence = [pairs[0], pairs[1], singles[2]]
             
-            equalities.arrange_in_grid(cols=1, col_alignments='l', buff=0.25)
+            triangle_equality = MathTexTrianglesEquality(abc, xyz, font_size=fs)
 
-            brace = Brace(equalities, direction=[-1, 0, 0])
-
-            conclude_equality = Group(MathTex(r'' + '\Rightarrow', font_size=fs).next_to(equalities, RIGHT, buff=0.2))
-            conclude_equality.add(
-                MathTex(r'\triangle ' + abc + r'\ =\ ' + r'\triangle ' + xyz, font_size=fs).next_to(conclude_equality[0], RIGHT))
-
-            triangle_equality = Group(
-                *equalities[0], *equalities[1], *equalities[2], brace, *conclude_equality).next_to(brace_tip, RIGHT, buff=0)
+            conclude_from_system = ConcludeFromStatementSystem(equalities, triangle_equality, font_size=fs, individual=True)
+            conclude_from_system.next_to(brace_tip, RIGHT, buff=0)
 
         # Animations
-        
-            def Brace_Conclude_Equality():
-                self.play(Write(triangle_equality[-3]))
-                self.play(Write(triangle_equality[-2]))
-                self.play(Write(triangle_equality[-1]))
-    
 
             if common == 0:
-                SegmentFunctions.animate_segments_equality(self, sequence[0], equalities[0], color=colors[0], 
+                PlayTwoSegmentsEqualityWiggling(self, sequence[0], equalities[0], color=colors[0], 
                     wiggle_simultaneously=wiggle_simultaneously[0], wiggle_endpoints=wiggle_endpoints[0], 
                         transform_simultaneously=transform_simultaneously[0], run_time=run_times[0])
+
                 self.wait(wait_time[0])
 
-                SegmentFunctions.animate_segments_equality(self, sequence[1], equalities[1], color=colors[1], 
+                PlayTwoSegmentsEqualityWiggling(self, sequence[1], equalities[1], color=colors[1], 
                     wiggle_simultaneously=wiggle_simultaneously[1], wiggle_endpoints=wiggle_endpoints[1], 
                         transform_simultaneously=transform_simultaneously[1], run_time=run_times[1])
+
                 self.wait(wait_time[1])
 
-                SegmentFunctions.animate_segments_equality(self, sequence[2], equalities[2], color=colors[2], 
+                PlayTwoSegmentsEqualityWiggling(self, sequence[2], equalities[2], color=colors[2], 
                     wiggle_simultaneously=wiggle_simultaneously[2], wiggle_endpoints=wiggle_endpoints[2], 
                         transform_simultaneously=transform_simultaneously[2], run_time=run_times[2])
+                        
                 self.wait(wait_time[2])
 
-                Brace_Conclude_Equality()
+                PlayBraceConclude(self, conclude_from_system)
 
             else:
-                SegmentFunctions.animate_segments_equality(self, sequence[0], equalities[0], color=colors[0], 
+                PlayTwoSegmentsEqualityWiggling(self, sequence[0], equalities[0], color=colors[0], 
                     wiggle_simultaneously=wiggle_simultaneously[0], wiggle_endpoints=wiggle_endpoints[0], 
                         transform_simultaneously=transform_simultaneously[0], run_time=run_times[0])
+
                 self.wait(wait_time[0])
 
-                SegmentFunctions.animate_segments_equality(self, sequence[1], equalities[1], color=colors[1], 
+                PlayTwoSegmentsEqualityWiggling(self, sequence[1], equalities[1], color=colors[1], 
                     wiggle_simultaneously=wiggle_simultaneously[1], wiggle_endpoints=wiggle_endpoints[1], 
                         transform_simultaneously=transform_simultaneously[1], run_time=run_times[1])
+
                 self.wait(wait_time[1])
 
-                SegmentFunctions.animate_segment_common(self, sequence[2], equalities[2], color=colors[2], wiggle_endpoints=wiggle_endpoints[2], 
-                    run_time=run_times[2])
+                PlaySegmentCommonWiggling(self, sequence[2], equalities[2], color=colors[2], 
+                    wiggle_endpoints=wiggle_endpoints[2], run_time=run_times[2])
+
                 self.wait(wait_time[2])
 
-                Brace_Conclude_Equality()
+                PlayBraceConclude(self, conclude_from_system)
         
         # return
-            return triangle_equality
+            return conclude_from_system
 
 
 
 class test(Scene):
     def construct(self):
-        self.wait()
+
+        C = Dot([-1, 1, 0])
+        CA = always_redraw(lambda: Line(C.get_center(), [0, -1, 0]))
+        self.add(C, CA)
+        self.wait(0.5)
+        self.play(C.animate().move_to([3, 1, 0]))
+        self.wait(0.5)
         
