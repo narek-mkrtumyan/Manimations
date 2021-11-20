@@ -4,7 +4,7 @@ In each folder must contain a `README.md` file describing the animations impleme
 
 You can find a template for the Readme files [here](./template/README.md) (just copy and edit it as needed).
 
-DO **NOT** add any directory named `images`, `texts`, etc. (see more in [.gitignore](./gitignore)).
+DO **NOT** add any directory named `images`, `texts`, etc. (see more in [.gitignore](./.gitignore)).
 Directories named `test` also will be ignored, so feel free to make `test/` in your computer if you need.
 
 
