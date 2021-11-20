@@ -1,20 +1,21 @@
 # Manim
 
-In each folder must be a Readme file, in which must be written what are the animations in that folder's .py files.
+In each folder must contain a `README.md` file describing the animations implemented in that folder's `.py` files.
 
-You can find template Readme file in template Folder (and just copy paste and edit it as needed)
+You can find a template for the Readme files [here](./template/README.md) (just copy and edit it as needed).
 
-DO NOT add any directory named images, texts etc (see more in .gitignore)
-Directories named test also will be ignored, so feel free to make test/ in your computer if you need
+DO **NOT** add any directory named `images`, `texts`, etc. (see more in [.gitignore](./gitignore)).
+Directories named `test` also will be ignored, so feel free to make `test/` in your computer if you need.
 
 
 To use funtions from Directory/file.py, add the following in your code
 ```py
 import sys
-sys.path.append("../../")       # relative path of master
+sys.path.append("../../")       # relative path to the root of the repository
 from Directory.file import *    # or import specific function
 ```
 
-To render the animation of file.py just type 'manim -pql file_name.py scene_name' in the terminal in the file's directory
+To render the animation implemented in `file.py` just type `'manim -pql file_name.py scene_name'` in the terminal in
+the directory containing the file.
 
-To make it work the computer must have manimCE miktex etc installed.
+To make it work the computer must have `manimCE`, `miktex`, etc. installed.

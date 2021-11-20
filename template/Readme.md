@@ -3,7 +3,7 @@
 
 ### Functions
 - 
-see more about each functions in it's docstrings
+see more about each functions in their docstrings.
 
 ### Animations
 - 

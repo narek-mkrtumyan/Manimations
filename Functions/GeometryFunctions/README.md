@@ -1,5 +1,5 @@
 # FUNCTIONS USEFUL IN GEOMETRY
-Also includes armtex package as armenian_tex_template
+Also includes `armtex` package as `armenian_tex_template`.
 
 ## DONE
 

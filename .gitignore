@@ -1,5 +1,7 @@
 !/.gitignore
 
+.vscode/
+
 **/test.mp4
 
 random\ tests/

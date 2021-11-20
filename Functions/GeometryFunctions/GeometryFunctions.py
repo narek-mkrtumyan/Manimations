@@ -16,14 +16,14 @@ def LabelPoint(point, label, position=DL*0.5, font_size=30):
 
     Returns - the Text mobject of label
     '''
-    laebl_point = MathTex(r'' + label, font_size=font_size, color=point.get_color())
-    laebl_point.next_to(point.get_center(), position)
-    return laebl_point
+    label_point = MathTex(r'' + label, font_size=font_size, color=point.get_color())
+    label_point.next_to(point.get_center(), position)
+    return label_point
 
 
 def DistanceBetweenCoordinates(a, b):
     '''
-    Calculates distance betwwen 2 coordinates
+    Calculates distance between 2 coordinates
 
     Arguments - a([x_1, y_1, z_1]), b([x_2, y_2, z_2])
 
@@ -34,7 +34,7 @@ def DistanceBetweenCoordinates(a, b):
 
 def DistanceBetweenPoints(A, B):
     '''
-    Calculates distance betwwen 2 Dots
+    Calculates distance between 2 Dots
 
     Arguments - A(Dot_1), B(Dot_2)
 
@@ -187,7 +187,7 @@ def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual
 
     conclude_from_system = Group()
 
-    if individual == True:
+    if individual:
         for i in range(len(statements)):
             conclude_from_system.add(*statements[i])
 
@@ -235,15 +235,15 @@ def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transfor
 
 def TransformSegmentsLabelsIntoEquality(segment_dots_labels_1, segment_dots_labels_2, equality, transform_segments=True, run_time=1.5):         
 
-    transformtion_AB = TransformSegmentLabelsIntoStatement(segment_dots_labels_1, equality[0:2],
+    transformation_AB = TransformSegmentLabelsIntoStatement(segment_dots_labels_1, equality[0:2],
         transform_segment=transform_segments, run_time=run_time)
 
     write_equal = Write(equality[2])
     
-    transformtion_XY = TransformSegmentLabelsIntoStatement(segment_dots_labels_2, equality[3:5], 
+    transformation_XY = TransformSegmentLabelsIntoStatement(segment_dots_labels_2, equality[3:5], 
         transform_segment=transform_segments, run_time=run_time)
 
-    animation = [*transformtion_AB, write_equal, *transformtion_XY]
+    animation = [*transformation_AB, write_equal, *transformation_XY]
 
     return animation
 
@@ -265,11 +265,11 @@ def TransformCommonSegmentLabelsIntoStatement(segment_dots_labels, statement, tr
 
 def PlaySegmentWiggling(self, segment_dots_labels, wiggle_endpoints=True, color=0, scale_factor=1.2, run_time=1.3):
         '''
-        Whiggles segment AB togeter with A and B (optional), and scales in and out Labels of A and B
+        Whiggles segment AB together with A and B (optional), and scales in and out Labels of A and B
         
         Arguments - self, AB, A, B, label_A, label_B
 
-        Optional - wiggle_endpoints(Ture or False), color(default is the same as AB), scale_factor(label), run_time
+        Optional - wiggle_endpoints(True or False), color(default is the same as AB), scale_factor(label), run_time
         '''
         AB, A, B, label_A, label_B = segment_dots_labels
         a, b = A.copy(), B.copy()
@@ -304,7 +304,7 @@ def PlayTwoSegmentsWiggling(self, segment_dots_labels_1, segment_dots_labels_2, 
         
         Arguments - self, AB, XY, (A, B, X, Y), (label_A, label_B, label_X, label_Y)
 
-        Optional - wiggle_endpoints, simultaneously(Ture or False), color(same as AB), scale_factor(label), 
+        Optional - wiggle_endpoints, simultaneously(True or False), color(same as AB), scale_factor(label), 
         run_time (for each wiggling)
         '''
         scale_factor = 1.2
@@ -321,7 +321,7 @@ def PlayTwoSegmentsWiggling(self, segment_dots_labels_1, segment_dots_labels_2, 
             ab, xy = segment_dots_labels_1[0].copy().set_color(color=color), segment_dots_labels_2[0].copy().set_color(color=color)
 
 
-        if simultaneously == False:
+        if not simultaneously:
         
             PlaySegmentWiggling(self, segment_dots_labels_1, wiggle_endpoints=wiggle_endpoints, 
                 color=color, scale_factor=scale_factor, run_time=run_time)
@@ -331,7 +331,7 @@ def PlayTwoSegmentsWiggling(self, segment_dots_labels_1, segment_dots_labels_2, 
         
         else:
             
-            if wiggle_endpoints == True:
+            if wiggle_endpoints:
                 
                 self.play(Wiggle(Group(ab, A, B), rate_func=linear),
                     label_A.animate(rate_func=there_and_back).scale(scale_factor), 
@@ -357,9 +357,9 @@ def PlayTwoSegmentsWiggling(self, segment_dots_labels_1, segment_dots_labels_2, 
 
 def PlayTransformSegmentsLabelsIntoEquality(self, animations, transform_segments=True, transform_simultaneously=False):
 
-    if transform_simultaneously == False: 
+    if not transform_simultaneously: 
 
-        if transform_segments == True:
+        if transform_segments:
             self.play(animations[0], animations[1], animations[2])
             self.play(animations[3])
             self.play(animations[4], animations[5], animations[6])
@@ -377,7 +377,7 @@ def PlayTransformSegmentsLabelsIntoEquality(self, animations, transform_segments
 
 def PlayTransformCommonSegmentLabelsIntoStatement(self, animations, transform_segment=True):
 
-    if transform_segment == True:
+    if transform_segment:
         self.play(animations[0], animations[1], animations[2])
         self.play(animations[3])
     
