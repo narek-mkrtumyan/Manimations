@@ -133,6 +133,21 @@ def Angle2(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, strok
     return Group(a_1, a_2)
 
 
+def Angle3(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, stroke_width=4, color=WHITE):
+    '''
+    Group of 3 circular arcs representing an angle of two lines
+
+    Arguments - same as Angle() # Expect of **kwargs
+
+    Returns - Vgroup()
+    '''
+    a_1 = Angle(line_1, line_2, radius=radius, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
+    a_2 = Angle(line_1, line_2, radius=radius + 0.1, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
+    a_3 = Angle(line_1, line_2, radius=radius + 0.2, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
+
+    return Group(a_1, a_2, a_3)
+
+
 def MathtexSegmentsEquality(labels, font_size=30, color=WHITE):
     '''
     Writes 2 segments equality (AB=XY) in MathTex as a Group of 5 mobjects
