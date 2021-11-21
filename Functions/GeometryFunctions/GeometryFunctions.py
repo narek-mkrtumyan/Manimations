@@ -6,6 +6,10 @@ armenian_tex_template = TexTemplate()
 armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")
 
 
+
+# Functions that return something
+
+
 def LabelPoint(point, label, position=DL*0.5, font_size=30):
     '''
     Adds label to a point
@@ -55,7 +59,7 @@ def SegmentLength(AB):
     return DistanceBetweenCoordinates(a, b)
 
 
-def SegmentEqualitySign_1(AB, sign_size=0.2, color=WHITE):
+def SegmentEqualitySign1(AB, sign_size=0.2, color=WHITE):
     '''
     Equality sign with 1 small line in the middle of the segment
 
@@ -71,10 +75,11 @@ def SegmentEqualitySign_1(AB, sign_size=0.2, color=WHITE):
     sign = sign.scale(sign_size / length_AB)
     sign = sign.set_color(color)
     sign = sign.rotate(PI / 2)
+
     return sign
 
 
-def SegmentEqualitySign_2(AB, sign_size=0.2, color=WHITE):
+def SegmentEqualitySign2(AB, sign_size=0.2, color=WHITE):
     '''
     Equality sign with 2 small lines for a segment
 
@@ -82,7 +87,7 @@ def SegmentEqualitySign_2(AB, sign_size=0.2, color=WHITE):
 
     Optional - sign_size=0.2, Color=WHITE
 
-    Returns - sign Mobject
+    Returns - sign VGroup
     '''
     a, b = AB.get_start_and_end()
     length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
@@ -98,10 +103,38 @@ def SegmentEqualitySign_2(AB, sign_size=0.2, color=WHITE):
     return sign
 
 
-def FilledAngle(line_1, line_2, radius=0.5, quadrant=(1, 1), other_angle=False, stroke_width=0, stroke_color=WHITE, 
-    fill_color=WHITE, fill_opacity=1):
+def SegmentEqualitySign3(AB, sign_size=0.2, color=WHITE):
     '''
-    Returns filled angle
+    Equality sign with 2 small lines for a segment
+
+    Arguments - AB(Line)
+
+    Optional - sign_size=0.2, color=WHITE
+
+    Returns - sign VGroup
+    '''
+    a, b = AB.get_start_and_end()
+    length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
+    unit_vector = AB.get_unit_vector()
+    sign = AB.copy()
+    sign = sign.scale(sign_size / length_AB)
+    sign = sign.set_color(color)
+    sign = sign.rotate(PI / 2)
+    sign_1 = sign.copy().shift((unit_vector[0] * RIGHT + unit_vector[1] * UP) * 0.1)
+    sign_2 = sign.copy().shift((-unit_vector[0] * RIGHT - unit_vector[1] * UP) * 0.1)
+    sign = VGroup(sign_1, sign, sign_2)
+
+    return sign
+
+
+def FilledAngle(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, stroke_width=0, stroke_color=WHITE, 
+    color=WHITE, fill_opacity=1):
+    '''
+    Returns angle sign filled with some color
+
+    Arguments - same as Angle
+
+    It also can ad stroke to the filled angle sign
     '''
     angle = Angle(line_1, line_2, radius=radius, quadrant=quadrant, other_angle=other_angle)
 
@@ -114,14 +147,14 @@ def FilledAngle(line_1, line_2, radius=0.5, quadrant=(1, 1), other_angle=False, 
     points = np.concatenate([side_1_points, angle_points, side_2_points])
 
     filled_angle = VMobject().set_points_as_corners(points)
-    filled_angle.set_stroke(color=stroke_color, width=stroke_width).set_fill(color=fill_color, opacity=fill_opacity)
+    filled_angle.set_stroke(color=stroke_color, width=stroke_width).set_fill(color=color, opacity=fill_opacity)
 
     return filled_angle
 
 
 def Angle2(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, stroke_width=4, color=WHITE):
     '''
-    Group of 2 circular arcs representing an angle of two lines
+    VGroup of 2 circular arcs representing an angle of two lines
 
     Arguments - same as Angle() # Expect of **kwargs
 
@@ -130,12 +163,12 @@ def Angle2(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, strok
     a_1 = Angle(line_1, line_2, radius=radius, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
     a_2 = Angle(line_1, line_2, radius=radius + 0.1, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
 
-    return Group(a_1, a_2)
+    return VGroup(a_1, a_2)
 
 
 def Angle3(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, stroke_width=4, color=WHITE):
     '''
-    Group of 3 circular arcs representing an angle of two lines
+    VGroup of 3 circular arcs representing an angle of two lines
 
     Arguments - same as Angle() # Expect of **kwargs
 
@@ -145,12 +178,12 @@ def Angle3(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, strok
     a_2 = Angle(line_1, line_2, radius=radius + 0.1, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
     a_3 = Angle(line_1, line_2, radius=radius + 0.2, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
 
-    return Group(a_1, a_2, a_3)
+    return VGroup(a_1, a_2, a_3)
 
 
 def MathtexSegmentsEquality(labels, font_size=30, color=WHITE):
     '''
-    Writes 2 segments equality (AB=XY) in MathTex as a Group of 5 mobjects
+    Writes 2 segments equality (AB=XY) in MathTex as a VGroup of 5 mobjects
 
     Argument - labels(list of 4 labels)
 
@@ -166,30 +199,45 @@ def MathtexSegmentsEquality(labels, font_size=30, color=WHITE):
 
 def MathtexCommonSegment(labels, font_size=30, color=WHITE):
     '''
-    Writes segment is common (AB-ն ընդհանուր է) in MathTex as a Group of 3 Mobjects
+    Writes segment is common (AB-ն ընդհանուր է) in MathTex as a VGroup of 3 Mobjects
 
     Arguments - labels (list of 2 labels)
 
-    Returns - Mathtex('AB-ն ընդհանուր է') # AB is common
+    Returns - VGroup() from 3 MathTex mobjects ('A''B' '-ն ընդհանուր է') # 'AB is common'
     '''
     label_1, label_2 = labels
     
-    segment_common = MathTex(r'' + label_1, r'' + label_2, r' \textrm{-ն ընդհանուր է}', 
-        tex_template=armenian_tex_template, font_size=font_size, color=color)
+    AB = MathTex(r'' + label_1, r'' + label_2, font_size=font_size, color=color)
+
+    is_common = MathTex(r'\textrm{-ն ընդհանուր է}', tex_template=armenian_tex_template, 
+        font_size=font_size, color=color).next_to(AB, RIGHT, buff=0)
+
+    segment_common = VGroup(*AB, is_common)
     
     return segment_common
 
 
-def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual=False):
+def MathTexTrianglesEquality(abc, xyz, color=WHITE, font_size=30):
     '''
-    Arranges statments under each other, puts Brace from the left, puts '=>' and conclusion
+    MathTex Mobject 'ABC=XYZ'
+
+    Arguments - abc('ABC'), xyz('XYZ')
+
+    Returns - MathTex('ABC=XYZ)
+    '''
+    return MathTex(r'\triangle ' + abc + r'\ =\ ' + r'\triangle ' + xyz, font_size=font_size, color=color)
+
+
+def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual_letters=False):
+    '''
+    Arranges statements under each other, puts Brace from the left, '=>' and the conclusion
     
-    Arguments - statments (some sort of group of statements), conclusion
+    Arguments - statements (some sort of group of statements), conclusion
     
-    Optional arguments - individual (if True, returning Group will consists from submobjects of statments submobjects
+    Optional arguments - individual_letters (if True, returning VGroup will consists from submobjects of statements submobjects
     (usefull for animating triangles equality))
 
-    Returns - Group of statements, brace and conclusion - ' { statements => conclusion '
+    Returns - VGroup of (statements, brace, =>, conclusion) - ' { statements => conclusion '
     '''
     statements = VGroup(*statements).arrange(DOWN, aligned_edge=LEFT)
 
@@ -200,9 +248,9 @@ def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual
 
     conclusion.next_to(rightarrow, RIGHT)
 
-    conclude_from_system = Group()
+    conclude_from_system = VGroup()
 
-    if individual:
+    if individual_letters:
         for i in range(len(statements)):
             conclude_from_system.add(*statements[i])
 
@@ -212,17 +260,6 @@ def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual
         conclude_from_system.add(*statements, brace, rightarrow, conclusion)
     
     return conclude_from_system
-
-
-def MathTexTrianglesEquality(abc, xyz, color=WHITE, font_size=30):
-    '''
-    Gives MathTex Mobject of ('ABC=XYZ')
-
-    Arguments - abc('ABC'), xyz('XYZ')
-
-    Returns - MathTex('ABC=XYZ)
-    '''
-    return MathTex(r'\triangle ' + abc + r'\ =\ ' + r'\triangle ' + xyz, font_size=font_size, color=color)
 
 
 def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transform_segment=True, run_time=1):
@@ -238,7 +275,7 @@ def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transfor
         ReplacementTransform(label_A, statement[0], rate_func=linear, run_time=run_time),
         ReplacementTransform(label_B, statement[1], rate_func=linear, run_time=run_time))
 
-    transformation_segment = Transform(Group(AB, A, B), AB_transformed, run_time=run_time, rate_func=linear)
+    transformation_segment = Transform(VGroup(AB, A, B), AB_transformed, run_time=run_time, rate_func=linear)
 
     if transform_segment == False:
         animation = [*transformation_labels]
@@ -275,12 +312,62 @@ def TransformCommonSegmentLabelsIntoStatement(segment_dots_labels, statement, tr
     return animation
 
 
-# ANIMATIONS
+
+
+
+# Functions that play some animations and return something
+
+
+
+def CircleFromSpinningRadius(self, radius=1, center=[0, 0, 0], starting_point_angle=0, 
+        radius_color=WHITE, circle_color=GREEN, run_time=4):
+    '''
+    This function Creates a Circle using it's radius like a Compass Drawing tool (կարկին)
+
+    Arguments - radius, center, point from which to start (angle in DEGREES), colors and run time
+
+    Optional - starting_point_angle=0, radius_color(line color), circle_color, run_time=4
+
+    Returns the Circle
+    '''
+
+    Center = Dot(center, color=radius_color)
+    circle = Circle(radius=radius, color=circle_color).move_to(center)
+
+    moving_point_angle = ValueTracker(starting_point_angle)
+
+    moving_point = always_redraw(lambda: Dot(circle.point_at_angle((moving_point_angle.get_value() % 360)*DEGREES), color=circle_color))
+
+    radius_line = always_redraw(lambda: Line(center, circle.point_at_angle((moving_point_angle.get_value() % 360)*DEGREES),
+        color=radius_color))
+
+    arc = always_redraw(lambda: Arc(start_angle=starting_point_angle*DEGREES, 
+        angle=((moving_point_angle.get_value() - starting_point_angle) % 360)*DEGREES, 
+        arc_center=center, radius=radius, color=circle_color))
+
+    self.play(Create(Center))
+    self.play(Create(radius_line))
+    self.play(Create(moving_point))
+    self.wait(0.5)
+    self.add(arc)
+    self.play(moving_point_angle.animate(run_time=run_time, rate_finc=linear).set_value(starting_point_angle + 360))
+    self.add(circle)
+    self.play(Uncreate(moving_point), Uncreate(radius_line))
+
+    return circle
+
+
+
+
+
+
+# Functions that only play some animations
+
 
 
 def PlaySegmentWiggling(self, segment_dots_labels, wiggle_endpoints=True, color=0, scale_factor=1.2, run_time=1.3):
         '''
-        Whiggles segment AB together with A and B (optional), and scales in and out Labels of A and B
+        Wiggles segment AB together with A and B (optional), and scales in and out Labels of A and B
         
         Arguments - self, AB, A, B, label_A, label_B
 
@@ -296,7 +383,7 @@ def PlaySegmentWiggling(self, segment_dots_labels, wiggle_endpoints=True, color=
         
         if wiggle_endpoints == True:
 
-            self.play(Wiggle(Group(ab, a, b), rate_func=linear),
+            self.play(Wiggle(VGroup(ab, a, b), rate_func=linear),
                     label_A.animate(rate_func=there_and_back).scale(scale_factor), 
                         label_B.animate(rate_func=there_and_back).scale(scale_factor),
                             run_time=run_time)
@@ -348,10 +435,10 @@ def PlayTwoSegmentsWiggling(self, segment_dots_labels_1, segment_dots_labels_2, 
             
             if wiggle_endpoints:
                 
-                self.play(Wiggle(Group(ab, A, B), rate_func=linear),
+                self.play(Wiggle(VGroup(ab, A, B), rate_func=linear),
                     label_A.animate(rate_func=there_and_back).scale(scale_factor), 
                         label_B.animate(rate_func=there_and_back).scale(scale_factor),
-                    Wiggle(Group(xy, X, Y), rate_func=linear),
+                    Wiggle(VGroup(xy, X, Y), rate_func=linear),
                         label_X.animate(rate_func=there_and_back).scale(scale_factor), 
                             label_Y.animate(rate_func=there_and_back).scale(scale_factor),
                                         run_time=run_time)
@@ -366,7 +453,7 @@ def PlayTwoSegmentsWiggling(self, segment_dots_labels_1, segment_dots_labels_2, 
                                 label_Y.animate(rate_func=there_and_back).scale(scale_factor),
                                             run_time=run_time)
             
-            self.remove(A, B, ab, X, Y, xy)
+        self.remove(A, B, ab, X, Y, xy)
 
 
 
@@ -386,7 +473,7 @@ def PlayTransformSegmentsLabelsIntoEquality(self, animations, transform_segments
     
     else:
 
-        self.play(animations)
+        self.play(*animations)
 
 
 
@@ -432,7 +519,6 @@ def PlaySegmentCommonWiggling(self, segment_dots_labels, statement, run_time=2.5
 
 
 
-
 def PlayBraceConclude(self, conclude_from_system):
     '''
     From ConcludeFromStatementsSystem animates drawing Brace, rightarrow and conclusion
@@ -447,52 +533,12 @@ def PlayBraceConclude(self, conclude_from_system):
 
 
 
-class CircleFunctions(Scene):
-
-    def CircleFromSpinningRadius(self, radius=1, center=[0, 0, 0], starting_point_angle=0, 
-        radius_color=WHITE, circle_color=GREEN, run_time=4):
-        '''
-        This function Creates a Circle using it's radius like a Compass Drawing tool (կարկին)
-
-        Arguments - radius, center, point from which to start (angle in DEGREES), colors and run time
-
-        Optional - starting_point_angle=0, radius_color(line color), circle_color, run_time=4
-
-        Returns the Circle
-        '''
-    
-        Center = Dot(center, color=radius_color)
-        circle = Circle(radius=radius, color=circle_color).move_to(center)
-
-        moving_point_angle = ValueTracker(starting_point_angle)
-
-        moving_point = always_redraw(lambda: Dot(circle.point_at_angle((moving_point_angle.get_value() % 360)*DEGREES), color=circle_color))
-
-        radius_line = always_redraw(lambda: Line(center, circle.point_at_angle((moving_point_angle.get_value() % 360)*DEGREES),
-            color=radius_color))
-
-        arc = always_redraw(lambda: Arc(start_angle=starting_point_angle*DEGREES, 
-            angle=((moving_point_angle.get_value() - starting_point_angle) % 360)*DEGREES, 
-            arc_center=center, radius=radius, color=circle_color))
-
-        self.play(Create(Center))
-        self.play(Create(radius_line))
-        self.play(Create(moving_point))
-        self.wait(0.5)
-        self.add(arc)
-        self.play(moving_point_angle.animate(run_time=run_time, rate_finc=linear).set_value(starting_point_angle + 360))
-        self.add(circle)
-        self.play(Uncreate(moving_point), Uncreate(radius_line))
-
-        return circle
-
-
 
 
 class TrianglesCongruence(Scene):
 
 
-    def SSS(self, vertices_ABC, sides_ABC, mob_labels_ABC, labels_ABC, 
+    def SSSWiggling(self, vertices_ABC, sides_ABC, mob_labels_ABC, labels_ABC, 
         vertices_XYZ, sides_XYZ, mob_labels_XYZ, labels_XYZ, brace_tip=[0, 0, 0],
             common=0, wiggle_endpoints=[True, True, True], wiggle_simultaneously=[True, True, True],
                 transform_simultaneously=[False, False, False], colors=[0, 0, 0],
@@ -510,7 +556,7 @@ class TrianglesCongruence(Scene):
             color(change color of the side while wiggling(list - 0 or color for each side)), 
             run_time(animations of sides(list)), wait_time(pause between animations of sides, or final brace(list))
 
-            Returns - Group of mobjects (same as ConcludeFromSystem)
+            Returns - VGroup of mobjects (same as ConcludeFromSystem)
             '''
         # Read points lables,    
             A, B, C = vertices_ABC
@@ -562,11 +608,11 @@ class TrianglesCongruence(Scene):
         # Equality system
             
             if common == 0:
-                equalities = Group(ab_xy, bc_yz, ca_zx)
+                equalities = VGroup(ab_xy, bc_yz, ca_zx)
                 sequence = pairs
 
             if common == AB:
-                equalities = Group(bc_yz, ca_zx, ab_common)
+                equalities = VGroup(bc_yz, ca_zx, ab_common)
                 sequence = [pairs[1], pairs[2], singles[0]]
                 colors = [colors[1], colors[2], colors[0]]
                 wiggle_endpoints = [wiggle_endpoints[1], wiggle_endpoints[2], wiggle_endpoints[0]]
@@ -574,7 +620,7 @@ class TrianglesCongruence(Scene):
                 transform_simultaneously = [transform_simultaneously[1], transform_simultaneously[2], transform_simultaneously[3]]
 
             if common == BC:
-                equalities = Group(ab_xy, ca_zx, bc_common)
+                equalities = VGroup(ab_xy, ca_zx, bc_common)
                 sequence = [pairs[0], pairs[2], singles[1]]
                 colors = [colors[0], colors[2], colors[1]]
                 wiggle_endpoints = [wiggle_endpoints[0], wiggle_endpoints[2], wiggle_endpoints[1]]
@@ -582,12 +628,12 @@ class TrianglesCongruence(Scene):
                 transform_simultaneously = [transform_simultaneously[0], transform_simultaneously[2], transform_simultaneously[1]]
                 
             if common == CA:
-                equalities = Group(ab_xy, bc_yz, ca_common)
+                equalities = VGroup(ab_xy, bc_yz, ca_common)
                 sequence = [pairs[0], pairs[1], singles[2]]
             
             triangle_equality = MathTexTrianglesEquality(abc, xyz, font_size=fs)
 
-            conclude_from_system = ConcludeFromStatementSystem(equalities, triangle_equality, font_size=fs, individual=True)
+            conclude_from_system = ConcludeFromStatementSystem(equalities, triangle_equality, font_size=fs, individual_letters=True)
             conclude_from_system.next_to(brace_tip, RIGHT, buff=0)
 
         # Animations
@@ -635,6 +681,7 @@ class TrianglesCongruence(Scene):
         
         # return
             return conclude_from_system
+
 
 
 

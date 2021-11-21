@@ -6,6 +6,8 @@ sys.path.append("../../")
 # sys.path.append("../../Functions/GeometryFunctions/GeometryFunctions.py")
 from Functions.GeometryFunctions.GeometryFunctions import *
 
+fs = 30 # font_size for MathTex
+
 class PerpBisect(MovingCameraScene):
     def construct(self):
 
@@ -39,11 +41,11 @@ class PerpBisect(MovingCameraScene):
         CB = always_redraw(lambda: Line(C.get_center(), B.get_center(),
             color=rgb_to_hex(hex_to_rgb(GREEN)*(1-color_frac.get_value()) + hex_to_rgb(ORANGE)*color_frac.get_value())))
 
-    # Equality signs for AM and BM with 2 small lines
-        AM = Line(A.get_center(), M.get_center())
-        BM = Line(B.get_center(), M.get_center())
-        equality_sign_AM = SegmentEqualitySign_2(AM)
-        equality_sign_BM = SegmentEqualitySign_2(BM)
+    # Equality signs for MA and MB with 2 small lines
+        MA = Line(M.get_center(), A.get_center())
+        MB = Line(M.get_center(), B.get_center())
+        equality_sign_MA = SegmentEqualitySign2(MA)
+        equality_sign_MB = SegmentEqualitySign2(MB)
         
 
 
@@ -65,23 +67,14 @@ class PerpBisect(MovingCameraScene):
 
         def Add_M_MC():
             # ANIMATION: Put equality signs, Create AB, M, CM
-            self.play(Create(equality_sign_CA))
-            self.play(Create(equality_sign_CB))
+            self.play(Create(equality_sign_CA), Create(equality_sign_CB))
             self.play(Create(AB))
             self.play(Create(M), Create(label_M))
-            self.play(Create(equality_sign_AM))
-            self.play(Create(equality_sign_BM))
+            self.play(Create(equality_sign_MA), Create(equality_sign_MB))
             self.play(Create(CM))
             self.add(C, M) # To put the points on top of the lines
             self.play(FadeIn(ACM),FadeIn(BCM))
-            self.wait(0.5)
             
-
-        def move_C_down_and_up(run_time=2.5):
-            # Function for moving C down then up
-            self.play(c_y.animate(rate_func=linear).set_value(1), run_time=run_time)
-            self.wait(1)
-            self.play(c_y.animate(rate_func=linear).set_value(3), run_time=run_time)
 
 
 # ANIMATIONS FOR DRAWING
@@ -89,20 +82,24 @@ class PerpBisect(MovingCameraScene):
     # Create A, B, C, CA, CB. Move C to Perpendicular bisector while changing colors
         self.wait(0.5)
         Create_A_B_C()
-        move_C_to_PB_and_change_colors(run_time=2)
+        move_C_to_PB_and_change_colors(run_time=4.5)
 
     # NOT ANIMATION: init new mobjects dependent on ValueTracker value
         # Equality signs for CA and CB with 1 small line and segment CM
-        equality_sign_CA = always_redraw(lambda: SegmentEqualitySign_1(CA))
-        equality_sign_CB = always_redraw(lambda: SegmentEqualitySign_1(CB))
+        equality_sign_CA = always_redraw(lambda: SegmentEqualitySign1(CA))
+        equality_sign_CB = always_redraw(lambda: SegmentEqualitySign1(CB))
         CM = always_redraw(lambda: Line(C.get_center(), M.get_center(), color=GREEN))
         # Color ACM and BCM triangles
-        ACM = Polygon(A.get_center(), C.get_center(), M.get_center(), 
-            fill_opacity=0.3).set_fill(ORANGE).set_stroke(width=0)
-        BCM = Polygon(B.get_center(), C.get_center(), M.get_center(), 
-            fill_opacity=0.3).set_fill(GREEN).set_stroke(width=0)
+        ACM = always_redraw(lambda: 
+            Polygon(A.get_center(), C.get_center(), M.get_center(), 
+                fill_opacity=0.3).set_fill(ORANGE).set_stroke(width=0))
+
+        BCM = always_redraw(lambda: 
+            Polygon(B.get_center(), C.get_center(), M.get_center(), 
+                fill_opacity=0.3).set_fill(GREEN).set_stroke(width=0))
 
     # Add_M_MC, shift camera
+        self.wait(0.5)
         Add_M_MC()
         self.wait(0.5)
         self.play(self.camera.frame.animate.shift(3*RIGHT))
@@ -115,15 +112,15 @@ class PerpBisect(MovingCameraScene):
         # self.play(self.camera.frame.animate.shift(3*RIGHT))
         # # NOT ANIMATION: init new mobjects dependent on ValueTracker value
         # # Equality signs for CA and CB with 1 small line and segment CM
-        # equality_sign_CA = always_redraw(lambda: SegmentEqualitySign_1(CA))
-        # equality_sign_CB = always_redraw(lambda: SegmentEqualitySign_1(CB))
+        # equality_sign_CA = always_redraw(lambda: SegmentEqualitySign1(CA))
+        # equality_sign_CB = always_redraw(lambda: SegmentEqualitySign1(CB))
         # CM = always_redraw(lambda: Line(C.get_center(), M.get_center(), color=GREEN))
         # # Color ACM and BCM triangles
         # ACM = Polygon(A.get_center(), C.get_center(), M.get_center(), 
         #     fill_opacity=0.3).set_fill(ORANGE).set_stroke(width=0)
         # BCM = Polygon(B.get_center(), C.get_center(), M.get_center(), 
         #     fill_opacity=0.3).set_fill(GREEN).set_stroke(width=0)
-        # self.add(M, CM, ACM, BCM, equality_sign_CA, equality_sign_CB, equality_sign_AM, equality_sign_BM, label_M)
+        # self.add(M, CM, ACM, BCM, equality_sign_CA, equality_sign_CB, equality_sign_AM, equality_sign_MB, label_M)
         # self.wait(1)
 
 
@@ -133,27 +130,72 @@ class PerpBisect(MovingCameraScene):
         fc = self.camera.frame_center     # Camera frame center after shifting camera
 
         vertices_ACM = (A, C, M)
-        sides_ACM = (CA, CM, AM)
+        sides_ACM = (CA, CM, MA)
         mob_labels_ACM = (label_A, label_C, label_M)
         labels_acm = (label_a, label_c, label_m)
         triangle_ACM = (vertices_ACM, sides_ACM, mob_labels_ACM, labels_acm)
 
         vertices_BCM = (B, C, M)
-        sides_BCM = (CB, CM, BM)
+        sides_BCM = (CB, CM, MB)
         mob_labels_BCM = (label_B, label_C, label_M)
         labels_bcm = (label_b, label_c, label_m)
         triangle_BCM = (vertices_BCM, sides_BCM, mob_labels_BCM, labels_bcm)
 
-    #
-
-        triangles_equality = TrianglesCongruence.SSS(
+    # Show CMA and CMB equality
+        triangles_equality = TrianglesCongruence.SSSWiggling(
             self, *triangle_ACM, *triangle_BCM, common=CM, colors=[0, 0, RED], 
-                brace_tip=fc + np.array([0, 2, 0]), wiggle_simultaneously=[False, True, True], 
-                    run_times=[2.5, 2.5, 2.5], wait_time=[0, 0, 0])
+            brace_tip=fc + np.array([-1, 2, 0]), wiggle_simultaneously=[False, True, True], 
+            run_times=[2.5, 2.5, 2.5], wait_time=[0, 0, 0], transform_simultaneously=[True, False, True])
+    
+    # INIT angles, and CMA=CMB=90
+        rightarrow_1 = MathTex(r'' + '\Rightarrow', font_size=fs).next_to(triangles_equality, RIGHT)
+
+        angle_CMA = always_redraw(lambda: Angle(CM, MA, quadrant=(-1, 1), radius=0.3))
+        angle_CMB = always_redraw(lambda: Angle(CM, MB, quadrant=(-1, 1), other_angle=True, radius=0.4))
+
+        right_angle_CMA = always_redraw(lambda: RightAngle(CM, MA, quadrant=(-1, 1), length=0.3))
+        right_angle_CMB = always_redraw(lambda: RightAngle(CM, MB, quadrant=(-1, 1), length=0.4))
+
+        CMA_CMB_equal_90 = MathTex(r'\angle CMA', r'=', r'\angle CMB', r'= 90^{\circ}', font_size=fs)
+        CMA_CMB_equal_90.next_to(fc, RIGHT, buff=0)
+
+    # FUNCTIONS FOR ANIMATIONS BLOCKS
+
+        def show_CMA_CMB_equality():
+            # Function for adding angles CMA and CMB and write their equality
+            self.play(Create(angle_CMA), Create(angle_CMB))
+            self.play(Write(rightarrow_1))
+
+            self.play(
+                ReplacementTransform(angle_CMA.copy(), CMA_CMB_equal_90[0]), 
+                Write(CMA_CMB_equal_90[1]), 
+                ReplacementTransform(angle_CMB.copy(), CMA_CMB_equal_90[2]))
+
+            self.wait(0.5)
+            self.play(
+                ReplacementTransform(angle_CMA, right_angle_CMA),
+                ReplacementTransform(angle_CMB, right_angle_CMB))
+
+            self.play(Write(CMA_CMB_equal_90[3]))
         
-        
-        
+
+        def move_C_down_and_up(run_time=2.5):
+            # Function for moving C down then up
+            self.play(c_y.animate(rate_func=linear).set_value(1), run_time=run_time)
+            self.wait(1)
+            self.play(c_y.animate(rate_func=linear).set_value(3), run_time=run_time)
+
+    # ANIMATIONS FOR DRAWING
+
         self.wait(1)
+        show_CMA_CMB_equality()
+
+        self.wait(1)
+        move_C_down_and_up()
+
+        self.wait(1)
+
+
          
 
 
@@ -180,21 +222,21 @@ class test(Scene):
         Z = Dot(z)
         vertices_2 = [X, Y, Z]
 
-        AB = Line(a, b)
-        BC = Line(b, c)
-        CA = Line(c, a)
+        AB = always_redraw(lambda: Line(A.get_center(), B.get_center()))
+        BC = always_redraw(lambda: Line(B.get_center(), C.get_center()))
+        CA = always_redraw(lambda: Line(C.get_center(), A.get_center()))
         sides_1 = [AB, BC, CA]
-        XY = Line(x, y)
-        YZ = Line(y, z)
-        ZX = Line(z, x)
+        XY = always_redraw(lambda: Line(X.get_center(), Y.get_center()))
+        YZ = always_redraw(lambda: Line(Y.get_center(), Z.get_center()))
+        ZX = always_redraw(lambda: Line(Z.get_center(), X.get_center()))
         sides_2 = [XY, YZ, ZX]
 
         label_a = 'A'
         label_b = 'B'
         label_c = 'C'
-        label_A = LabelPoint(A, label_a)
-        label_B = LabelPoint(B, label_b, UP*0.75)
-        label_C = LabelPoint(C, label_c, DR*0.5)
+        label_A = always_redraw(lambda: LabelPoint(A, label_a))
+        label_B = always_redraw(lambda: LabelPoint(B, label_b, UP*0.75))
+        label_C = always_redraw(lambda: LabelPoint(C, label_c, DR*0.5))
         labels_1 = [label_a, label_b, label_c]
         mob_labels_1  = Group(label_A, label_B, label_C)
 
@@ -202,9 +244,9 @@ class test(Scene):
         label_x = 'X_1'
         label_y = 'Y_1'
         label_z = 'Z_1'
-        label_X = LabelPoint(X, label_x)
-        label_Y = LabelPoint(Y, label_y, UP*0.75)
-        label_Z = LabelPoint(Z, label_z, DR*0.5)
+        label_X = always_redraw(lambda: LabelPoint(X, label_x))
+        label_Y = always_redraw(lambda: LabelPoint(Y, label_y, UP*0.75))
+        label_Z = always_redraw(lambda: LabelPoint(Z, label_z, DR*0.5))
         labels_2 = [label_x, label_y, label_z]
         mob_labels_2 = Group(label_X, label_Y, label_Z)
 
@@ -228,17 +270,48 @@ class test(Scene):
 
     # end init
 
+        # self.add(AB.set_color(ORANGE), BC.set_color(BLUE), CA.set_color(GREEN))
+        # self.add(A.set_color(BLUE), B.set_color(GREEN), C.set_color(ORANGE))
+        # self.add(label_A.set_color(BLUE), label_B.set_color(GREEN), label_C.set_color(ORANGE))
         self.add(AB, BC, CA)
         self.add(A, B, C)
         self.add(label_A, label_B, label_C)
 
+        angle_CAB = always_redraw(lambda: Angle(CA, AB, quadrant=(-1, 1), color=BLUE))
+        angle_CAB_filled = always_redraw(lambda: FilledAngle(CA, AB, quadrant=(-1, 1), color=BLUE))
+        equality_sign_BC = always_redraw(lambda: SegmentEqualitySign1(BC, color=BLUE))
+
+        angle_ABC = always_redraw(lambda: Angle2(AB, BC, quadrant=(-1, 1), color=GREEN))
+        angle_ABC_filled = always_redraw(lambda: FilledAngle(AB, BC, quadrant=(-1, 1), color=GREEN))
+        equality_sign_CA = always_redraw(lambda: SegmentEqualitySign2(CA, color=GREEN))
+
+        angle_BCA = always_redraw(lambda: Angle3(BC, CA, quadrant=(-1, 1), color=ORANGE))
+        angle_BCA_filled = always_redraw(lambda: FilledAngle(BC, CA, quadrant=(-1, 1), color=ORANGE))
+        equality_sign_AB = always_redraw(lambda: SegmentEqualitySign3(AB, color=ORANGE))
+
+        def sum_180_copies(center):
+            _100 = center
+            CAB_copy = always_redraw(lambda: angle_CAB_filled.copy().next_to(_100, UR, buff=0))
+            BCA_copy = always_redraw(lambda: angle_BCA_filled.copy().next_to(_100, UL, buff=0))
+            # ABC_copy = always_redraw(lambda: angle_ABC_filled.copy().rotate(PI).next_to(_100, UP, buff=0))
+            # ABC_copy = always_redraw(lambda: Difference())
+            line_100 = Line([1.4, 0, 0], [0.6, 0, 0])
+            circle_100 = ArcBetweenPoints(*line_100.get_start_and_end(), radius=0.4, stroke_width=0).next_to(_100, UP, buff=0)
+            line_points = line_100.reverse_direction().points
+            circle_points = circle_100.points
+            points = np.concatenate([line_points, circle_points])
+            filled_circle = VMobject().set_points_as_corners(points)
+            ABC_copy = always_redraw(lambda: 
+                Difference(filled_circle, Union(CAB_copy, BCA_copy), color=GREEN, fill_opacity=1, stroke_width=0))
+            
+            return CAB_copy, ABC_copy, BCA_copy
+
         
-        angle_BCA = Angle(BC, CA, quadrant=(-1, 1), color=ORANGE, elbow=True)
-        filled_angle_BCA = FilledAngle(BC, CA, quadrant=(-1, 1), fill_color=ORANGE)
-
-        angle_2 = Angle2(BC, CA, quadrant=(-1, 1), color=ORANGE)
-
-        self.add(angle_BCA)
+        self.add(angle_CAB_filled, equality_sign_BC)
+        self.add(angle_ABC_filled, equality_sign_CA)
+        self.add(angle_BCA_filled, equality_sign_AB)
+        
+        
 
 
 
@@ -249,20 +322,5 @@ class test(Scene):
 class shtest(Scene):
     def construct(self):
         
-        C = Dot([-1, 1, 0])
-        A = Dot([1, -1, 0])
-
-        label_A = LabelPoint(A, 'A', DOWN)
-        label_C = LabelPoint(C, 'C', UP)
-        equality = MathTex('A')
-            
-
-
-        CA = always_redraw(lambda: Line(C.get_center(), A.get_center()))
-        self.add(C, A, CA)
-        animation = (C.animate().move_to([3, 1, 0]), A.animate().move_to([-3, -1, 0]))
-        self.wait(0.5)
-        self.play(*animation)
-        self.wait(0.5)
-        self.remove(A)
-        self.wait(0.5)
+        CMA_CMB_equal_90 = MathTex(r'\angle CMA', r'=', r'\angle CMB', r'=', r'90^{\circ}')
+        self.add(CMA_CMB_equal_90)
