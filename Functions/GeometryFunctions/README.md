@@ -3,7 +3,7 @@ Also includes `armtex` package as `armenian_tex_template`.
 
 ## DONE
 
-- Functions that return something
+- Functions that only return something
     - LabelPoint(point, label, position)
         - returns label_A - MathTex('A')
     - DistanceBetweenCoordinates(a, b)
@@ -32,6 +32,12 @@ Also includes `armtex` package as `armenian_tex_template`.
         - MathTex('ABC=XYZ')
     - ConcludeFromStatementSystem(statements, conclusion)
         - returns VGroup of (statements, brace, => conclusion) - { statements => conclusion
+
+    - TransformSegmentLabelsIntoStatement
+        - returns list of 2 or 3 animations for Transforming segment into a statement 'A''B'
+    - TransformSegmentsLabelsIntoEquality
+        - returns list of 5 or 7 animations for Transforming segments into equality AB=BC
+    - returns list of 3 or 4 animations for Transforming segment into a statement 'AB' and Writing '-ն ընդհանուր է' ('A''B''-is common')
 
 
 

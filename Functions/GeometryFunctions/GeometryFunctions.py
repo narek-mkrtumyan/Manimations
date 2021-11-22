@@ -263,7 +263,15 @@ def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual
 
 
 def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transform_segment=True, run_time=1):
-            
+    '''
+    Animations for Transforming segment into a statement AB
+
+    Arguments - segment_dots_labels(AB, A, B, label_A, label_B), statement ('A', 'B')
+
+    Optional argument - transform_segment, run_time
+
+    Returns list of 2 or 3 animations
+    '''
     AB = segment_dots_labels[0].copy()
     A, B = segment_dots_labels[1].copy(), segment_dots_labels[2].copy()
     label_A, label_B = segment_dots_labels[3].copy(), segment_dots_labels[4].copy()
@@ -286,7 +294,15 @@ def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transfor
 
 
 def TransformSegmentsLabelsIntoEquality(segment_dots_labels_1, segment_dots_labels_2, equality, transform_segments=True, run_time=1.5):         
+    '''
+    Animations for Transforming segments into equality AB=XY
 
+    Arguments - segment_dots_labels_1, segment_dots_labels_2, equality('A''B''=''X''Y')
+
+    Optional argument - transform_segments, run_time
+
+    Returns list of 5 or 7 animations
+    '''
     transformation_AB = TransformSegmentLabelsIntoStatement(segment_dots_labels_1, equality[0:2],
         transform_segment=transform_segments, run_time=run_time)
 
@@ -301,7 +317,15 @@ def TransformSegmentsLabelsIntoEquality(segment_dots_labels_1, segment_dots_labe
 
 
 def TransformCommonSegmentLabelsIntoStatement(segment_dots_labels, statement, transform_segment=True, run_time=1.5):
+    '''
+    Animations for Transforming segment into a statement 'AB-ն ընդհանուր է' ('AB is common')
 
+    Arguments - segment_dots_labels, statement
+
+    Optional argument - transform_segment, run_time
+
+    Returns list of 3 or 4 animations
+    '''
     transformation_AB = TransformSegmentLabelsIntoStatement(segment_dots_labels, statement[0:2], 
         transform_segment=transform_segment, run_time=run_time)
     
