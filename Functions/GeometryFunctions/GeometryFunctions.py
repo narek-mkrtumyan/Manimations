@@ -69,8 +69,7 @@ def SegmentEqualitySign1(AB, sign_size=0.2, color=WHITE):
 
     Returns - sign Mobject
     '''
-    a, b = AB.get_start_and_end()
-    length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
+    length_AB = SegmentLength(AB)
     sign = AB.copy()
     sign = sign.scale(sign_size / length_AB)
     sign = sign.set_color(color)
@@ -210,7 +209,7 @@ def MathtexCommonSegment(labels, font_size=30, color=WHITE):
     AB = MathTex(r'' + label_1, r'' + label_2, font_size=font_size, color=color)
 
     is_common = MathTex(r'\textrm{-ն ընդհանուր է}', tex_template=armenian_tex_template, 
-        font_size=font_size, color=color).next_to(AB, RIGHT, buff=0)
+        font_size=font_size, color=color).next_to(AB, RIGHT, buff=0).shift(DOWN*0.04)
 
     segment_common = VGroup(*AB, is_common)
     
