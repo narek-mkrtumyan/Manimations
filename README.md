@@ -1,4 +1,4 @@
-# Manim
+# Video Lessons
 
 In each folder must contain a `README.md` file describing the animations implemented in that folder's `.py` files.
 
