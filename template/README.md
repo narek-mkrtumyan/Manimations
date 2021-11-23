@@ -1,14 +1,15 @@
 # SCENE name
-## DONE
+
+## WHAT IS DONE
 
 ### Functions
 - 
-see more about each functions in their docstrings.
+see more about each function in it's docstring.
 
 ### Animations
 - 
 
-## NEEDS TO BE DONE
+## WHAT NEEDS TO BE DONE
 
 ### Functions
 - 
