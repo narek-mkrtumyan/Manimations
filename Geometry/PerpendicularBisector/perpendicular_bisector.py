@@ -8,7 +8,7 @@ from Functions.GeometryFunctions.GeometryFunctions import *
 
 fs = 30 # font_size for MathTex
 
-class PerpBisect(MovingCameraScene):
+class Scene1(MovingCameraScene):
     def construct(self):
 
         # self.camera.frame.save_state()
@@ -61,7 +61,8 @@ class PerpBisect(MovingCameraScene):
 
         def move_C_to_PB_and_change_colors(run_time):
             # Function for animationg moving C to the Perpendicular bisector and changing colos of CA and CB
-            self.play(c_x.animate(rate_func=linear).set_value((a[0] + b[0]) / 2), c_y.animate().set_value(2.5), 
+            self.play(c_x.animate(rate_func=linear).set_value((a[0] + b[0]) / 2), 
+                c_y.animate().set_value(2.5), 
                 color_frac.animate(rate_func=linear).set_value(1), run_time=run_time)
             self.add(A, B, C) # To put the points on top of the lines
 
@@ -73,7 +74,7 @@ class PerpBisect(MovingCameraScene):
             self.play(Create(equality_sign_MA), Create(equality_sign_MB))
             self.play(Create(CM))
             self.add(C, M) # To put the points on top of the lines
-            self.play(FadeIn(ACM),FadeIn(BCM))
+            self.play(FadeIn(fill_ACM),FadeIn(fill_BCM))
             
 
 
@@ -89,12 +90,12 @@ class PerpBisect(MovingCameraScene):
         equality_sign_CA = always_redraw(lambda: SegmentEqualitySign1(CA))
         equality_sign_CB = always_redraw(lambda: SegmentEqualitySign1(CB))
         CM = always_redraw(lambda: Line(C.get_center(), M.get_center(), color=GREEN))
-        # Color ACM and BCM triangles
-        ACM = always_redraw(lambda: 
+        # fill_ACM and fill_BCM triangles
+        fill_ACM = always_redraw(lambda: 
             Polygon(A.get_center(), C.get_center(), M.get_center(), 
-                fill_opacity=0.3).set_fill(ORANGE).set_stroke(width=0))
+                fill_opacity=0.3).set_fill(YELLOW).set_stroke(width=0))
 
-        BCM = always_redraw(lambda: 
+        fill_BCM = always_redraw(lambda: 
             Polygon(B.get_center(), C.get_center(), M.get_center(), 
                 fill_opacity=0.3).set_fill(GREEN).set_stroke(width=0))
 
@@ -106,28 +107,12 @@ class PerpBisect(MovingCameraScene):
         self.wait(0.5)
 
 
-# TEMPORARY ADDING
-        # self.add(A, B, C, AB, CA, CB, label_A, label_B, label_C)
-        # move_C_to_PB_and_change_colors(1)
-        # self.play(self.camera.frame.animate.shift(3*RIGHT))
-        # # NOT ANIMATION: init new mobjects dependent on ValueTracker value
-        # # Equality signs for CA and CB with 1 small line and segment CM
-        # equality_sign_CA = always_redraw(lambda: SegmentEqualitySign1(CA))
-        # equality_sign_CB = always_redraw(lambda: SegmentEqualitySign1(CB))
-        # CM = always_redraw(lambda: Line(C.get_center(), M.get_center(), color=GREEN))
-        # # Color ACM and BCM triangles
-        # ACM = Polygon(A.get_center(), C.get_center(), M.get_center(), 
-        #     fill_opacity=0.3).set_fill(ORANGE).set_stroke(width=0)
-        # BCM = Polygon(B.get_center(), C.get_center(), M.get_center(), 
-        #     fill_opacity=0.3).set_fill(GREEN).set_stroke(width=0)
-        # self.add(M, CM, ACM, BCM, equality_sign_CA, equality_sign_CB, equality_sign_AM, equality_sign_MB, label_M)
-        # self.wait(1)
-
 
 # SOLUTION
 
+        fc = self.camera.frame_center     # Camera frame center after shifting ([3, 0, 0])
+
     # INIT Triangles
-        fc = self.camera.frame_center     # Camera frame center after shifting camera
 
         vertices_ACM = (A, C, M)
         sides_ACM = (CA, CM, MA)
@@ -141,7 +126,7 @@ class PerpBisect(MovingCameraScene):
         labels_bcm = (label_b, label_c, label_m)
         triangle_BCM = (vertices_BCM, sides_BCM, mob_labels_BCM, labels_bcm)
 
-    # Show CMA and CMB equality
+    # Show triangle equality CMA and CMB
         triangles_equality = TrianglesCongruence.SSSWiggling(
             self, *triangle_ACM, *triangle_BCM, common=CM, colors=[0, 0, RED], 
             brace_tip=fc + np.array([-1, 2, 0]), wiggle_simultaneously=[False, True, True], 
@@ -150,11 +135,17 @@ class PerpBisect(MovingCameraScene):
     # INIT angles, and CMA=CMB=90
         rightarrow_1 = MathTex(r'' + '\Rightarrow', font_size=fs).next_to(triangles_equality, RIGHT)
 
-        angle_CMA = always_redraw(lambda: Angle(CM, MA, quadrant=(-1, 1), radius=0.3))
-        angle_CMB = always_redraw(lambda: Angle(CM, MB, quadrant=(-1, 1), other_angle=True, radius=0.4))
+        angle_CMA = always_redraw(lambda: 
+            Angle(CM, MA, quadrant=(-1, 1), radius=0.3, color=fill_ACM.get_color()))
 
-        right_angle_CMA = always_redraw(lambda: RightAngle(CM, MA, quadrant=(-1, 1), length=0.3))
-        right_angle_CMB = always_redraw(lambda: RightAngle(CM, MB, quadrant=(-1, 1), length=0.4))
+        angle_CMB = always_redraw(lambda: 
+        Angle(CM, MB, quadrant=(-1, 1), other_angle=True, radius=0.4, color=fill_BCM.get_color()))
+
+        right_angle_CMA = always_redraw(lambda: 
+            RightAngle(CM, MA, quadrant=(-1, 1), length=0.3, color=fill_ACM.get_color()))
+
+        right_angle_CMB = always_redraw(lambda: 
+            RightAngle(CM, MB, quadrant=(-1, 1), length=0.4, color=fill_BCM.get_color()))
 
         CMA_CMB_equal_90 = MathTex(r'\angle CMA', r'=', r'\angle CMB', r'= 90^{\circ}', font_size=fs)
         CMA_CMB_equal_90.next_to(fc, RIGHT, buff=0)
@@ -179,11 +170,11 @@ class PerpBisect(MovingCameraScene):
             self.play(Write(CMA_CMB_equal_90[3]))
         
 
-        def move_C_down_and_up(run_time=2.5):
-            # Function for moving C down then up
-            self.play(c_y.animate(rate_func=linear).set_value(1), run_time=run_time)
+        def move_C_up_down(run_time=1.5):
+            # Function for moving C up then down
+            self.play(c_y.animate(rate_func=linear).set_value(3.5), run_time=run_time)
             self.wait(1)
-            self.play(c_y.animate(rate_func=linear).set_value(3), run_time=run_time)
+            self.play(c_y.animate(rate_func=linear).set_value(1.5), run_time=run_time)
 
     # ANIMATIONS FOR DRAWING
 
@@ -191,9 +182,34 @@ class PerpBisect(MovingCameraScene):
         show_CMA_CMB_equality()
 
         self.wait(1)
-        move_C_down_and_up()
+        move_C_up_down()
 
         self.wait(1)
+
+        system = VGroup(*[triangles_equality[i] for i in range(len(triangles_equality) - 1)])
+
+        self.play(
+            self.camera.frame.animate.shift(2*RIGHT, 1.75*DOWN),
+            system.animate(rate_func=linear).next_to([0, -2, 0], DOWN, buff=0),
+            triangles_equality[-1].animate(rate_func=linear).next_to([-0.25, -3.75, 0], DOWN, buff=0),
+            rightarrow_1.animate(rate_func=linear).next_to([1.25, -3.9, 0], RIGHT),
+            CMA_CMB_equal_90.animate(rate_func=linear).next_to([0, -4.5, 0], DOWN, buff=0), 
+            run_time=2
+        )
+        self.wait(1)
+
+        under_first_triangle = VGroup(*triangles_equality, rightarrow_1, CMA_CMB_equal_90)
+
+    # Divide screen into 2 parts by vertical line
+        fc = self.camera.frame_center    # [5, -1.75, 0]
+        height = self.camera.frame_height
+        
+        divide_line = DashedLine(fc + np.array([0, height/2, 0]), fc + np.array([0, -height/2, 0]))
+        divide_line.shift(LEFT*2.75)
+
+        self.play(Create(divide_line))
+        self.wait(1)
+
 
 
          
