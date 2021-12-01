@@ -8,11 +8,12 @@ DO **NOT** add any directory named `images`, `texts`, etc. (see more in [.gitign
 Directories named `test` also will be ignored, so feel free to make `test/` in your computer if you need.
 
 
-To use funtions from Directory/file.py, add the following in your code
+To use functions from Directory/file.py, add the following in your code
 ```py
 import sys
 sys.path.append("../../")       # relative path to the root of the repository
 from Directory.file import *    # or import specific function
+# from Functions.GeometryFunctions.GeometryFunctions import *
 ```
 
 To render the animation implemented in `file.py` just type `'manim -pql file_name.py scene_name'` in the terminal in

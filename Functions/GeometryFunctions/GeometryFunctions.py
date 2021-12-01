@@ -1,3 +1,4 @@
+from math import degrees, radians
 from manim import *
 import numpy as np
 
@@ -61,13 +62,13 @@ def SegmentLength(AB):
 
 def SegmentEqualitySign1(AB, sign_size=0.2, color=WHITE):
     '''
-    Equality sign with 1 small line in the middle of the segment
+        Equality sign with 1 small line in the middle of the segment
 
-    Arguments - AB(Line)
+        Arguments - AB(Line)
 
-    Optional - sign_size=0.2, Color=WHITE
+        Optional - sign_size=0.2, Color=WHITE
 
-    Returns - sign Mobject
+        Returns - sign Mobject
     '''
     length_AB = SegmentLength(AB)
     sign = AB.copy()
@@ -80,13 +81,13 @@ def SegmentEqualitySign1(AB, sign_size=0.2, color=WHITE):
 
 def SegmentEqualitySign2(AB, sign_size=0.2, color=WHITE):
     '''
-    Equality sign with 2 small lines for a segment
+        Equality sign with 2 small lines for a segment
 
-    Arguments - AB(Line)
+        Arguments - AB(Line)
 
-    Optional - sign_size=0.2, Color=WHITE
+        Optional - sign_size=0.2, Color=WHITE
 
-    Returns - sign VGroup
+        Returns - sign VGroup
     '''
     a, b = AB.get_start_and_end()
     length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
@@ -129,11 +130,11 @@ def SegmentEqualitySign3(AB, sign_size=0.2, color=WHITE):
 def FilledAngle(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, stroke_width=0, stroke_color=WHITE, 
     color=WHITE, fill_opacity=1):
     '''
-    Returns angle sign filled with some color
+        Returns angle sign filled with some color
 
-    Arguments - same as Angle
+        Arguments - same as Angle
 
-    It also can ad stroke to the filled angle sign
+        It also can ad stroke to the filled angle sign
     '''
     angle = Angle(line_1, line_2, radius=radius, quadrant=quadrant, other_angle=other_angle)
 
@@ -153,11 +154,11 @@ def FilledAngle(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, 
 
 def Angle2(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, stroke_width=4, color=WHITE):
     '''
-    VGroup of 2 circular arcs representing an angle of two lines
+        VGroup of 2 circular arcs representing an angle of two lines
 
-    Arguments - same as Angle() # Expect of **kwargs
+        Arguments - same as Angle() # Expect of **kwargs
 
-    Returns - Vgroup()
+        Returns - Vgroup()
     '''
     a_1 = Angle(line_1, line_2, radius=radius, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
     a_2 = Angle(line_1, line_2, radius=radius + 0.1, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
@@ -167,11 +168,11 @@ def Angle2(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, strok
 
 def Angle3(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, stroke_width=4, color=WHITE):
     '''
-    VGroup of 3 circular arcs representing an angle of two lines
+        VGroup of 3 circular arcs representing an angle of two lines
 
-    Arguments - same as Angle() # Expect of **kwargs
+        Arguments - same as Angle() # Expect of **kwargs
 
-    Returns - Vgroup()
+        Returns - Vgroup()
     '''
     a_1 = Angle(line_1, line_2, radius=radius, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
     a_2 = Angle(line_1, line_2, radius=radius + 0.1, quadrant=quadrant, other_angle=other_angle, color=color, stroke_width=stroke_width)
@@ -182,11 +183,11 @@ def Angle3(line_1, line_2, radius=0.4, quadrant=(1, 1), other_angle=False, strok
 
 def MathtexSegmentsEquality(labels, font_size=30, color=WHITE):
     '''
-    Writes 2 segments equality (AB=XY) in MathTex as a VGroup of 5 mobjects
+        Writes 2 segments equality (AB=XY) in MathTex as a VGroup of 5 mobjects
 
-    Argument - labels(list of 4 labels)
+        Argument - labels(list of 4 labels)
 
-    Returns - MathTex('AB=CD')
+        Returns - MathTex('AB=CD')
     '''
     label_1_1, label_1_2, label_2_1, label_2_2 = labels
 
@@ -198,11 +199,11 @@ def MathtexSegmentsEquality(labels, font_size=30, color=WHITE):
 
 def MathtexCommonSegment(labels, font_size=30, color=WHITE):
     '''
-    Writes segment is common (AB-ն ընդհանուր է) in MathTex as a VGroup of 3 Mobjects
+        Writes segment is common (AB-ն ընդհանուր է) in MathTex as a VGroup of 3 Mobjects
 
-    Arguments - labels (list of 2 labels)
+        Arguments - labels (list of 2 labels)
 
-    Returns - VGroup() from 3 MathTex mobjects ('A''B' '-ն ընդհանուր է') # 'AB is common'
+        Returns - VGroup() from 3 MathTex mobjects ('A''B' '-ն ընդհանուր է') # 'AB is common'
     '''
     label_1, label_2 = labels
     
@@ -218,25 +219,25 @@ def MathtexCommonSegment(labels, font_size=30, color=WHITE):
 
 def MathTexTrianglesEquality(abc, xyz, color=WHITE, font_size=30):
     '''
-    MathTex Mobject 'ABC=XYZ'
+        MathTex Mobject 'ABC=XYZ'
 
-    Arguments - abc('ABC'), xyz('XYZ')
+        Arguments - abc('ABC'), xyz('XYZ')
 
-    Returns - MathTex('ABC=XYZ)
+        Returns - MathTex('ABC=XYZ)
     '''
     return MathTex(r'\triangle ' + abc + r'\ =\ ' + r'\triangle ' + xyz, font_size=font_size, color=color)
 
 
 def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual_letters=False):
     '''
-    Arranges statements under each other, puts Brace from the left, '=>' and the conclusion
-    
-    Arguments - statements (some sort of group of statements), conclusion
-    
-    Optional arguments - individual_letters (if True, returning VGroup will consists from submobjects of statements submobjects
-    (usefull for animating triangles equality))
+        Arranges statements under each other, puts Brace from the left, '=>' and the conclusion
+        
+        Arguments - statements (some sort of group of statements), conclusion
+        
+        Optional arguments - individual_letters (if True, returning VGroup will consists from submobjects of statements submobjects
+        (usefull for animating triangles equality))
 
-    Returns - VGroup of (statements, brace, =>, conclusion) - ' { statements => conclusion '
+        Returns - VGroup of (statements, brace, =>, conclusion) - ' { statements => conclusion '
     '''
     statements = VGroup(*statements).arrange(DOWN, aligned_edge=LEFT)
 
@@ -263,13 +264,13 @@ def ConcludeFromStatementSystem(statements, conclusion, font_size=30, individual
 
 def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transform_segment=True, run_time=1):
     '''
-    Animations for Transforming segment into a statement AB
+        Animations for Transforming segment into a statement AB
 
-    Arguments - segment_dots_labels(AB, A, B, label_A, label_B), statement ('A', 'B')
+        Arguments - segment_dots_labels(AB, A, B, label_A, label_B), statement ('A', 'B')
 
-    Optional argument - transform_segment, run_time
+        Optional argument - transform_segment, run_time
 
-    Returns list of 2 or 3 animations
+        Returns list of 2 or 3 animations
     '''
     AB = segment_dots_labels[0].copy()
     A, B = segment_dots_labels[1].copy(), segment_dots_labels[2].copy()
@@ -294,13 +295,13 @@ def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transfor
 
 def TransformSegmentsLabelsIntoEquality(segment_dots_labels_1, segment_dots_labels_2, equality, transform_segments=True, run_time=1.5):         
     '''
-    Animations for Transforming segments into equality AB=XY
+        Animations for Transforming segments into equality AB=XY
 
-    Arguments - segment_dots_labels_1, segment_dots_labels_2, equality('A''B''=''X''Y')
+        Arguments - segment_dots_labels_1, segment_dots_labels_2, equality('A''B''=''X''Y')
 
-    Optional argument - transform_segments, run_time
+        Optional argument - transform_segments, run_time
 
-    Returns list of 5 or 7 animations
+        Returns list of 5 or 7 animations
     '''
     transformation_AB = TransformSegmentLabelsIntoStatement(segment_dots_labels_1, equality[0:2],
         transform_segment=transform_segments, run_time=run_time)
@@ -317,13 +318,13 @@ def TransformSegmentsLabelsIntoEquality(segment_dots_labels_1, segment_dots_labe
 
 def TransformCommonSegmentLabelsIntoStatement(segment_dots_labels, statement, transform_segment=True, run_time=1.5):
     '''
-    Animations for Transforming segment into a statement 'AB-ն ընդհանուր է' ('AB is common')
+        Animations for Transforming segment into a statement 'AB-ն ընդհանուր է' ('AB is common')
 
-    Arguments - segment_dots_labels, statement
+        Arguments - segment_dots_labels, statement
 
-    Optional argument - transform_segment, run_time
+        Optional argument - transform_segment, run_time
 
-    Returns list of 3 or 4 animations
+        Returns list of 3 or 4 animations
     '''
     transformation_AB = TransformSegmentLabelsIntoStatement(segment_dots_labels, statement[0:2], 
         transform_segment=transform_segment, run_time=run_time)
@@ -342,42 +343,123 @@ def TransformCommonSegmentLabelsIntoStatement(segment_dots_labels, statement, tr
 
 
 
-def CircleFromSpinningRadius(self, radius=1, center=[0, 0, 0], starting_point_angle=0, 
-        radius_color=WHITE, circle_color=GREEN, run_time=4):
+def CircleFromSpinningRadius(self, radius=1, center=ORIGIN, starting_point_angle=0, 
+        equality_sign=0, equality_sign_color=WHITE, r_sign='',
+        radius_color=WHITE, circle_color=GREEN, direction=1, run_time=4, center_color=WHITE,
+        create_center=True, create_radius=True, create_point=True):
     '''
-    This function Creates a Circle using it's radius like a Compass Drawing tool (կարկին)
+        This function Creates a Circle using it's radius like a Compass Drawing tool (կարկին)
 
-    Arguments - radius, center, point from which to start (angle in DEGREES), colors and run time
+        Arguments - radius, center, point from which to start (angle in DEGREES), colors and run time
 
-    Optional - starting_point_angle=0, radius_color(line color), circle_color, run_time=4
+        Optional - starting_point_angle=0, radius_color(line color), circle_color, run_time=4
 
-    Returns the Circle
+        Returns the Circle and the Center
     '''
 
-    Center = Dot(center, color=radius_color)
+    Center = always_redraw(lambda: Dot(center, color=center_color))
     circle = Circle(radius=radius, color=circle_color).move_to(center)
 
     moving_point_angle = ValueTracker(starting_point_angle)
 
-    moving_point = always_redraw(lambda: Dot(circle.point_at_angle((moving_point_angle.get_value() % 360)*DEGREES), color=circle_color))
+    moving_point = always_redraw(lambda: 
+        Dot(circle.point_at_angle((moving_point_angle.get_value() % 360) * DEGREES), color=circle_color))
 
-    radius_line = always_redraw(lambda: Line(center, circle.point_at_angle((moving_point_angle.get_value() % 360)*DEGREES),
-        color=radius_color))
+    radius_line = always_redraw(lambda: 
+        Line(center, circle.point_at_angle((moving_point_angle.get_value() % 360) * DEGREES), color=radius_color))
 
-    arc = always_redraw(lambda: Arc(start_angle=starting_point_angle*DEGREES, 
-        angle=((moving_point_angle.get_value() - starting_point_angle) % 360)*DEGREES, 
-        arc_center=center, radius=radius, color=circle_color))
+    if direction == 1:
+        arc = always_redraw(lambda: 
+            Arc(
+                start_angle=starting_point_angle * DEGREES + 0.001, 
+                angle=(moving_point_angle.get_value() - starting_point_angle) * DEGREES, 
+                arc_center=center, radius=radius, color=circle_color))
 
-    self.play(Create(Center))
-    self.play(Create(radius_line))
-    self.play(Create(moving_point))
+    else:
+        arc = always_redraw(lambda:
+            Arc(
+                start_angle=starting_point_angle * DEGREES + 0.001, 
+                angle=(moving_point_angle.get_value() - starting_point_angle)*DEGREES,
+                arc_center=center, radius=radius, color=circle_color))
+
+    if equality_sign == 1:
+        equality_sign_OR = always_redraw(lambda: SegmentEqualitySign1(radius_line, color=equality_sign_color))
+    if equality_sign == 2:
+        equality_sign_OR = always_redraw(lambda: SegmentEqualitySign2(radius_line, color=equality_sign_color))
+    if equality_sign == 3:
+        equality_sign_OR = always_redraw(lambda: SegmentEqualitySign3(radius_line, color=equality_sign_color))
+
+    if len(r_sign) > 0:
+        sign_r = always_redraw(lambda:
+            r_sign.copy().next_to((Center.get_center() + 
+                circle.point_at_angle(((moving_point_angle.get_value() - 30)  % 360) * DEGREES)) / 2, buff=0))
+
+
+    if create_center:
+        self.play(Create(Center))
+    else:
+        self.add(Center)
+    
+    if create_radius:
+        self.play(Create(radius_line))
+    else:
+        self.add(radius_line)
+    self.add(Center)
+    
+    if create_point:
+        self.play(Create(moving_point))
+    else:
+        self.add(moving_point_angle)
+    
+    if equality_sign != 0:
+        self.play(Create(equality_sign_OR))
+    
+    if len(r_sign) > 0:
+        self.play(Create(sign_r))
+
     self.wait(0.5)
-    self.add(arc)
-    self.play(moving_point_angle.animate(run_time=run_time, rate_finc=linear).set_value(starting_point_angle + 360))
-    self.add(circle)
-    self.play(Uncreate(moving_point), Uncreate(radius_line))
 
-    return circle
+    self.add(arc)
+
+    if direction == 1:
+        self.play(
+            moving_point_angle.animate(run_time=run_time, rate_func=linear).set_value(starting_point_angle + 360))
+    else:
+        self.play(
+            moving_point_angle.animate(run_time=run_time, rate_func=linear).set_value(starting_point_angle - 360))
+
+    self.remove(arc)
+    self.add(circle)
+
+
+    if equality_sign != 0:
+        if len(r_sign) > 0:
+            self.play(
+                Uncreate(moving_point), 
+                Uncreate(radius_line), 
+                Uncreate(equality_sign_OR),
+                Uncreate(sign_r)
+            )
+        else:
+            self.play(
+                Uncreate(moving_point), 
+                Uncreate(radius_line), 
+                Uncreate(equality_sign_OR),
+            )
+    else:
+        if len(r_sign) > 0:
+            self.play(
+                Uncreate(moving_point), 
+                Uncreate(radius_line),
+                Uncreate(sign_r)
+            )
+        else:
+            self.play(
+                Uncreate(moving_point), 
+                Uncreate(radius_line),
+            )
+
+    return circle, Center
 
 
 
@@ -390,11 +472,11 @@ def CircleFromSpinningRadius(self, radius=1, center=[0, 0, 0], starting_point_an
 
 def PlaySegmentWiggling(self, segment_dots_labels, wiggle_endpoints=True, color=0, scale_factor=1.2, run_time=1.3):
         '''
-        Wiggles segment AB together with A and B (optional), and scales in and out Labels of A and B
-        
-        Arguments - self, AB, A, B, label_A, label_B
+            Wiggles segment AB together with A and B (optional), and scales in and out Labels of A and B
+            
+            Arguments - self, AB, A, B, label_A, label_B
 
-        Optional - wiggle_endpoints(True or False), color(default is the same as AB), scale_factor(label), run_time
+            Optional - wiggle_endpoints(True or False), color(default is the same as AB), scale_factor(label), run_time
         '''
         AB, A, B, label_A, label_B = segment_dots_labels
         a, b = A.copy(), B.copy()
@@ -425,12 +507,12 @@ def PlaySegmentWiggling(self, segment_dots_labels, wiggle_endpoints=True, color=
 def PlayTwoSegmentsWiggling(self, segment_dots_labels_1, segment_dots_labels_2, wiggle_endpoints=True, simultaneously=False, color=0,
         run_time=1.3):
         '''
-        SegmentWiggling for AB and XY
-        
-        Arguments - self, AB, XY, (A, B, X, Y), (label_A, label_B, label_X, label_Y)
+            SegmentWiggling for AB and XY
+            
+            Arguments - self, AB, XY, (A, B, X, Y), (label_A, label_B, label_X, label_Y)
 
-        Optional - wiggle_endpoints, simultaneously(True or False), color(same as AB), scale_factor(label), 
-        run_time (for each wiggling)
+            Optional - wiggle_endpoints, simultaneously(True or False), color(same as AB), scale_factor(label), 
+            run_time (for each wiggling)
         '''
         scale_factor = 1.2
 
@@ -515,10 +597,10 @@ def PlayTransformCommonSegmentLabelsIntoStatement(self, animations, transform_se
 def PlayTwoSegmentsEqualityWiggling(self, pair, equality, run_time=2.5, color=WHITE, wiggle_simultaneously=True, 
     wiggle_endpoints=True, transform_simultaneously=False, transform_segments=True):
     '''
-    Wiggles 2 segments and transforms into AB=CD
+        Wiggles 2 segments and transforms into AB=CD
 
-    Arguments - pair((AB, A, B, label_A, label_B), (CD, C, D, label_C, label_D)) input for TwoSegmentsWiggling;
-    equality(MathTex from 5 Mobjects  AB=CD)
+        Arguments - pair((AB, A, B, label_A, label_B), (CD, C, D, label_C, label_D)) input for TwoSegmentsWiggling;
+        equality(MathTex from 5 Mobjects  AB=CD)
     '''
     
     PlayTwoSegmentsWiggling(self, *pair, color=color,
@@ -544,9 +626,9 @@ def PlaySegmentCommonWiggling(self, segment_dots_labels, statement, run_time=2.5
 
 def PlayBraceConclude(self, conclude_from_system):
     '''
-    From ConcludeFromStatementsSystem animates drawing Brace, rightarrow and conclusion
+        From ConcludeFromStatementsSystem animates drawing Brace, rightarrow and conclusion
 
-    Parameters - conclude_from_system(last three elements must be brace, rightarrow and conclusion respectively)
+        Arguments - conclude_from_system(last three elements must be brace, rightarrow and conclusion respectively)
     '''
     self.play(Write(conclude_from_system[-3]))
     self.play(Write(conclude_from_system[-2]))
@@ -567,19 +649,19 @@ class TrianglesCongruence(Scene):
                 transform_simultaneously=[False, False, False], colors=[0, 0, 0],
                     run_times=[2.5, 2.5, 2.5], wait_time=[1, 1, 1]):
             '''
-            Shows and writes equality of two triangles by their 3 sides,
-            if there is a common side, that will be shown last,
-            others are animated in order
+                Shows and writes equality of two triangles by their 3 sides,
+                if there is a common side, that will be shown last,
+                others are animated in order
 
-            Arguments - vertices_ABC(A, B, C), sides_ABC (AB, BC, AC(order matters)), mob_labels_ABC(mobjects, preferably from LabelPoint()), 
-            labels_ABC('A', 'B', 'C'), same things for second triangle(XYZ), brace_tip(left middle point of system of equalities), 
-            common(if triangles have a common side), 
-            wiggle_endpoints(list - True or False for each side), 
-            wiggle_simultaneously(2 equal sides(list - True or False for each side)), 
-            color(change color of the side while wiggling(list - 0 or color for each side)), 
-            run_time(animations of sides(list)), wait_time(pause between animations of sides, or final brace(list))
+                Arguments - vertices_ABC(A, B, C), sides_ABC (AB, BC, AC(order matters)), mob_labels_ABC(mobjects, preferably from LabelPoint()), 
+                labels_ABC('A', 'B', 'C'), same things for second triangle(XYZ), brace_tip(left middle point of system of equalities), 
+                common(if triangles have a common side), 
+                wiggle_endpoints(list - True or False for each side), 
+                wiggle_simultaneously(2 equal sides(list - True or False for each side)), 
+                color(change color of the side while wiggling(list - 0 or color for each side)), 
+                run_time(animations of sides(list)), wait_time(pause between animations of sides, or final brace(list))
 
-            Returns - VGroup of mobjects (same as ConcludeFromSystem)
+                Returns - VGroup of mobjects (same as ConcludeFromSystem)
             '''
         # Read points lables,    
             A, B, C = vertices_ABC
@@ -711,10 +793,32 @@ class TrianglesCongruence(Scene):
 class test(Scene):
     def construct(self):
 
-        C = Dot([-1, 1, 0])
-        CA = always_redraw(lambda: Line(C.get_center(), [0, -1, 0]))
-        self.add(C, CA)
+        circle = Circle(radius=1)
+
+        # self.add(
+        #     ArcBetweenPoints(
+        #         start=circle.point_at_angle(0*DEGREES),
+        #         end=circle.point_at_angle(270*DEGREES),
+        #         arc_center=ORIGIN
+        #     )
+        # )
+
+        # self.add(
+        #     Arc(radius=1, start_angle=30*DEGREES, angle=-60*DEGREES)
+        # )
+
+        CircleFromSpinningRadius(self, direction=-1, starting_point_angle=60)
         self.wait(0.5)
-        self.play(C.animate().move_to([3, 1, 0]))
-        self.wait(0.5)
-        
+
+        # angle = ValueTracker(0)
+        # point = always_redraw(lambda: 
+        #     Dot(circle.point_at_angle(angle.get_value())))
+
+        # self.wait(0.5)
+        # self.play(Create(point))
+        # self.play(
+        #     Create(circle, run_time=3),
+        #     angle.animate(run_time=3).set_value(2 * PI)
+        # )
+        # self.wait(0.5)
+
