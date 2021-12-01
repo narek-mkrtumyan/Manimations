@@ -1,5 +1,8 @@
 from manim import *
 import numpy as np
+
+import sys
+sys.path.append("../../")       # relative path to the root of the repository
 from Functions.GeometryFunctions.GeometryFunctions import *
 
 
@@ -48,8 +51,8 @@ class SheepCircle(Scene):
         self.wait(0.5)
         CircleFromSpinningRadiusSheep(radius=radius, starting_point_angle=starting_point_angle, circle_color=DARK_BROWN)
         self.wait(0.5)
-        
 
-# just cheking commit and push with vscode
-# one more line
-# one more extra line
+
+class test(Scene):
+    def construct(self):
+        self.wait()
