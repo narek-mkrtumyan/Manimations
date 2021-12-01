@@ -1,4 +1,5 @@
-# SCENE name
+# SCENE Problem4
+Let AB be the diameter of the circle with the center O and let the chords AC and BC are equal, Find angle AOC.
 
 ## WHAT IS DONE
 

@@ -15,6 +15,14 @@
 
     Prove that the three points on the same line doesn't belong to the same circle.
 
+- Problem4
+
+    Let AB be the diameter of the circle with the center O and let the chords AC and BC are equal, Find angle AOC.
+
+- Problem5
+
+    Draw a circle of given radius that passed the given 2 points.
+
 
 ## NEEDS TO BE DONE
 

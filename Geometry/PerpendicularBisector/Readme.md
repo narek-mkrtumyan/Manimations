@@ -7,8 +7,6 @@
 
 AC=BC => C-ն միջնուղղահայացի վրա է
 
-## DONE
-
 ### Animations
 - Գծագիր
     - Վերցնել որևէ A և B կետեր, որոնք լինելու են հատվածի ծայրակետերը և ցանկացած C կետ, որը միացնել A և B կետերին
@@ -51,11 +49,6 @@ AC=BC => C-ն միջնուղղահայացի վրա է
 
 see more about each functions in it's docstring
 
-## NEEDS TO BE DONE
-
-### Functions
-
-### Animations
 
 
 

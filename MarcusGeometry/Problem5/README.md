@@ -1,4 +1,5 @@
 # SCENE Problem5
+Draw a circle of given radius that passed the given 2 points.
 
 ## WHAT IS DONE
 
