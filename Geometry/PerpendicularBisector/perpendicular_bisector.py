@@ -60,8 +60,9 @@ class Scene1(MovingCameraScene):
             self.play(Create(CA), Create(CB))
 
         def move_C_to_PB_and_change_colors(run_time):
-            # Function for animationg moving C to the Perpendicular bisector and changing colos of CA and CB
-            self.play(c_x.animate(rate_func=linear).set_value((a[0] + b[0]) / 2), 
+            # Function for animation moving C to the Perpendicular bisector and changing colors of CA and CB
+            self.play(
+                c_x.animate(rate_func=linear).set_value((a[0] + b[0]) / 2), 
                 c_y.animate().set_value(2.5), 
                 color_frac.animate(rate_func=linear).set_value(1), run_time=run_time)
             self.add(A, B, C) # To put the points on top of the lines
