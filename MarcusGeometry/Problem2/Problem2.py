@@ -40,8 +40,6 @@ class Problem2(Scene):
         chord = Line(pointA.get_center(), pointC.get_center(), color=ORANGE)
 
         self.play(Write(A))
-
-        #self.play(Write(A), Write(B))
         self.wait(0.5)
 
         self.play(Create(diameter, run_time=2))
@@ -50,10 +48,7 @@ class Problem2(Scene):
 
         self.play(Create(chord, run_time=1.5))
         self.play(Write(C))
-        self.wait(0.5)
-
-        #self.play(Create(chord, run_time=1.5))
-        self.wait(3)
+        self.wait(3.5)
 
     # Choose midpoint of AC, mention it K and draw sign of equal segments for AK and KC.
         pointK = Dot(color=ORANGE).move_to(chord.get_midpoint())
@@ -83,12 +78,9 @@ class Problem2(Scene):
 
         self.play(Create(OK, run_time=3.0))
         self.add(O, K)
-        self.wait(0.5)
+        self.wait(1.5)
 
-        #self.play(Write(four))
-        self.wait(1)
-
-        # Connect B and C.
+    # Connect B and C.
         BC = Line(pointB.get_center(), pointC.get_center(), color=WHITE)
 
         self.play(Create(BC, run_time=3.0))
