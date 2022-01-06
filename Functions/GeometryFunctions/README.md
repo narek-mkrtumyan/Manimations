@@ -45,17 +45,23 @@ Also includes `armtex` package as `armenian_tex_template`.
     - CircleFromSpinningRadius()
         - draws a circle with compass drawing tool (կարկին) effect
         - returns the circle
-    - TrianglesCongruence.SSSWiggling()
 
 
 - Functions that only play some animations
     - 
 
 
+
 ## NEEDS TO BE DONE
 
-- TrianglesCongruence.SSSThickening()
-- TrianglesCongruence.SASWiggling()
-- TrianglesCongruence.SASThickening()
-- TrianglesCongruence.ASAWiggling()
-- TrianglesCongruence.ASAThickening()
+- TriangleCongruence functions
+    - SSS() needs to be deleted
+    - PlaySSSWiggling() needs to be deleted
+    - PlaySSSThickening() needs to be updated (like wiggling) or deleted
+    - SSA()
+    - PlaySSAWiggling()
+    - PlaySSAThickening()
+    - SAA()
+    - PlaySAAWiggling()
+    - PlaySAAThickening()
+
