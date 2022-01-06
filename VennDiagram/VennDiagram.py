@@ -1,9 +1,5 @@
-from os import remove
-from PIL.Image import new
 from manim import *
-from manim.utils import tex_templates
 import numpy as np
-from numpy.lib.index_tricks import fill_diagonal
 
 armenian = TexTemplate()
 armenian.add_to_preamble(r"\usepackage{Armtex}")
