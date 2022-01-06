@@ -14,22 +14,25 @@ class Scene1(MovingCameraScene):
     # AO=OB => O lies on the perpendicular bisector of segment AB
     def construct(self):
         '''
-            Գծագիր
-                Վերցնել որևէ A և B կետեր, որոնք լինելու են հատվածի ծայրակետերը և ցանկացած C կետ, որը միացնել A և B կետերին
-                Քանի որ AC < BC, ուստի AC ներկել կարմիր, իսկ BC-ն կանաչ
-                C-ն տեղաշարժել ու մոտեցնել AB-ի միջնուղղահայացին, որին զուգահեռ երկու հատվածների գույները մոտենում են նարնջագույնին
+            Drawing
+                Վերցնել որևէ A և B կետեր, որոնք լինելու են հատվածի ծայրակետերը և ցանկացած O կետ, որը միացնել A և B կետերին
+                Քանի որ AO < BO, ուստի AC ներկել կարմիր, իսկ BO-ն կանաչ
+                O-ն տեղաշարժել ու տանել AB-ի միջնակետ, որին զուգահեռ երկու հատվածների գույները մոտենում են նարնջագույնին
                 Երբ հատվածները դառնում են իրար հավասար հատվածները սարքել մեր ստանդարտ նարնջագույնը
-                AC և BC հատվածների վրա դնել հավասար հատվածների նշանները
-                Կառուցել AB հատվածը և նշել AB հատվածի M միջնակետը՝ նշելով որ AM=MC
-                Տանել բարակ MC բաց կանաչ ուղիղը
-                ACM եռանկյունը ներկել դեղին, իսկ BMC եռանկյունը ներկել բաց կանաչ
+                AO և BO հատվածների վրա դնել հավասար հատվածների նշանները
+                O կետը բարձրացնել վերև, պահելով հավասարության նշանները
+                Կառուցել AB հատվածը և նշել AB հատվածի M միջնակետը՝ նշելով որ AM=MB
+                Տանել բարակ MO բաց կանաչ ուղիղը
+                AOM եռանկյունը ներկել դեղին, իսկ BOM եռանկյունը ներկել բաց կանաչ
                 Էկրանը տեղափոխել աջ, լուծման համար տեղ բացվի
 
-            Լուծում
+            Solution
                 Հերթով հաստացնել ու բարակացնելով եռանկյունների համապատասխան կողմերը և աջի վրա գրել հավասարությունները
-                Եռանկյունների կողմերի հավասարություններից եզրակացնել, որ եռանկյունները հավասար են և գծագրի վրա նշել, որ \angle AMC = \angle BMC = 90^o:
-                C կետը տանել վերև-ներքև ու միշտ AC և BC վրա նշել իրար հավասար։
-                Այս ամբողջը տեղավորել էկրանի ձախ 1/3 մասում։
+                Եռանկյունների կողմերի հավասարություններից եզրակացնել, որ եռանկյունները հավասար են և գծագրի վրա նշել, 
+                որ \angle AMO = \angle BMO = 90^o:
+                O կետը տանել վերև-ներքև ու միշտ AO և BO վրա նշել իրար հավասար։
+            
+            Այս ամբողջը տեղավորել էկրանի ձախ 1/3 մասում։
         '''
        
 # INIT Points, Lines, equality_signs
@@ -76,25 +79,38 @@ class Scene1(MovingCameraScene):
         self.play(Create(B), Create(label_B))
         self.wait(0.3)
         self.play(Create(O), Create(label_O))
+        self.wait(3)
         self.play(Create(OA), Create(OB))
+        self.add(A, B)
+        self.wait(2)
 
     #  Move O to Perpendicular bisector while changing colors of OA and OB
         self.play(
             o_x.animate(rate_func=linear).set_value((a[0] + b[0]) / 2), 
-            o_y.animate().set_value(2.5), 
-            color_frac.animate(rate_func=linear).set_value(1), run_time=4.5
+            o_y.animate(rate_func=linear).set_value(a[1]), 
+            color_frac.animate(rate_func=linear).set_value(1), run_time=3
         )
-        self.add(A, B, O) # To put the points on top of the lines
+        self.wait(1)
 
-
-# NOT ANIMATION: init new mobjects dependent on ValueTracker value (OM, equality signs, triangle fills)
-
-    # Equality signs for OA and OB with 1 small line and segment OM
+# NOT ANIMATION: init OM, equality signs OA and OB
         equality_sign_OA = always_redraw(lambda: SegmentEqualitySign1(OA))
         equality_sign_OB = always_redraw(lambda: SegmentEqualitySign1(OB))
+
+
+# ANIMATIONS FOR DRAWING 2
+    # Add equality signs
+        self.play(Create(equality_sign_OA), Create(equality_sign_OB))
+        self.wait(2)
+
+    # Move C up
+        self.play(o_y.animate(rate_func=linear, run_time=2).set_value(2.5))
+        self.add(A, B, O)
+        self.wait(1)
+
+# NOT ANIMATION: init fill_AOM and fill_BOM triangles
+
         OM = always_redraw(lambda: Line(O.get_center(), M.get_center(), color=GREEN))
 
-    # fill_AOM and fill_BOM triangles
         color_AOM = YELLOW
         color_BOM = BLUE
 
@@ -109,23 +125,25 @@ class Scene1(MovingCameraScene):
             )
 
 
-# ANIMATIONS FOR DRAWING 2
+# ANIMATIONS FOR DRAWING 3
 
     # Put equality signs, Create AB, M, OM
-        self.wait(0.5)
-        self.play(Create(equality_sign_OA), Create(equality_sign_OB))
         self.play(Create(AB))
+        self.wait(1)
         self.play(Create(M), Create(label_M))
+        self.wait(1)
         self.play(Create(equality_sign_MA), Create(equality_sign_MB))
+        self.wait(1)
         self.play(Create(OM))
         self.add(O, M) # To put the points on top of the lines
-        self.wait(0.5)
-    # Shift camera
-        self.play(self.camera.frame.animate.shift(3*RIGHT))
         self.wait(1)
     # Fill triangles AOM and BOM with colors
         self.play(FadeIn(fill_AOM))
         self.play(FadeIn(fill_BOM))
+        self.wait(0.5)
+    # Shift camera
+        self.play(self.camera.frame.animate.shift(3*RIGHT))
+        self.wait(1)
 
 
 # INITS for SOLUTION
@@ -138,7 +156,7 @@ class Scene1(MovingCameraScene):
         OM_is_common = MathtexCommonSegment((label_o, label_m))
         common_segment_sign_OM = always_redraw(lambda: CommonSegmentSign(OM))
 
-        triangles_AMO_BMO_equality = MathTexTrianglesEquality(label_a+label_m+label_o, label_b+label_m+label_o)
+        triangles_AMO_BMO_equality = MathTexTrianglesEquality(label_a+label_o+label_m, label_b+label_o+label_m)
 
         triangles_equality = ConcludeFromSSS((AO_BO_equality, AM_MB_equality, OM_is_common), triangles_AMO_BMO_equality)
         triangles_equality.next_to(fc + np.array([-1, 2, 0]), RIGHT, buff=0)
@@ -152,16 +170,19 @@ class Scene1(MovingCameraScene):
         right_angle_OMA = RightAngle(OM, MA, quadrant=(-1, 1), length=0.3, color=color_AOM)
         right_angle_OMB = RightAngle(OM, MB, quadrant=(-1, 1), length=0.4, color=color_BOM)
 
-        OMA_OMB_equal_90 = MathTex(r'\angle OMA', r'=', r'\angle OMB', r'= 90^{\circ}', font_size=font_size)
-        OMA_OMB_equal_90.next_to(fc, RIGHT, buff=0)
+        AMO_BMO_equal_90 = MathTex(r'\angle AMO', r'=', r'\angle BMO', r'= 90^{\circ}', font_size=font_size)
+        AMO_BMO_equal_90.next_to(fc, RIGHT, buff=0)
 
 
 # ANIMATIONS FOR SOLUTION
 
     # Show triangles congruence with 3 sides (AOM, BOM)
         PlayTwoSegmentsEqualityWiggling(self, ((OA, A, O, label_A, label_O), (OB, O, B, label_O, label_B)), AO_BO_equality)
+        self.wait(0.5)
         PlayTwoSegmentsEqualityWiggling(self, ((MA, M, A, label_A, label_M), (MB, M, B, label_M, label_B)), AM_MB_equality)
+        self.wait(0.5)
         PlaySegmentIsCommonWiggling(self, (OM, O, M, label_O, label_M), OM_is_common, sign=common_segment_sign_OM)
+        self.wait(1)
 
         PlayConcludeTriangleCongruence(self, triangles_equality)
 
@@ -169,27 +190,27 @@ class Scene1(MovingCameraScene):
 
         self.play(Write(rightarrow_1))
         self.play(Create(angle_OMA), Create(angle_OMB))
-        PlayTwoAnglesEqualityWiggling(self, angle_OMA, angle_OMB, OMA_OMB_equal_90[:3])
-        self.wait(0.5)
+        PlayTwoAnglesEqualityWiggling(self, angle_OMA, angle_OMB, AMO_BMO_equal_90[:3])
+        self.wait(1)
 
         self.play(
             Wiggle(angle_OMA, rotation_angle=0.08*TAU, scale_value=1.3), 
             Wiggle(angle_OMB, rotation_angle=0.08*TAU, scale_value=1.3)
         )
-        self.wait(0.5)
+        self.wait(1)
         self.play(
             ReplacementTransform(angle_OMA, right_angle_OMA),
             ReplacementTransform(angle_OMB, right_angle_OMB)
         )
 
-        self.play(Write(OMA_OMB_equal_90[3]))
-        self.wait(1)
+        self.play(Write(AMO_BMO_equal_90[3]))
+        self.wait(3)
 
     # Move O up then down
         self.play(o_y.animate(rate_func=linear).set_value(3.5), run_time=1.5)
-        self.wait(1)
+        self.wait(0.5)
         self.play(o_y.animate(rate_func=linear).set_value(1.5), run_time=1.5)
-        self.wait(1)
+        self.wait(0.5)
 
     # Move everything to te left of the screen
         
@@ -200,10 +221,10 @@ class Scene1(MovingCameraScene):
             system.animate(rate_func=linear).next_to([0, -2, 0], DOWN, buff=0),
             triangles_equality[-1].animate(rate_func=linear).next_to([-0.25, -3.75, 0], DOWN, buff=0),
             rightarrow_1.animate(rate_func=linear).next_to([1.25, -3.9, 0], RIGHT),
-            OMA_OMB_equal_90.animate(rate_func=linear).next_to([0, -4.5, 0], DOWN, buff=0), 
-            run_time=2
+            AMO_BMO_equal_90.animate(rate_func=linear).next_to([0, -4.5, 0], DOWN, buff=0), 
+            run_time=1.5
         )
-        self.wait(1)
+        self.wait(0.5)
 
     # Divide screen into 2 parts by vertical line
         fc = self.camera.frame_center    # np.array([5, -1.75, 0])
@@ -212,26 +233,27 @@ class Scene1(MovingCameraScene):
         divide_line = DashedLine(fc + np.array([-2.75, height/2, 0]), fc + np.array([-2.75, -height/2, 0]))
 
         self.play(Create(divide_line))
-        self.wait(1)
+        self.wait(0.5)
 
 
-# ALL THE THING UNDER THE LEFT TRIANGLE
-        under_first_triangle = VGroup(*triangles_equality, rightarrow_1, OMA_OMB_equal_90)
-        return under_first_triangle
+# return
+        under_drawing_1 = Group(*triangles_equality, rightarrow_1, AMO_BMO_equal_90)
+        drawing_1 = Group(*[mob for mob in self.mobjects]).remove(*under_drawing_1)
+        return drawing_1, under_drawing_1
 
 
          
 
 
 class Scene2(MovingCameraScene):
-    # O lies on the perpendicular bisector of segment AB => AO=OB
+    # O lies on the perpendicular bisector of segment AB => OA=OB
     def construct(self):
         self.camera.frame_center = np.array([5, -1.75, 0])          # frame_height is 8
         fc = np.array([5, -1.75, 0])
 
-        divide_line = DashedLine([2.25, 2.25, 0], [2.25, -5.75, 0])
-        divide_line = DashedLine(np.array(([-2.75, 4, 0])) + fc, np.array([-2.75, -4, 0]) + fc)
-        self.add(divide_line)
+        # divide_line = DashedLine([2.25, 2.25, 0], [2.25, -5.75, 0])
+        # divide_line = DashedLine(np.array(([-2.75, 4, 0])) + fc, np.array([-2.75, -4, 0]) + fc)
+        # self.add(divide_line)
 
 # INIT points, lines
         a = np.array([-1.5, -1, 0]) + fc
@@ -255,15 +277,15 @@ class Scene2(MovingCameraScene):
         label_O = LabelPoint(O, label_o, UL*0.5)
 
         AB = Line(a, b)
-        AO = Line(a, o, color=ORANGE)
-        BO = Line(b, o, color=ORANGE)
+        OA = Line(o, a, color=ORANGE)
+        OB = Line(o, b, color=ORANGE)
         AM = Line(a, m)
         BM = Line(b, m)
         OM = Line(o, m, color=GREEN)
         perp_bisect = Line(m + np.array([0, 4.5, 0]), m - np.array([0, 1, 0]), color=GREEN)
 
         equality_signs_AM_BM = VGroup( SegmentEqualitySign2(AM), SegmentEqualitySign2(BM) )
-        equality_signs_AO_BO = VGroup( SegmentEqualitySign1(AO), SegmentEqualitySign1(BO) )
+        equality_signs_OA_OB = VGroup( SegmentEqualitySign1(OA), SegmentEqualitySign1(OB) )
 
         common_sign_OM = CommonSegmentSign(OM)
 
@@ -274,17 +296,17 @@ class Scene2(MovingCameraScene):
         angle_BMO = RightAngle(OM, BM, quadrant=(-1, -1), color=color_BMO)
 
 # INIT equalities
-        angles_AMO_BMO_equality = MathTexAnglesEquality(label_a + label_m + label_o, label_b + label_m + label_o)
         AM_MB_equality = MathtexSegmentsEquality((label_a, label_m, label_m, label_b))
         OM_common = MathtexCommonSegment((label_o, label_m))
+        angles_AMO_BMO_equality = MathTexAnglesEquality(label_a + label_m + label_o, label_b + label_m + label_o)
 
         triangles_AMO_BMO_equality = MathTexTrianglesEquality(label_a + label_m + label_o, label_b + label_m + label_o)
 
-        conclude_from_sas = ConcludeFromSAS((angles_AMO_BMO_equality, AM_MB_equality, OM_common), triangles_AMO_BMO_equality)
+        conclude_from_sas = ConcludeFromSAS((AM_MB_equality, OM_common, angles_AMO_BMO_equality), triangles_AMO_BMO_equality)
         conclude_from_sas[-1].next_to(conclude_from_sas[:-1], DOWN, buff=0.75)
         conclude_from_sas.next_to(np.array([2, 1, 0])+fc, RIGHT, buff=0)
         rightarrow = Rightarrow().next_to(conclude_from_sas[-1], RIGHT)
-        AO_BO_equality = MathtexSegmentsEquality((label_a, label_o, label_b, label_o)).next_to(conclude_from_sas[-1], DOWN, buff=0.758)
+        OA_OB_equality = MathtexSegmentsEquality((label_o, label_a, label_o, label_b)).next_to(conclude_from_sas[-1], DOWN, buff=0.758)
 
         fill_AMO = Polygon(A.get_center(), O.get_center(), M.get_center(), fill_opacity=0.3)
         fill_AMO.set_fill(color_AMO).set_stroke(width=0)
@@ -294,29 +316,49 @@ class Scene2(MovingCameraScene):
 # ANIMATIONS
         self.wait(1)
         self.play(Create(A), Write(label_A), Create(B), Write(label_B))
+        self.wait(0.5)
         self.play(Create(AB))
+        self.wait(0.5)
         self.play(Create(M), Write(label_M))
+        self.wait(0.5)
         self.play(Create(equality_signs_AM_BM))
+        self.wait(0.5)
         self.play(Create(perp_bisect))
         self.add(M)
         self.play(Create(angle_AMO), Create(angle_BMO))
+        self.wait(0.5)
         self.play(Create(O), Write(label_O))
-        self.play(Create(OM), Create(AO), Create(BO))
-        self.add(O, A, B, M)
-
-        PlayTwoAnglesEqualityWiggling(self, angle_AMO, angle_BMO, angles_AMO_BMO_equality)
-        PlayTwoSegmentsEqualityWiggling(self, ((AM, A, M, label_A, label_M), (BM, B, M, label_M, label_B)), AM_MB_equality)
-        PlaySegmentIsCommonWiggling(self, (OM, O, M, label_O, label_M), OM_common, common_sign_OM)
+        self.wait(0.5)
+        self.add(OM, M)
+        self.play(Create(OA))
+        self.play(Create(OB))
+        self.add(O, A, B)
+        self.wait(0.5)
 
         self.play(FadeIn(fill_BMO), FadeIn(fill_AMO))
-        PlayConcludeTriangleCongruence(self, conclude_from_sas)
+        self.wait(0.5)
 
-        PlayTwoSegmentsWiggling(self, (AO, A, O, label_A, label_O), (BO, B, O, label_B, label_O))
-        self.play(Create(equality_signs_AO_BO))
+        PlayTwoSegmentsEqualityWiggling(self, ((AM, A, M, label_A, label_M), (BM, B, M, label_M, label_B)), AM_MB_equality)
+        self.wait(0.5)
+        PlaySegmentIsCommonWiggling(self, (OM, O, M, label_O, label_M), OM_common, common_sign_OM)
+        self.wait(0.5)
+        PlayTwoAnglesEqualityWiggling(self, angle_AMO, angle_BMO, angles_AMO_BMO_equality)
+        self.wait(1)
+
+        PlayConcludeTriangleCongruence(self, conclude_from_sas)
+        self.wait(1)
+
+        PlayTwoSegmentsWiggling(self, (OA, A, O, label_A, label_O), (OB, B, O, label_B, label_O))
+        self.play(Create(equality_signs_OA_OB))
         self.play(Write(rightarrow))
-        self.play(Write(AO_BO_equality))
+        self.play(Write(OA_OB_equality))
         
         self.wait(1)
+
+# return
+        under_drawing_2 = Group(*conclude_from_sas, rightarrow, OA_OB_equality)
+        drawing_2 = Group(*[mob for mob in self.mobjects]).remove(*under_drawing_2)
+        return drawing_2, under_drawing_2
 
 
 
@@ -325,10 +367,11 @@ class Scene2(MovingCameraScene):
 class PerpendicularBisector(MovingCameraScene):
     def construct(self):
         self.wait(0.5)
-        under_first_triangle = Scene1.construct(self)
-        Scene2.construct(self)
-        self.wait(1)
-        self.wait(0.5)
+        drawing_1, under_drawing_1 = Scene1.construct(self)
+        drawing_2, under_drawing_2 = Scene2.construct(self)
+        self.wait(2)
+        self.play(*[FadeOut(mob_1) for mob_1 in Group(*drawing_1, *under_drawing_1, *under_drawing_2)])
+        self.wait(2)
 
 
 
@@ -410,9 +453,6 @@ class test(Scene):
         ABO_XYZ_equality = MathTexTrianglesEquality(abo, xyz)
 
     # end init
-
-        self.add(AB, BO, OA, A, B, O, XY, YZ, ZX, X, Y, Z)
-
-        sas = ConcludeFromSAS((equality_AB_XY, equality_BO_YZ, equality_OA_ZX), ABO_XYZ_equality)
-
-        self.add(*sas)
+        self.camera.frame_shape = (14, 8)
+        
+        self.add(Dot([0, 0, 0]), Dot([0, 4.5, 0]), Dot([0, -4.5, 0]), Dot([-3.5, 0, 0]), Dot([3.5, 0, 0]))
