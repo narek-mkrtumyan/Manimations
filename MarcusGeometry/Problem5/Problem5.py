@@ -7,19 +7,19 @@ from Functions.GeometryFunctions.GeometryFunctions import *
 class Problem5(Scene):
     def construct(self):
 
-    # Draw a points A and B (ORANGE) and a circle with the center O, such that the radius is bigger than AB/2.
+    # Draw a points A and B (WHITE) and a circle with the center O, such that the radius is bigger than AB/2.
         r1 = ValueTracker(0.08)
         r2 = ValueTracker(0.08)
         pointA = always_redraw(lambda:
-           Dot(radius=r1.get_value(), color=ORANGE).shift(LEFT)
+           Dot(radius=r1.get_value(), color=WHITE).shift(LEFT)
         )
-        labelA = Text("A", color=ORANGE, font_size=30).next_to(pointA, DOWN, buff=SMALL_BUFF)
+        labelA = Text("A", color=WHITE, font_size=30).next_to(pointA, DOWN, buff=SMALL_BUFF)
         A = VGroup(pointA,labelA)
 
         pointB = always_redraw(lambda:
-           Dot(radius=r2.get_value(), color=ORANGE).shift(RIGHT)
+           Dot(radius=r2.get_value(), color=WHITE).shift(RIGHT)
         )
-        labelB = Text("B", color=ORANGE, font_size=30).next_to(pointB, DOWN, buff=SMALL_BUFF)
+        labelB = Text("B", color=WHITE, font_size=30).next_to(pointB, DOWN, buff=SMALL_BUFF)
         B = VGroup(pointB,labelB)
 
         template_radius = Line([-6, 2.5, 0], [-4.5, 2.5, 0], color=ORANGE)
