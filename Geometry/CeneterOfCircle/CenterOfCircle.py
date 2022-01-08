@@ -8,7 +8,7 @@ from Functions.GeometryFunctions.GeometryFunctions import *
 
 font_size = 30 # font_size for MathTex
 
-class Scene1(MovingCameraScene):
+class Scene1(MovingCameraScene):     # not documented
     def construct(self):
         '''
             Drawing
@@ -234,9 +234,9 @@ class Scene1(MovingCameraScene):
         self.wait(1)
 
 
-# ALL THE THING UNDER THE LEFT TRIANGLE
-        under_first_triangle = VGroup(*triangles_equality, rightarrow_1, OMA_OMB_equal_90)
-        return under_first_triangle
+# MATHTEX EQUALITIES UNDER THE LEFT TRIANGLE
+        first_mathtex = VGroup(*triangles_equality, rightarrow_1, OMA_OMB_equal_90)
+        return first_mathtex
 
 
          
@@ -252,9 +252,9 @@ class Scene2(MovingCameraScene):
         divide_line = DashedLine(np.array(([-2.75, 4, 0])) + fc, np.array([-2.75, -4, 0]) + fc)
         self.add(divide_line)
 
-# INIT points, lines
-        a = np.array([-1.5, -1, 0]) + fc
-        b = np.array([1.5, -1, 0]) + fc
+# INIT points, lines, circle
+        a = np.array([-1, -1.5, 0]) + fc
+        b = np.array([2, -1.5, 0]) + fc
         m = (a + b) / 2
         o = m + np.array([0, 3.5, 0])
 
@@ -271,26 +271,31 @@ class Scene2(MovingCameraScene):
         label_A = LabelPoint(A, label_a)
         label_B = LabelPoint(B, label_b, DR*0.5)
         label_M = LabelPoint(M, label_m)
-        label_O = LabelPoint(O, label_o, UL*0.5)
+        label_O = always_redraw(lambda: LabelPoint(O, label_o, UL*0.5))
 
         AB = Line(a, b)
-        AO = Line(a, o, color=ORANGE)
-        BO = Line(b, o, color=ORANGE)
         AM = Line(a, m)
         BM = Line(b, m)
-        OM = Line(o, m, color=GREEN)
+        AO = always_redraw(lambda: Line(a, O.get_center(), color=ORANGE))
+        BO = always_redraw(lambda: Line(b, O.get_center(), color=ORANGE))
+        OM = always_redraw(lambda: Line(O.get_center(), m, color=GREEN))
         perp_bisect = Line(m + np.array([0, 4.5, 0]), m - np.array([0, 1, 0]), color=GREEN)
 
+        equality_signs_AO_BO = VGroup(
+            always_redraw(lambda: SegmentEqualitySign1(AO)), 
+            always_redraw(lambda: SegmentEqualitySign1(BO))
+            )
         equality_signs_AM_BM = VGroup( SegmentEqualitySign2(AM), SegmentEqualitySign2(BM) )
-        equality_signs_AO_BO = VGroup( SegmentEqualitySign1(AO), SegmentEqualitySign1(BO) )
 
-        common_sign_OM = CommonSegmentSign(OM)
+        common_sign_OM = always_redraw(lambda: CommonSegmentSign(OM))
 
         color_AMO = YELLOW
         color_BMO = BLUE
 
         angle_AMO = RightAngle(OM, AM, quadrant=(-1, -1), color=color_AMO, length=0.3)
         angle_BMO = RightAngle(OM, BM, quadrant=(-1, -1), color=color_BMO)
+
+        circle = always_redraw(lambda: Circle(radius=SegmentLength(AO), color=GREEN).move_to(O.get_center()))
 
 # INIT equalities
         angles_AMO_BMO_equality = MathTexAnglesEquality(label_a + label_m + label_o, label_b + label_m + label_o)
@@ -305,10 +310,12 @@ class Scene2(MovingCameraScene):
         rightarrow = Rightarrow().next_to(conclude_from_sas[-1], RIGHT)
         AO_BO_equality = MathtexSegmentsEquality((label_a, label_o, label_b, label_o)).next_to(conclude_from_sas[-1], DOWN, buff=0.758)
 
-        fill_AMO = Polygon(A.get_center(), O.get_center(), M.get_center(), fill_opacity=0.3)
-        fill_AMO.set_fill(color_AMO).set_stroke(width=0)
-        fill_BMO = Polygon(B.get_center(), O.get_center(), M.get_center(), fill_opacity=0.3)
-        fill_BMO.set_fill(color_BMO).set_stroke(width=0)
+        fill_AMO = always_redraw(lambda:
+            Polygon(A.get_center(), O.get_center(), M.get_center(), fill_opacity=0.3).set_fill(color_AMO).set_stroke(width=0)
+        )
+        fill_BMO = always_redraw(
+            lambda:Polygon(B.get_center(), O.get_center(), M.get_center(), fill_opacity=0.3).set_fill(color_BMO).set_stroke(width=0)
+            )
 
 # ANIMATIONS
         self.wait(1)
@@ -334,22 +341,34 @@ class Scene2(MovingCameraScene):
         self.play(Create(equality_signs_AO_BO))
         self.play(Write(rightarrow))
         self.play(Write(AO_BO_equality))
-
-        # circle, center = CircleFromSpinningRadius(self, radius=SegmentLength(AO), center=O.get_center(), 
-        #                     starting_point_angle=(PI*3/2 - np.arcsin(SegmentLength(AM)/SegmentLength(AO)))/DEGREES,
-        #                     radius_color=ORANGE, equality_sign=1, create_center=False, create_radius=False, direction=-1)
         self.wait(1)
 
+        self.play(O.animate(rate_fnc=linear).shift(DOWN))
+
+        temp_circle, center = CircleFromSpinningRadius(self, radius=SegmentLength(AO), center=O.get_center(), 
+                            starting_point_angle=(PI*3/2 - np.arcsin(SegmentLength(AM)/SegmentLength(AO)))/DEGREES,
+                            radius_color=ORANGE, equality_sign=1, create_center=False, create_radius=False, direction=-1)
+        self.remove(temp_circle)
+        self.add(circle)
+        self.wait(1)
+
+# MATHTEX EQUALITIES UNDER THE LEFT TRIANGLE
+        second_mathtex = VGroup(*conclude_from_sas, rightarrow, AO_BO_equality)
+        return second_mathtex
 
 
 
 
-class PerpendicularBisector(MovingCameraScene):
+class CenterOfCircle(MovingCameraScene):
     def construct(self):
         self.wait(0.5)
-        under_first_triangle = Scene1.construct(self)
-        Scene2.construct(self)
+        first_mathtex = Scene1.construct(self)
         self.wait(1)
+        second_mathtex = Scene2.construct(self)
+        self.wait(1)
+        self.play(*[FadeOut(mob) for mob in first_mathtex])
+        self.wait(1)
+        self.play(*[FadeOut(mob) for mob in second_mathtex])
         self.wait(0.5)
 
 
