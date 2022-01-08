@@ -1,6 +1,7 @@
 !/.gitignore
 
 .vscode/
+.DS_Store
 
 **/test.mp4
 

@@ -352,3 +352,4 @@ class Problem5(Scene):
             circleO.animate(run_time=3.0, rate_func=there_and_back).shift(2*UP)
         )
         self.wait()
+        
