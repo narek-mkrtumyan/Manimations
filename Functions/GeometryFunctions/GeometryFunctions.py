@@ -19,50 +19,54 @@ def set_frame_half():
 # Functions that only return something
 
 
-def LabelPoint(point, label, position=DL*0.5, font_size=30):
+def LabelPoint(point, label, position=DL*0.5, font_size=30, color=0):
     '''
-    Adds label to a point
+        Adds label to a point
 
-    Arguments - point(Dot), label(string)
+        Arguments - point(Dot), label(string)
 
-    Optional - Position relative to the point=DL, font_size=25
+        Optional - Position relative to the point=DL, font_size=25
 
-    Returns - the Text mobject of label
+        Returns - the Text mobject of label
     '''
-    label_point = MathTex(r'' + label, font_size=font_size, color=point.get_color())
+    if color == 0:
+        dot_color = point.get_color()
+    else:
+        dot_color = color
+    label_point = MathTex(r'' + label, font_size=font_size, color=dot_color)
     label_point.next_to(point.get_center(), position)
     return label_point
 
 
 def DistanceBetweenCoordinates(a, b):
     '''
-    Calculates distance between 2 coordinates
+        Calculates distance between 2 coordinates
 
-    Arguments - a([x_1, y_1, z_1]), b([x_2, y_2, z_2])
+        Arguments - a([x_1, y_1, z_1]), b([x_2, y_2, z_2])
 
-    Returns - Distance (float)
+        Returns - Distance (float)
     '''
     return np.sqrt(sum((np.array(a) - np.array(b))**2))
 
 
 def DistanceBetweenPoints(A, B):
     '''
-    Calculates distance between 2 Dots
+        Calculates distance between 2 Dots
 
-    Arguments - A(Dot_1), B(Dot_2)
+        Arguments - A(Dot_1), B(Dot_2)
 
-    Returns - Distance (float)
+        Returns - Distance (float)
     '''
     return DistanceBetweenCoordinates(A.get_center(), B.get_center())
 
 
 def SegmentLength(AB):
     '''
-    Calculates the Length of a Segment
+        Calculates the Length of a Segment
 
-    Arguments - AB(Line)
+        Arguments - AB(Line)
 
-    Returns - Length(float)
+        Returns - Length(float)
     '''
     a, b = AB.get_start_and_end()
     return DistanceBetweenCoordinates(a, b)
@@ -113,13 +117,13 @@ def SegmentEqualitySign2(AB, sign_size=0.2, color=WHITE):
 
 def SegmentEqualitySign3(AB, sign_size=0.2, color=WHITE):
     '''
-    Equality sign with 2 small lines for a segment
+        Equality sign with 2 small lines for a segment
 
-    Arguments - AB(Line)
+        Arguments - AB(Line)
 
-    Optional - sign_size=0.2, color=WHITE
+        Optional - sign_size=0.2, color=WHITE
 
-    Returns - sign VGroup
+        Returns - sign VGroup
     '''
     a, b = AB.get_start_and_end()
     length_AB = np.sqrt(sum((np.array(a) - np.array(b))**2))
@@ -263,7 +267,7 @@ def Rightarrow(font_size=45, color=WHITE):
     return MathTex(r'\Rightarrow', font_size=font_size, color=color)
 
 
-def ConcludeFromStatementsSystem(statements, conclusion, rightarrow_size=45, individual_letters=True):
+def ConcludeFromStatementsSystem(statements, conclusion, position=RIGHT, rightarrow_size=45, individual_letters=True):
     '''
         Arranges statements under each other, puts Brace from the left, '=>' and the conclusion
         
@@ -281,7 +285,10 @@ def ConcludeFromStatementsSystem(statements, conclusion, rightarrow_size=45, ind
     rightarrow = Rightarrow(font_size=rightarrow_size, color=conclusion.get_color())
     rightarrow.next_to(statements, RIGHT)
 
-    conclusion.next_to(rightarrow, RIGHT)
+    if position.any == RIGHT.any():
+        conclusion.next_to(rightarrow, RIGHT)
+    elif position.any() == DOWN.any():
+        conclusion.next_to(brace, RIGHT).shift(DOWN*1.25)
 
     conclude_from_system = VGroup()
 
@@ -297,7 +304,7 @@ def ConcludeFromStatementsSystem(statements, conclusion, rightarrow_size=45, ind
     return conclude_from_system
 
 
-def ConcludeFromSAS(statements, conclusion, rightarrow_size=45, individual_letters=True):
+def ConcludeFromSAS(statements, conclusion, position=RIGHT, rightarrow_size=45, individual_letters=True):
     '''
         Arranges statements under each other, puts Brace from the left, '=>', \triangle^{(1)} and the conclusion
         
@@ -308,7 +315,7 @@ def ConcludeFromSAS(statements, conclusion, rightarrow_size=45, individual_lette
 
         Returns - VGroup of (statements, brace, =>, \triangle^{(1)} conclusion) - ' { statements => conclusion '
     '''
-    conclude = ConcludeFromStatementsSystem(statements, conclusion, rightarrow_size, individual_letters)
+    conclude = ConcludeFromStatementsSystem(statements, conclusion, position, rightarrow_size, individual_letters)
 
     conclude_from_sas = VGroup(*conclude[:-1])
     sas = MathTex(r'\triangle ^ {(1)}', font_size=30)
@@ -319,7 +326,7 @@ def ConcludeFromSAS(statements, conclusion, rightarrow_size=45, individual_lette
     return conclude_from_sas
 
 
-def ConcludeFromASA(statements, conclusion, rightarrow_size=45, individual_letters=True):
+def ConcludeFromASA(statements, conclusion, position=RIGHT, rightarrow_size=45, individual_letters=True):
     '''
         Arranges statements under each other, puts Brace from the left, '=>', \triangle^{(2)} and the conclusion
         
@@ -330,7 +337,7 @@ def ConcludeFromASA(statements, conclusion, rightarrow_size=45, individual_lette
 
         Returns - VGroup of (statements, brace, =>, \triangle^{(2)} conclusion) - ' { statements => conclusion '
     '''
-    conclude = ConcludeFromStatementsSystem(statements, conclusion, rightarrow_size, individual_letters)
+    conclude = ConcludeFromStatementsSystem(statements, conclusion, position, rightarrow_size, individual_letters)
 
     conclude_from_asa = VGroup(*conclude[:-1])
     asa = MathTex(r'\triangle ^ {(2)}', font_size=30)
@@ -341,7 +348,7 @@ def ConcludeFromASA(statements, conclusion, rightarrow_size=45, individual_lette
     return conclude_from_asa
 
 
-def ConcludeFromSSS(statements, conclusion, rightarrow_size=45, individual_letters=True):
+def ConcludeFromSSS(statements, conclusion, position=RIGHT, rightarrow_size=45, individual_letters=True):
     '''
         Arranges statements under each other, puts Brace from the left, '=>', \triangle^{(3)} and the conclusion
         
@@ -352,7 +359,7 @@ def ConcludeFromSSS(statements, conclusion, rightarrow_size=45, individual_lette
 
         Returns - VGroup of (statements, brace, =>, \triangle^{(3)} conclusion) - ' { statements => conclusion '
     '''
-    conclude = ConcludeFromStatementsSystem(statements, conclusion, rightarrow_size, individual_letters)
+    conclude = ConcludeFromStatementsSystem(statements, conclusion, position, rightarrow_size, individual_letters)
 
     conclude_from_sss = VGroup(*conclude[:-1])
     sss = MathTex(r'\triangle ^ {(3)}', font_size=30)
@@ -403,9 +410,10 @@ def TransformSegmentLabelsIntoStatement(segment_dots_labels, statement, transfor
 
 def CircleFromSpinningRadius(self, 
         radius=1, center=ORIGIN, starting_point_angle=0, 
-        equality_sign=0, equality_sign_color=WHITE, r_sign=MathTex(''),
+        equality_sign=0, equality_sign_color=WHITE,
         radius_color=WHITE, circle_color=GREEN, direction=1, center_color=WHITE,
-        create_center=True, create_radius=True, create_point=True, r_sign_angle=-30, run_time=4
+        create_center=True, create_radius=True, create_point=True, create_equality_sign=True,
+        r_sign=MathTex(''), r_sign_angle=-30, run_time=4
 ):
     '''
         This function Creates a Circle using it's radius like a Compass Drawing tool (կարկին)
@@ -469,13 +477,16 @@ def CircleFromSpinningRadius(self,
         self.add(radius_line)
     self.add(Center)
     
+    if equality_sign != 0:
+        if create_equality_sign == True:
+            self.play(Create(equality_sign_OR))
+        else:
+            self.add(equality_sign_OR)
+    
     if create_point:
         self.play(Create(moving_point))
     else:
         self.add(moving_point_angle)
-    
-    if equality_sign != 0:
-        self.play(Create(equality_sign_OR))
     
     if len(r_sign) > 0:
         self.play(Create(sign_r))
@@ -721,6 +732,22 @@ def PlayTwoSegmentsThickening(self,
                     Y.animate(rate_func=there_and_back).scale(1.5),
                     run_time=run_time
                 )
+
+
+
+def PlayAnglesWiggling(self,
+    angle_1, angle_2=False, run_time=2
+):
+    if angle_2:
+        self.play(
+            Wiggle(angle_1, scale_value=1.3, rotation_angle=0.05*TAU),
+            Wiggle(angle_2, scale_value=1.3, rotation_angle=0.05*TAU),
+            run_time=run_time
+        )
+    
+    else:
+        self.play(Wiggle(angle_1, scale_value=1.3, rotation_angle=0.05*TAU), run_time=run_time)
+    
 
 
 
