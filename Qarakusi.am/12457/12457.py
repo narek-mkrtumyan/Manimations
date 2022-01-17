@@ -5,49 +5,49 @@ from numpy.core.numeric import moveaxis
 
 def ConstructPolygonLine(n, delta_x, delta_y, line_y, vertices):
 
-    n_equals_n = Tex(f'N\ =\ ${n}$', font_size=60).move_to([-4.5, 3, 0])
+        n_equals_n = Tex(f'N\ =\ ${n}$', font_size=60).move_to([-4.5, 3, 0])
 
     # THE LINE
-    starting_point = -6.5
-    ending_point = 6.5
-    l_1 = np.array([starting_point, line_y, 0])
-    l_2 = np.array([ending_point, line_y, 0])
-    line = Line(l_1, l_2, color=ORANGE).scale(1.3)
+        starting_point = -6.5
+        ending_point = 6.5
+        l_1 = np.array([starting_point, line_y, 0])
+        l_2 = np.array([ending_point, line_y, 0])
+        line = Line(l_1, l_2, color=ORANGE).scale(1.3)
 
-    for i in range(len(vertices)):
-        vertices[i] = vertices[i] + np.array([delta_x, delta_y, 0])
+        for i in range(len(vertices)):
+            vertices[i] = vertices[i] + np.array([delta_x, delta_y, 0])
 
-    polygon = Polygon(*vertices, color=GREEN)
-    area = Polygon(*vertices, color=GREEN, fill_opacity=0.3)
+        polygon = Polygon(*vertices, color=GREEN)
+        area = Polygon(*vertices, color=GREEN, fill_opacity=0.3)
 
     # INTERSECTION COORDINATES OF THE POLYGON AND THE LINE
-    intersection_coordinates = []
-    for i in range(len(vertices)):
-        intersection_coordinates.append(line_intersection([l_1, l_2], [vertices[i], vertices[(i+n-1)%n]]))
+        intersection_coordinates = []
+        for i in range(len(vertices)):
+            intersection_coordinates.append(line_intersection([l_1, l_2], [vertices[i], vertices[(i+n-1)%n]]))
 
     # INTERSECTION POINT ORANGE AND GREEN IN TURN
-    intersection_points = VGroup()
-    for i in range(len(intersection_coordinates)):
-        if i % 2 == 0:
-            intersection_points.add(Dot(intersection_coordinates[i], color=ORANGE))
-        else:
-            intersection_points.add(Dot(intersection_coordinates[i], color=GREEN))
+        intersection_points = VGroup()
+        for i in range(len(intersection_coordinates)):
+            if i % 2 == 0:
+                intersection_points.add(Dot(intersection_coordinates[i], color=ORANGE))
+            else:
+                intersection_points.add(Dot(intersection_coordinates[i], color=GREEN))
 
     # INDICES OF THE INTERSECTION POINTS
-    point_indices = Tex(*[f'${i+1}$' for i in range(n)], font_size=40)
-    intersection_point_indices = VGroup()
-    for i in range(len(intersection_coordinates)):
-        if i % 2 == 0:
-            intersection_point_indices.add(point_indices[i].set_color(ORANGE).next_to(intersection_points[i], DL * 0.6))
-        else:
-            intersection_point_indices.add(point_indices[i].set_color(GREEN).next_to(intersection_points[i], DR * 0.6))
-    
-    points = intersection_coordinates.copy()
-    points.append(np.array([ending_point, line_y, 0]))
-    points.append(np.array([starting_point, line_y, 0]))
+        point_indices = Tex(*[f'${i+1}$' for i in range(n)], font_size=40)
+        intersection_point_indices = VGroup()
+        for i in range(len(intersection_coordinates)):
+            if i % 2 == 0:
+                intersection_point_indices.add(point_indices[i].set_color(ORANGE).next_to(intersection_points[i], DL * 0.6))
+            else:
+                intersection_point_indices.add(point_indices[i].set_color(GREEN).next_to(intersection_points[i], DR * 0.6))
+        
+        points = intersection_coordinates.copy()
+        points.append(np.array([ending_point, line_y, 0]))
+        points.append(np.array([starting_point, line_y, 0]))
 
-    return n_equals_n, line, polygon, area, intersection_points, intersection_point_indices, points
-    
+        return n_equals_n, line, polygon, area, intersection_points, intersection_point_indices, points
+        
 
 
 class hexagon(Scene):
@@ -59,14 +59,14 @@ class hexagon(Scene):
         delta_x = -1     # shift the hexagon left or right
         line_y = -1.5    # y coordinate of the main line
 
-        # THE LINE
+    # THE LINE
         starting_point = -6.5
         ending_point = 6.5
         l_1 = np.array([starting_point, line_y, 0])
         l_2 = np.array([ending_point, line_y, 0])
         line = Line(l_1, l_2, color=ORANGE).scale(1.3)
 
-        # POLYGON VERTICES
+    # POLYGON VERTICES
         v_0 = np.array([-3.5 + delta_x, -1.3 + line_y, 0])
         v_1 = np.array([-1 + delta_x, 1.2 + line_y, 0])
         v_2 = np.array([0 + delta_x, -1.8 + line_y, 0])
@@ -77,22 +77,24 @@ class hexagon(Scene):
         vertices = [v_0, v_1, v_2, v_3, v_4, v_5]
 
         hexagon = Polygon(*vertices, color=GREEN)
-        area = Polygon(*vertices, color=GREEN, fill_opacity=0.3)
+        area = Polygon(*vertices, color=GREEN, fill_opacity=0.5, stroke_width=0)
 
-        # INTERSECTION COORDINATES OF THE POLYGON AND THE LINE
+    # INTERSECTION COORDINATES OF THE POLYGON AND THE LINE
         intersection_coordinates = []
         for i in range(len(vertices)):
             intersection_coordinates.append(line_intersection([l_1, l_2], [vertices[i], vertices[(i+5)%6]]))
 
-        # INTERSECTION POINT ORANGE AND GREEN IN TURN
+    # INTERSECTION POINTS ORANGE AND GREEN IN TURN
         intersection_points = VGroup()
         for i in range(len(intersection_coordinates)):
             if i % 2 == 0:
                 intersection_points.add(Dot(intersection_coordinates[i], color=ORANGE))
             else:
                 intersection_points.add(Dot(intersection_coordinates[i], color=GREEN))
+        
+        white_intersection_points = VGroup(*[Dot(coord) for coord in intersection_coordinates])
 
-        # INDICES OF THE INTERSECTION POINTS
+    # INDICES OF THE INTERSECTION POINTS
         point_indices = Tex(*[f'${i+1}$' for i in range(n)], font_size=40)
         intersection_point_indices = VGroup()
         for i in range(len(intersection_coordinates)):
@@ -103,6 +105,7 @@ class hexagon(Scene):
         intersection_point_indices[0].shift(0.1 * LEFT)
         intersection_point_indices[-1].shift(0.2 * RIGHT)
 
+    # COLORED SEGMENTS
         x = ValueTracker(starting_point)
         dot_orange = always_redraw(lambda: Dot([x.get_value(), line_y, 0], color=ORANGE))
         dot_green = always_redraw(lambda: Dot([x.get_value(), line_y, 0], color=GREEN))
@@ -121,52 +124,41 @@ class hexagon(Scene):
         points.append(np.array([ending_point, line_y, 0]))
         points.append(np.array([starting_point, line_y, 0]))
 
-        new_points_coordinates = [np.array([2 + i * 4/5, 2, 0]) for i in range(len(intersection_coordinates))]
+    # NEW POINTS, PARENTHESIS
+        new_points_coordinates = [
+            np.array([2 + 0 * 8/5, 2, 0]), np.array([2 + 0 * 8/5, 1.25, 0]),
+            np.array([2 + 1 * 8/5, 2, 0]), np.array([2 + 1 * 8/5, 1.25, 0]),
+            np.array([2 + 2 * 8/5, 2, 0]), np.array([2 + 2 * 8/5, 1.25, 0])
+        ]
         new_points = VGroup(*[Dot(new_points_coordinates[i], color=i%2*GREEN+(1-i%2)*ORANGE) for i in range(len(new_points_coordinates))])
         new_numbers = VGroup(*[Tex(f'${i+1}$', font_size=40, color=new_points[i].get_color()).move_to(new_points[i]) for i in range(len(new_points))])
 
         parentheses = VGroup()
         for i in range(len(new_numbers)):
             if i % 2 == 0:
-                parentheses.add(Tex('(', font_size=60).move_to(new_points[i]).shift(0.2*LEFT))
+                parentheses.add(Tex('(', font_size=120).move_to(new_points[i:i+2]).shift(0.5*LEFT))
             else:
-                parentheses.add(Tex(')', font_size=60).move_to(new_points[i]).shift(0.2*RIGHT))
+                parentheses.add(Tex(')', font_size=120).move_to(new_points[i-1:i+1]).shift(0.5*RIGHT))
         
         n_is_even = Text('N-ը զույգ է', font_size=40).move_to([4, 0, 0])
 
-        # self.wait(0.5)
-
-        # self.add(line)
-        # self.add(hexagon, area)
-        # self.add(dot_orange)
-        # self.add(intersection_point_indices, intersection_points)
-        # self.wait(0.5)
-        # self.add(n_equals_n)
-        # self.add(parentheses)
-        # self.add(new_points)
-        # self.wait(0.5)
-        # self.play(Transform(new_points, new_numbers))
-        # self.wait(0.5)
-        # self.play(Write(n_is_even))
-
-        # self.wait(1)
-
-        # Final animations
+    # Final animations
         self.wait(1)
 
-        self.play(Create(hexagon), run_time=2)
-        self.wait(0.5)
-        self.play(Write(n_equals_n), run_time=1.5)
-        self.wait(0.5)
+        self.play(Create(hexagon), run_time=1.5)
         self.play(Create(line), run_time=1.5)
-        self.wait(0.5)
+        self.play(Create(white_intersection_points))
+        self.play(Write(n_equals_n), run_time=1.5)
+        self.wait(5)
         self.play(FadeIn(area))
-        self.wait(0.5)
+        self.wait(1)
         self.play(Create(dot_orange))
+        self.wait(1)
 
         for i in range(len(points) - 1):
-            run_time = (points[i][0] - points[i-1][0]) * 2 / 3
+            run_time = (points[i][0] - points[i-1][0]) * 2
             self.remove(dot_orange, dot_green)
+
             if i % 2 == 0:
                 self.add(dot_orange)
             else:
@@ -175,20 +167,24 @@ class hexagon(Scene):
                 self.play(x.animate.set_value(points[i][0]), rate_func=linear, run_time=run_time)
                 self.remove(moving_segments[int(i/2)])
                 self.add(segments[int(i/2)])
+
             self.play(x.animate.set_value(points[i][0]), rate_func=linear, run_time=run_time)
+
             if i < len(intersection_points):
-                self.add(*[intersection_points[j] for j in range(i+1)])
+                self.add(*intersection_points[:i+1])
                 self.play(Write(intersection_point_indices[i]))
+            self.wait(1)
         
         self.wait(1)
         intersection_points_copy = intersection_points.copy()
-        self.play(Transform(intersection_points_copy, new_points))
+        self.play(Transform(intersection_points_copy, new_points, rate_func=linear, run_time=1.5))
         self.remove(intersection_points_copy)
         self.add(new_points)
-        self.wait(0.5)
+        self.wait(1)
         self.play(Create(parentheses))
+        self.wait(1)
         self.play(Transform(new_points, new_numbers))
-        self.wait(0.5)
+        self.wait(1)
         self.play(Write(n_is_even))
 
 
@@ -223,7 +219,7 @@ class octagon(Scene):
         vertices = [v_0, v_1, v_2, v_3, v_4, v_5, v_6, v_7]
 
         octagon = Polygon(*vertices, color=GREEN)
-        area = Polygon(*vertices, color=GREEN, fill_opacity=0.3)
+        area = Polygon(*vertices, color=GREEN, fill_opacity=0.5)
 
         tic = []   # temporary_intersection_coordinates - with "wrong" order
 
@@ -272,7 +268,14 @@ class octagon(Scene):
         points.append(np.array([ending_point, line_y, 0]))
         points.append(np.array([starting_point, line_y, 0]))
 
-        new_points_coordinates = [np.array([1 + i * 4/5, 3, 0]) for i in range(len(intersection_coordinates))]
+
+        new_points_coordinates = [
+            np.array([1 + 0 * 8/5, 3, 0]), np.array([1 + 0 * 8/5, 2.25, 0]),
+            np.array([1 + 1 * 8/5, 3, 0]), np.array([1 + 1 * 8/5, 2.25, 0]),
+            np.array([1 + 2 * 8/5, 3, 0]), np.array([1 + 2 * 8/5, 2.25, 0]),
+            np.array([1 + 3 * 8/5, 3, 0]), np.array([1 + 3 * 8/5, 2.25, 0])
+        ]
+        
         new_points = VGroup(*[Dot(new_points_coordinates[i], color=i%2*GREEN+(1-i%2)*ORANGE) for i in range(len(new_points_coordinates))])
         new_numbers = VGroup(*[Tex(f'${i+1}$', font_size=40, color=new_points[i].get_color()).move_to(new_points[i]) for i in range(len(new_points))])
         intersection_points_copy = intersection_points.copy()
@@ -280,9 +283,9 @@ class octagon(Scene):
         parentheses = VGroup()
         for i in range(len(new_numbers)):
             if i % 2 == 0:
-                parentheses.add(Tex('(', font_size=60).move_to(new_points[i]).shift(0.2*LEFT))
+                parentheses.add(Tex('(', font_size=120).move_to(new_points[i:i+2]).shift(0.5*LEFT))
             else:
-                parentheses.add(Tex(')', font_size=60).move_to(new_points[i]).shift(0.2*RIGHT))
+                parentheses.add(Tex(')', font_size=120).move_to(new_points[i-1:i+1]).shift(0.5*RIGHT))
         
         n_is_even = Text('N-ը զույգ է', font_size=40).move_to([3.5, -2, 0])
 
@@ -317,7 +320,7 @@ class octagon(Scene):
                 self.play(Write(intersection_point_indices[i]))
         
         self.wait(1)
-        self.play(Transform(intersection_points_copy, new_points))
+        self.play(Transform(intersection_points_copy, new_points, rate_func=linear, run_time=2))
         self.remove(intersection_points_copy)
         self.add(new_points)
         self.wait(0.5)
@@ -358,7 +361,7 @@ class nonagon(Scene):
         vertices = [v_0, v_1, v_2, v_3, v_4, v_5, v_6, v_7, v_8]
 
         nonagon = Polygon(*vertices, color=GREEN)
-        area = Polygon(*vertices, color=GREEN, fill_opacity=0.3)
+        area = Polygon(*vertices, color=GREEN, fill_opacity=0.5)
 
         tic = []   # temporary_intersection_coordinates - with "wrong" order
 
@@ -408,7 +411,13 @@ class nonagon(Scene):
         points.append(np.array([ending_point, line_y, 0]))
         points.append(np.array([starting_point, line_y, 0]))
 
-        new_points_coordinates = [np.array([1 + i * 4/5, 3, 0]) for i in range(len(intersection_coordinates))]
+        new_points_coordinates = [
+            np.array([1 + 0 * 8/5, 3, 0]), np.array([1 + 0 * 8/5, 2.25, 0]),
+            np.array([1 + 1 * 8/5, 3, 0]), np.array([1 + 1 * 8/5, 2.25, 0]),
+            np.array([1 + 2 * 8/5, 3, 0]), np.array([1 + 2 * 8/5, 2.25, 0]),
+            np.array([1 + 3 * 8/5, 3, 0]), np.array([1 + 3 * 8/5, 2.25, 0])
+        ]
+
         new_points = VGroup(*[Dot(new_points_coordinates[i], color=i%2*GREEN+(1-i%2)*ORANGE) for i in range(len(new_points_coordinates))])
         new_numbers = VGroup(*[Tex(f'${i+1}$', font_size=40, color=new_points[i].get_color()).move_to(new_points[i]) for i in range(len(new_points))])
         intersection_points_copy = intersection_points.copy()
@@ -416,9 +425,9 @@ class nonagon(Scene):
         parentheses = VGroup()
         for i in range(len(new_numbers)):
             if i % 2 == 0:
-                parentheses.add(Tex('(', font_size=60).move_to(new_points[i]).shift(0.2*LEFT))
+                parentheses.add(Tex('(', font_size=120).move_to(new_points[i:i+2]).shift(0.5*LEFT))
             else:
-                parentheses.add(Tex(')', font_size=60).move_to(new_points[i]).shift(0.2*RIGHT))
+                parentheses.add(Tex(')', font_size=120).move_to(new_points[i-1:i+1]).shift(0.5*RIGHT))
         
         n_is_even = Text('N-ը կենտ է', font_size=40).move_to([3.5, -2, 0])
 
@@ -467,7 +476,51 @@ class nonagon(Scene):
         self.play(Indicate(Line(v_4, v_5, color=GREEN), color=PURE_RED, run_time=4, scale_factor=1))
 
         self.wait(1)
+        
+        self.play(FadeOut(*[mob for mob in self.mobjects]))
 
+
+
+class thumbnail(Scene):
+    def construct(self):
+        n = 6
+        n_equals_n = Tex(f'N\ =\ ${n}$', font_size=60, color=GREEN).move_to([-4.5, 3, 0])
+
+        n_equals_9 = Tex('N\ =\ $9$', font_size=60, color=RED).move_to([4.5, 3, 0])
+        question = Tex('?', font_size=60, color=RED).next_to(n_equals_9, DOWN)
+
+        
+        delta_x = -1     # shift the hexagon left or right
+        line_y = -1.5    # y coordinate of the main line
+
+    # THE LINE
+        starting_point = -6.5
+        ending_point = 6.5
+        l_1 = np.array([starting_point, line_y, 0])
+        l_2 = np.array([ending_point, line_y, 0])
+        line = Line(l_1, l_2, color=ORANGE).scale(1.3)
+
+    # POLYGON VERTICES
+        v_0 = np.array([-3.5 + delta_x, -1.3 + line_y, 0])
+        v_1 = np.array([-1 + delta_x, 1.2 + line_y, 0])
+        v_2 = np.array([0 + delta_x, -1.8 + line_y, 0])
+        v_3 = np.array([1 + delta_x, 0.8 + line_y, 0])
+        v_4 = np.array([3.5 + delta_x, -1.1 + line_y, 0])
+        v_5 = np.array([-1 + delta_x, 3, 0])
+
+        vertices = [v_0, v_1, v_2, v_3, v_4, v_5]
+
+        hexagon = Polygon(*vertices, color=GREEN)
+
+    # INTERSECTION COORDINATES OF THE POLYGON AND THE LINE
+        intersection_coordinates = []
+        for i in range(len(vertices)):
+            intersection_coordinates.append(line_intersection([l_1, l_2], [vertices[i], vertices[(i+5)%6]]))
+
+    # INTERSECTION POINTS
+        white_intersection_points = VGroup(*[Dot(coord) for coord in intersection_coordinates])
+
+        self.add(n_equals_n, line, hexagon, white_intersection_points, n_equals_9, question)
 
 
 class problem_12457(Scene):
@@ -485,6 +538,9 @@ class problem_12457(Scene):
         self.play(FadeOut(*[mob for mob in self.mobjects]))
 
         self.wait(1)
+
+
+
 
 
 class test(Scene):
@@ -525,3 +581,4 @@ class test(Scene):
 
 
         # self.wait()
+
