@@ -14,7 +14,7 @@ class Map(Scene):
         map.scale(0.5)
         map.shift(0*RIGHT + 0*UP)
 
-        self.play(FadeIn(map))
+        self.add(map)
         self.wait(2)
 
         c = [1, 0, 0]
