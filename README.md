@@ -9,11 +9,13 @@ Directories named `test` also will be ignored, so feel free to make `test/` in y
 
 
 To use functions from Directory/file.py, add the following in your code
+QarakusiFunctions contains every other function file that we write, so importing only QarakusiFunctions will be enough.
 ```py
 import sys
 sys.path.append("../../")       # relative path to the root of the repository
 from Directory.file import *    # or import specific function
-# from Functions.GeometryFunctions.GeometryFunctions import *
+# example below
+from Functions.QarakusiFunctions import *
 ```
 
 To render the animation implemented in `file.py` just type `'manim -pql file_name.py scene_name'` in the terminal in
