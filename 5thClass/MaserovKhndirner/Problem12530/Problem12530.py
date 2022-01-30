@@ -10,11 +10,6 @@ sys.path.append('../')
 sys.path.append('../../../Functions')
 from Functions.QarakusiFunctions import *
 
-# ԽՆԴԻՐ
-# Աշոտը Հասմիկից 3 անգամ ավելի քիչ մատիտ ունի։ 
-# Գտնել, թե քանի՞ մատիտ ունեն նրանք միասին, եթե Հասմիկի մատիտները շատ են Աշոտի մատիտներից 8-ով։
-
-
 class Problem12530(Scene):
     def construct(self):
         self.add(bounds)
