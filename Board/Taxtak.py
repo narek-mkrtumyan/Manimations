@@ -3,6 +3,20 @@ import numpy as np
 import csv
 import pandas as pd
 from numpy import genfromtxt
+from Board import Board, T4
+
+# --------- IMPORTS
+from pathlib import Path
+import os
+# ---------- FLAGS
+RESOLUTION = ""
+FLAGS = f"-pql {RESOLUTION} -s"
+SCENE = "Star"
+
+
+if __name__ == '__main__':
+    script_name = f"{Path(__file__).resolve()}"
+    os.system(f"manim {FLAGS} {script_name} {SCENE}")
 
 def matrix_to_VGroup(matrix):
 	'''matrix-ի բոլոր տարրերով VGroup'''
@@ -22,35 +36,60 @@ def write_random_table(rows, columns, low, high, file_name):
 
 class tetramino(Scene):
 	def construct(self):
-		chess = Board(rows=10, columns=10, stroke_width=1).shift(2*LEFT)
-		self.play(Create(chess))
+		chess0 = Board(rows=10, columns=10, stroke_width=2).shift(3*LEFT)
+		chess = Board(rows=10, columns=10, stroke_width=0.2).shift(3*LEFT)
+		self.play(Create(chess0))
+		self.add(chess)
 		self.wait()
 
-		T4_1 = T4(stroke_width=1).shift(2*UP+3*RIGHT)
-		T4_2 = T4(stroke_width=1).shift(2*DOWN+3*RIGHT)
-		self.play(Create(T4_1))
+		T4_1 = T4(stroke_width=0.2).shift(2*UP+3*RIGHT)
+		T4_2 = T4(stroke_width=0.2).shift(2*DOWN+3*RIGHT)
+
+		T4_10 = T4(stroke_width=2).shift(2*UP+3*RIGHT)
+		T4_20 = T4(stroke_width=2).shift(2*DOWN+3*RIGHT)
+		self.play(Create(T4_10))
+		self.add(T4_1)
 		self.wait()
-		self.play(chess.animate.make_chess())
+
+		self.play(FadeOut(chess0), chess.animate.make_chess())
 		self.wait()
+
 		self.play(T4_1.animate.color_cell(3, WHITE))
 		self.wait()
 		self.play(
-			T4_1.animate.color_cell(0, WHITE),
-			T4_1.animate.color_cell(2, WHITE)
+			T4_1.animate.color_cell(0, WHITE).color_cell(2, WHITE)
 			)
 		self.wait()
-		self.play(T4_1.animate.color_cell(1, DARK_BROWN))
+		self.play(T4_1.animate.color_cell(1, DARK_BROWN), FadeOut(T4_10))
+		#self.play(FadeOut(T4_10))
 
-		self.play(Create(T4_2))
+		self.play(Create(T4_20))
+		self.add(T4_2)
 		self.wait()
 		self.play(T4_2.animate.color_cell(3, DARK_BROWN))
 		self.wait()
 		self.play(
-			T4_2.animate.color_cell(0, DARK_BROWN),
-			T4_2.animate.color_cell(2, DARK_BROWN)
+			T4_2.animate.color_cell(0, DARK_BROWN).color_cell(2, DARK_BROWN)
 			)
 		self.wait()
-		self.play(T4_2.animate.color_cell(1, WHITE))
+		self.play(T4_2.animate.color_cell(1, WHITE), FadeOut(T4_20))
+
+		myTemplate = TexTemplate()
+		myTemplate.add_to_preamble(r"\usepackage{armtex}")
+		text11 = Tex('3 սպիտակ', tex_template=myTemplate)
+		text12 = Tex('1 սև', tex_template=myTemplate, color=DARK_BROWN)
+		text22 = Tex('3 սև', tex_template=myTemplate, color=DARK_BROWN)
+		text21 = Tex('1 սպիտակ',tex_template=myTemplate)
+		text1 = VGroup(text11, text12)
+		text1.arrange(DOWN)
+		text2 = VGroup(text21, text22)
+		text2.arrange(DOWN)
+		text1.next_to(T4_1, RIGHT)
+		text2.next_to(T4_2, RIGHT)
+		self.play(Write(text2))
+		self.play(Write(text1))
+		self.wait()
+
 
 class Knight(Scene):
 	def construct(self):
@@ -88,50 +127,98 @@ class Knight(Scene):
 
 #myus idean ays Scene-um method greln a vor ani nerkumy
 class sum(Scene):
-	def step(self, i1, j1, i2, j2, pop, dif):
-		change = Integer(pop).shift(5*RIGHT)
-		self.play(Create(change))
+	def do(self):
+		low = -100
+		high = 101
+		self.dif = (high - 1 - low) / 2
+	def hstep(self, i1, j1, i2, j2, change_value):
+		cells = VGroup(self.board.cells[i1][j1], self.board.cells[i2][j2])
+		self.play(Circumscribe(cells, color=RED))
+
+		plus1 = Tex('$+$').next_to(self.board.cells[i1][j1], RIGHT)
+		plus2 = Tex('$+$').next_to(self.board.cells[i2][j2], RIGHT)
+		change1 = Integer(change_value).next_to(plus1, RIGHT)
+		change2 = Integer(change_value).next_to(plus2, RIGHT)
+		self.play(Write(change1), Write(change2))
 		self.wait()
-		self.play(Wiggle(self.board.numbers[0][0]), Wiggle(self.board.numbers[0][1]), Wiggle(change))
-		change1=change.copy()
-		change2=change.copy()
+		
+		self.play(
+			Wiggle(self.board.numbers[i1][j1]),
+			Wiggle(self.board.numbers[i2][j2]),
+			Wiggle(change1), Wiggle(change2)
+			)
+
+		equal1 = Tex('$=$').next_to(change1, RIGHT)
+		equal2 = Tex('$=$').next_to(change2, RIGHT)
+		signs = VGroup(plus1, plus2, equal1, equal2)
+		self.add(signs)
+		self.wait(0.5)
+		new1 = Integer(self.board.all_numbers[i1][j1]+change_value).next_to(equal1, RIGHT)
+		new2 = Integer(self.board.all_numbers[i2][j2]+change_value).next_to(equal2, RIGHT)
+		self.play(Write(new1), Write(new2))
+
 		self.play(
 			FadeOut(self.board.numbers[i1][j1]),
 			FadeOut(self.board.numbers[i2][j2]),
-			change1.animate.move_to(self.board.cells[i1][j1]),
-			change2.animate.move_to(self.board.cells[i2][j2]),
-			FadeOut(change1),
-			FadeOut(change2),
-			FadeOut(change))
+			FadeOut(signs),
+			FadeOut(change1), FadeOut(change2),
+			new1.animate.move_to(self.board.cells[i1][j1]),
+			new2.animate.move_to(self.board.cells[i2][j2])
+			)
 
-		self.board.all_numbers[i1][j1]+=pop
-		self.board.all_numbers[i2][j2]+=pop
+		self.board.all_numbers[i1][j1]+=change_value
+		self.board.all_numbers[i2][j2]+=change_value
 
 		self.board.numbers[i1][j1] = Integer(self.board.all_numbers[i1][j1]).move_to(self.board.cells[i1][j1])
 		self.board.numbers[i2][j2] = Integer(self.board.all_numbers[i2][j2]).move_to(self.board.cells[i2][j2])
-		self.play(
-			Write(self.board.numbers[i1][j1]),
-			Write(self.board.numbers[i2][j2])
-			)
-		if self.board.all_numbers[i1][j1]>=0:
-			self.play(self.board.animate.color_cell([i1,j1], YELLOW, opacity=self.board.all_numbers[i1][j1]/dif))
-		if self.board.all_numbers[i1][j1]<0:
-			self.play(self.board.animate.color_cell([i1,j1], BLUE, opacity=-self.board.all_numbers[i1][j1]/dif))
-		if self.board.all_numbers[i2][j2]>=0:
-			self.play(self.board.animate.color_cell([i2,j2], YELLOW, opacity=self.board.all_numbers[i2][j2]/dif))
-		if self.board.all_numbers[i2][j2]<0:
-			self.play(self.board.animate.color_cell([i2,j2], BLUE, opacity=-self.board.all_numbers[i2][j2]/dif))
-		self.wait()
-	def construct(self):
-		rows = 8
-		columns = 8
-		self.board = Board(size=0.9, rows=rows, columns=columns)
-		self.play(Create(self.board))
+		self.add(self.board.numbers[i1][j1], self.board.numbers[i2][j2])
+		self.remove(new1, new2)
+
+		if self.board.all_numbers[i1][j1] >= 0:
+			self.play(self.board.animate.color_cell([i1,j1], YELLOW, opacity=self.board.all_numbers[i1][j1]/self.dif))
+		if self.board.all_numbers[i1][j1] < 0:
+			self.play(self.board.animate.color_cell([i1,j1], BLUE, opacity=-self.board.all_numbers[i1][j1]/self.dif))
+		if self.board.all_numbers[i2][j2] >= 0:
+			self.play(self.board.animate.color_cell([i2,j2], YELLOW, opacity=self.board.all_numbers[i2][j2]/self.dif))
+		if self.board.all_numbers[i2][j2] < 0:
+			self.play(self.board.animate.color_cell([i2,j2], BLUE, opacity=-self.board.all_numbers[i2][j2]/self.dif))
 		self.wait()
 
-		low = -100
-		high = 101
-		dif = (high - 1 - low) / 2
+
+	def estep(self, i1, j1, i2, j2, change_value):
+		cells = VGroup(self.board.cells[i1][j1], self.board.cells[i2][j2])
+		self.play(Circumscribe(cells, color=RED),
+			Wiggle(self.board.numbers[i1][j1]),
+			Wiggle(self.board.numbers[i2][j2]))
+
+		new1 = Integer(self.board.all_numbers[i1][j1]+change_value).move_to(self.board.cells[i1][j1])
+		new2 = Integer(self.board.all_numbers[i2][j2]+change_value).move_to(self.board.cells[i2][j2])
+		self.remove(self.board.numbers[i1][j1], self.board.numbers[i2][j2])
+		self.add(new1, new2)
+
+		self.board.all_numbers[i1][j1]+=change_value
+		self.board.all_numbers[i2][j2]+=change_value
+
+		self.board.numbers[i1][j1] = Integer(self.board.all_numbers[i1][j1]).move_to(self.board.cells[i1][j1])
+		self.board.numbers[i2][j2] = Integer(self.board.all_numbers[i2][j2]).move_to(self.board.cells[i2][j2])
+		self.add(self.board.numbers[i1][j1], self.board.numbers[i2][j2])
+		self.remove(new1, new2)
+
+		if self.board.all_numbers[i1][j1] >= 0:
+			self.board.color_cell([i1,j1], YELLOW, opacity=self.board.all_numbers[i1][j1]/self.dif)
+		if self.board.all_numbers[i1][j1] < 0:
+			self.board.color_cell([i1,j1], BLUE, opacity=-self.board.all_numbers[i1][j1]/self.dif)
+		if self.board.all_numbers[i2][j2] >= 0:
+			self.board.color_cell([i2,j2], YELLOW, opacity=self.board.all_numbers[i2][j2]/self.dif)
+		if self.board.all_numbers[i2][j2] < 0:
+			self.board.color_cell([i2,j2], BLUE, opacity=-self.board.all_numbers[i2][j2]/self.dif)
+	def construct(self):
+		self.do()
+		rows = 8
+		columns = 8
+		self.board = Board(size=0.95, rows=rows, columns=columns).shift(2*LEFT)
+		self.play(Create(self.board))
+		self.wait()
 		
 		matrix = genfromtxt('random_table.csv', delimiter=',').astype(int)
 		self.board.add_numbers(matrix)
@@ -139,23 +226,17 @@ class sum(Scene):
 		self.add(self.board.numbers_)
 		self.wait()
 
-		self.play(self.board.animate.colorful(dif))
+		self.play(self.board.animate.colorful(self.dif))
 		self.wait()
-		#board.track(dif)
 
-		change = -matrix.item(0,0)
-		#self.play(Wiggle(self.board.cells[0][0]), Wiggle(self.board.cells[0][1]), Wiggle(change))
-		self.step(0,0,0,1, change, dif)
-		#board.update_color(dif)
-		#board.trackers[0][0] += matrix.item(0,0)
-		#board.trackers[0][1] += matrix.item(0,0)
-
-		#self.play(
-		#	change.copy().animate.move_to(board.cells[0][0]),
-		#	change.copy().animate.move_to(board.cells[0][1]),
-		#	FadeOut(change))
-		#self.wait()
-
+		change = -matrix.item(0,7)
+		self.hstep(0,7,1,7, change)
+		change = -self.board.all_numbers[1][7]
+		self.hstep(1,7,2,7, change)
+		
+		for i in range(2,7):
+			change = -self.board.all_numbers[i][7]
+			self.estep(i,7,i+1,7, change)
 		self.wait()
 
 class graph(Scene):
@@ -224,5 +305,6 @@ class Star(Scene):
 	def construct(self):
 		star = Star(5, outer_radius=2, density=3, color=YELLOW)
 		self.add(star)
+
 #print(help(Circle))
 #print(T4.__doc__)

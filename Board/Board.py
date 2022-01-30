@@ -84,53 +84,6 @@ class Board(VMobject):
 				self.all_numbers.append(k)
 		self.numbers_ = matrix_to_VGroup(self.numbers)
 
-	def add_trackers(self, matrix_of_numbers, dif):
-		self.trackers = list()
-		self.numbers = list()
-		self.all_numbers = list()
-		if isinstance(matrix_of_numbers, np.ndarray):
-			assert self.rows == matrix_of_numbers.shape[0] and self.columns == matrix_of_numbers.shape[1], "Մատրիցի չափերը չեն համընկնում տախտակի չափերի հետ"
-			for i in range(self.rows):
-				k = list()
-				l = list()
-				for j in range(self.columns):
-					tracker = ValueTracker(matrix_of_numbers.item((i,j)))
-					k.append(tracker)
-					l.append(matrix_of_numbers.item((i,j)))
-					self.numbers.append(Integer(matrix_of_numbers.item((i,j))).move_to(self.cells[i][j].get_center()))
-				self.trackers.append(k)
-				self.all_numbers.append(l)
-		else:
-			assert self.rows == len(matrix_of_numbers) and self.columns == len(matrix_of_numbers[0]), "Մատրիցի չափերը չեն համընկնում տախտակի չափերի հետ"
-			for i in range(self.rows):
-				k = list()
-				l = list()
-				for j in range(self.columns):
-					tracker = ValueTracker(matrix_of_numbers[i][j])
-					k.append(tracker)
-					l.append(matrix_of_numbers.item((i,j)))
-					self.numbers.append(Integer(matrix_of_numbers[i][j]).move_to(self.cells[i][j].get_center()))
-				self.trackers.append(k)
-				self.all_numbers.append(l)
-		self.numbers_ = VGroup(*self.numbers)
-
-	def track(self, dif):
-		#for i in range(self.rows):
-		#	for j in range(self.columns):
-		def number_updater(mobject):
-			mobject.set_value(self.trackers[0][0].get_value())
-			#mobject = Tex(self.trackers[i][j].get_value())
-		for number in self.numbers:
-			number.add_updater(number_updater)
-
-		for i in range(self.rows):
-			for j in range(self.columns):
-				def cell_updater(mobject):
-					mobject.set_fill(YELLOW, opacity=self.trackers[i][j].get_value()/dif)
-				for row in self.cells:
-					for cell in row:
-						cell.add_updater(cell_updater)
-
 	def colorful(self, dif):
 		matrix = self.all_numbers
 		for i in range(self.rows):
