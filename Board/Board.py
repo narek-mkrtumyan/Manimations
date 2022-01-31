@@ -19,6 +19,15 @@ def write_random_table(rows, columns, low, high, file_name):
 	    writer = csv.writer(f)
 	    writer.writerows(matrix)
 
+def knight_moves(i,j):
+	old = [ [i+1,j+2], [i+2,j+1], [i+1,j-2], [i+2,j-1], [i-1,j+2], [i-2,j+1], [i-1,j-2], [i-2,j-1] ]
+	new = list()
+	for pair in old:
+		m = pair[0]
+		n= pair[1]
+		if m<=7 and m>=0 and n<=7 and n>=0:
+			new.append(pair)
+	return new
 #TODO: understand set_fill
 class Board(VMobject):
 	def __init__(self, size=0.75, rows=8, columns=8, color=WHITE, midrows=0, midcolumns=0, stroke_width=0.2):
@@ -49,6 +58,12 @@ class Board(VMobject):
 
 	def color_cell(self, coords, color, opacity=1):
 		self.cells[coords[0]][coords[1]].set_fill(color, opacity=opacity)
+
+	def color_cells(self, coords, color, opacity=1):
+		group = VGroup()
+		for coord in coords:
+			group += self.cells[coord[0]][coord[1]]
+		group.set_color(color)
 
 	def make_chess(self, white=WHITE, black=DARK_BROWN, opacity=1):
 		for i in range(self.rows):
