@@ -1,4 +1,4 @@
-# Class Problem10346()
+# Class Problem10346
 
 ## Խնդիր
 
