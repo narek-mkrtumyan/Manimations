@@ -6,6 +6,7 @@ sys.path.append("../../../")
 from Functions.QarakusiFunctions import *
 
 
+
 class Pens(Scene):
     def construct(self):
 
@@ -164,8 +165,10 @@ class Rope(Scene):
         line_2_is_44 = MathTex(r'=', r'44', font_size=font_size).move_to(new_position_for_3 + np.array([0.75, 0, 0]))
     
     # scissors
-        open_scissors = SVGMobject('open.svg').set_color(WHITE).rotate(PI/10).scale(0.5)
-        closed_scissors = ImageMobject('closed.png').set_color(WHITE).scale(0.26).shift(0.1*DOWN).rotate(PI*(1/5)).scale(0.5)
+        open_scissors = SVGMobject('../../../Functions/SVG_PNG_files/open_scissors.svg')
+        open_scissors.set_color(WHITE).rotate(PI/10).scale(0.5)
+        closed_scissors = ImageMobject('../../../Functions/SVG_PNG_files/closed_scissors.png')
+        closed_scissors.set_color(WHITE).scale(0.13).shift(0.1*DOWN).rotate(PI/5)
 
 
 # ANIMATIONS
@@ -181,7 +184,7 @@ class Rope(Scene):
     # create dashed line, write 3
         self.play(Create(dashed_line))
         self.wait(0.25)
-        self.play(Create(line_2_right[1].reverse_direction())) # revers direction to create from up to down
+        self.play(Create(line_2_right[1].reverse_direction())) # revers direction to create from up to bottom
         self.wait(0.25)
         self.play(Create(line_2_right[0]))
         self.add(line_2_right, line_2_left)
@@ -191,15 +194,7 @@ class Rope(Scene):
         self.wait(0.25)
     
     # cut (split) second line
-        self.play(FadeIn(open_scissors.move_to([-0.2, -1, 0])))
-        self.wait(0.25)
-        self.play(open_scissors.animate().move_to([-0.2, -0.4, 0]))
-        self.wait(0.25)
-        self.remove(open_scissors)
-        self.add(closed_scissors.move_to([-0.3, -0.5, 0]))
-        self.wait(0.25)
-        self.play(FadeOut(closed_scissors))
-        self.wait(0.25)
+        cut_with_scissors(self, open_scissors, closed_scissors, extra_point)
         self.play(VGroup(line_2_right, extra_is_3).animate(rate_func=linear).shift(0.75*RIGHT))
         self.wait(0.25)
 
@@ -243,3 +238,13 @@ class Rope(Scene):
 
         self.remove(*self.mobjects)
         self.wait(1)
+
+
+
+
+
+class test(Scene):
+    def construct(self):
+        
+        self.wait()
+
