@@ -1,6 +1,8 @@
+from turtle import width
 from manim import *
 import numpy as np
 import sys
+from colour import Color
 sys.path.append("../../../")
 sys.path.append("../../")
 sys.path.append("../")
@@ -44,8 +46,8 @@ armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")
 
 # Մասերով խնդիրների համար ֆունկցիաներ
 
-DEFAULT_ENDMARK_LENGTH = 0.4
-
+DEFAULT_ENDMARK_LENGTH = 0.2
+DEFAULT_COUNTING_COLOR = ORANGE
 
 
 def Endmark(length=DEFAULT_ENDMARK_LENGTH, color=WHITE):
@@ -60,12 +62,16 @@ def Segment(start=[-1, 0, 0], end=[1, 0, 0], mathtex=False, position=UP,
         Arguments - start, end, mathtex(Mathtex('')), position(for mathtex), colors for line, endmarks, mathtex
     '''
 
+    endmark_length = stroke_width / 20
+
     AB = Line(start, end, color=color, stroke_width=stroke_width)
 
-    endmark_1 = AB.copy().set_color(endmark_color).scale(DEFAULT_ENDMARK_LENGTH / DistanceBetweenCoordinates(start, end))
+    endmark_1 = AB.copy().set_color(endmark_color).scale(endmark_length / DistanceBetweenCoordinates(start, end))
+    endmark_1.set_stroke(width=DEFAULT_STROKE_WIDTH)
     endmark_1.move_to(start).rotate(PI/2)
 
-    endmark_2 = AB.copy().set_color(endmark_color).scale(DEFAULT_ENDMARK_LENGTH / DistanceBetweenCoordinates(start, end))
+    endmark_2 = AB.copy().set_color(endmark_color).scale(endmark_length / DistanceBetweenCoordinates(start, end))
+    endmark_2.set_stroke(width=DEFAULT_STROKE_WIDTH)
     endmark_2.move_to(end).rotate(PI/2)
 
     line = VGroup(AB, endmark_1, endmark_2)
@@ -227,6 +233,63 @@ def MultiplySegmentRotating(self, segment, factor=2, direction=RIGHT, color=GREE
         segments = combined_segment
 
     return segments
+
+
+
+
+class Scissors:
+    def __init__(self, cut_point):
+        self.cut_point = cut_point
+        scissor_1 = SVGMobject('../../../Functions/siz.svg').set_color(WHITE)
+        scissor_2 = SVGMobject('../../../Functions/siz2.svg').set_color(WHITE)
+        dot = Dot().scale(0.2)
+        self.__p_end = [a + b for a, b in zip([0, -0.35, 0], cut_point)]
+        VGroup(scissor_1, scissor_2).arrange(RIGHT, buff=0.1)
+        scissor_1.shift(0.08 * DOWN + 0.6 * RIGHT)
+        scissor_2.shift(0.08 * DOWN - 0.6 * RIGHT)
+        scissors_with_dot = VGroup(scissor_1, scissor_2, dot).scale(0.5)
+        point = scissors_with_dot[2].get_center()
+        scissors_with_dot[0].rotate(angle=-0.02, about_point=point)
+        scissors_with_dot[1].rotate(angle=0.02, about_point=point)
+        scissors_with_dot.move_to(self.__p_end)
+        scissors_with_dot.shift(DOWN)
+        self.siz = scissors_with_dot
+
+
+    def cut_in(self, screen):
+
+        def cut_with_scissors(mobject, t):
+            dt = 1/60
+            dl= [0, 1/60, 0]
+            if t < 1/2:
+                angle = PI / 6 * dt
+            else:
+                angle = -PI / 6 * dt
+            #p_end = [a+b for a, b in zip([0, -0.25, 0], mobject[3].get_center())]
+            mobject.shift(dl)
+            point = mobject[2].get_center()
+            mobject[0].rotate(angle=angle, about_point=point)
+            mobject[1].rotate(angle=-angle, about_point=point)
+        screen.play(UpdateFromAlphaFunc(self.siz, cut_with_scissors, run_time=1, rate_func=linear))
+        self.siz.move_to(self.__p_end)
+
+    def cut_out(self, screen):
+        def cut_with_scissors(mobject, t):
+            dt = 1/60
+            dl = [0, -1/60, 0]
+            angle = PI / 6 * dt
+            mobject.shift(dl)
+            point = mobject[2].get_center()
+            color = Color(hue=1, saturation=t/3, luminance=1-t)
+            mobject.set_color(color)
+            mobject[0].rotate(angle=angle, about_point=point)
+            mobject[1].rotate(angle=-angle, about_point=point)
+        screen.play(UpdateFromAlphaFunc(self.siz, cut_with_scissors, run_time=1, rate_func=linear))
+        screen.remove(self.siz)
+
+
+
+
 
 
 
