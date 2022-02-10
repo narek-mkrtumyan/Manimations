@@ -1,8 +1,5 @@
 import sys
-
 sys.path.append('../../../')
-sys.path.append('../../')
-sys.path.append('../')
 from Functions.QarakusiFunctions import *
 
 
@@ -62,11 +59,6 @@ class Problem10323(Scene):
         answer = MathTex(r'103', font_size=numbers_font_size).next_to(children_segment, UP*0.5).shift(0.25*DOWN)
         answer_rect = SurroundingRectangle(answer, color=PURE_GREEN)
 
-        open_scissors = SVGMobject('../../../Functions/SVG_PNG_files/open_scissors.svg')
-        open_scissors.set_color(WHITE).rotate(PI/10).scale(0.5)
-
-        closed_scissors = ImageMobject('../../../Functions/SVG_PNG_files/closed_scissors.png')
-        closed_scissors.set_color(WHITE).scale(0.13).shift(0.1*DOWN).rotate(PI/5)
 
 
 # ANIMATIONS
@@ -102,7 +94,7 @@ class Problem10323(Scene):
 
     # Cut the extra segment and move right
 
-        cut_with_scissors(self, open_scissors, closed_scissors, women_segments_extention[0][0].get_start_and_end()[0])
+        cut_with_scissors(self, women_segments_extention[0][0].get_start_and_end()[0])
         # self.play(women_segments_extention.animate().shift(0.25*RIGHT))
         self.wait(0.5)
 
