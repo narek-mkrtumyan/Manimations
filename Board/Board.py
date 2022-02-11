@@ -75,8 +75,18 @@ class Board(VMobject):
 				else:
 					self.cells[i][j].set_fill(white, opacity=opacity)
 	
-	def color4(self):
-		pass
+	def color4(self, color_0=ORANGE, color_1=PURE_GREEN, color_2=WHITE, color_3=GREY, opacity=1):
+		for i in range(self.rows):
+			for j in range(self.columns):
+				if (i+j)%4==0:
+					self.cells[i][j].set_fill(color_0, opacity=opacity)
+				elif (i+j)%4==1:
+					self.cells[i][j].set_fill(color_1, opacity=opacity)
+				elif (i+j)%4==2:
+					self.cells[i][j].set_fill(color_2, opacity=opacity)
+				else:
+					self.cells[i][j].set_fill(color_3, opacity=opacity)
+
 
 	def add_numbers(self, matrix_of_numbers):
 		self.numbers = VGroup()
