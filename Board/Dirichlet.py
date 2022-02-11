@@ -490,3 +490,27 @@ class Updater(Scene):
 		self.wait()
 		self.play(dot2.animate.shift(2*UP))
 		self.wait()
+
+class All_Color(Scene):
+	def given(self):
+		pass
+	def example(self):
+		pass
+	def row(self):
+		pass
+	def color_rows(self):
+		pass
+	def col(self):
+		pass
+	def proof(self):
+		pass
+	def final(self):
+		pass
+	def construct(self):
+		self.board3 = Board(rows=3, columns=3)
+		self.board2 = Board()
+
+		self.given()
+		self.example()
+		self.proof()
+		self.final()
