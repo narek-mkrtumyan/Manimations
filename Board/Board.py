@@ -16,8 +16,8 @@ def matrix_to_VGroup(matrix):
 def write_random_table(rows, columns, low, high, file_name):
 	matrix = np.random.randint(low=low,high=high,size=(rows,columns))
 	with open(file_name, 'w', encoding='UTF8', newline='') as f:
-	    writer = csv.writer(f)
-	    writer.writerows(matrix)
+		writer = csv.writer(f)
+		writer.writerows(matrix)
 
 def knight_moves(i,j):
 	old = [ [i+1,j+2], [i+2,j+1], [i+1,j-2], [i+2,j-1], [i-1,j+2], [i-2,j+1], [i-1,j-2], [i-2,j-1] ]
@@ -28,7 +28,8 @@ def knight_moves(i,j):
 		if m<=7 and m>=0 and n<=7 and n>=0:
 			new.append(pair)
 	return new
-#TODO: understand set_fill
+
+
 class Board(VMobject):
 	def __init__(self, size=0.75, rows=8, columns=8, color=WHITE, midrows=0, midcolumns=0, stroke_width=0.2):
 		k=[]
@@ -55,6 +56,7 @@ class Board(VMobject):
 		self.columns = columns
 		self.size = size
 		self.color = color
+		#self.updated_numbers = VGroup()
 
 	def color_cell(self, coords, color, opacity=1):
 		self.cells[coords[0]][coords[1]].set_fill(color, opacity=opacity)
@@ -77,27 +79,52 @@ class Board(VMobject):
 		pass
 
 	def add_numbers(self, matrix_of_numbers):
-		self.numbers = list()
+		self.numbers = VGroup()
 		self.all_numbers = list()
 		if isinstance(matrix_of_numbers, np.ndarray):
 			assert self.rows == matrix_of_numbers.shape[0] and self.columns == matrix_of_numbers.shape[1], "Մատրիցի չափերը չեն համընկնում տախտակի չափերի հետ"
 			for i in range(self.rows):
 				k = list()
-				l = list()
+				l = VGroup()
 				for j in range(self.columns):
 					k.append(matrix_of_numbers.item((i,j)))
-					l.append(Integer(matrix_of_numbers.item((i,j))).move_to(self.cells[i][j].get_center()))
-				self.numbers.append(l)
+					if matrix_of_numbers.item((i,j)) is not None:
+						l += Integer(matrix_of_numbers.item((i,j))).set_color(BLACK).move_to(self.cells[i][j].get_center())
+				self.numbers += l
 				self.all_numbers.append(k)
 		else:
 			assert self.rows == len(matrix_of_numbers) and self.columns == len(matrix_of_numbers[0]), "Մատրիցի չափերը չեն համընկնում տախտակի չափերի հետ"
 			for i in range(self.rows):
 				k=list()
+				l = VGroup()
 				for j in range(self.columns):
-					l.append(Integer(matrix_of_numbers.item((i,j))).move_to(self.cells[i][j].get_center()))
-				self.numbers.append(l)
+					k.append(matrix_of_numbers[i][j])
+					if matrix_of_numbers[i][j] is not None:
+						l += Integer(matrix_of_numbers[i][j]).set_color(BLACK).move_to(self.cells[i][j].get_center())
+					else:
+						l += Integer(0).move_to(8*RIGHT)
+				self.numbers += l
 				self.all_numbers.append(k)
-		self.numbers_ = matrix_to_VGroup(self.numbers)
+		self.add(self.numbers)
+
+	def update_numbers(self, matrix_of_numbers):
+		self.updated_numbers = VGroup()
+		group = VGroup()
+		for i in range(self.rows):
+			ggroup = VGroup()
+			for j in range(self.columns):
+				if matrix_of_numbers[i][j] is not None:
+					self.all_numbers[i][j] = matrix_of_numbers[i][j]
+					#self.numbers[i][j] = Integer(matrix_of_numbers[i][j]).set_color(BLACK).move_to(self.cells[i][j].get_center())
+					#ggroup += self.numbers[i][j]
+					num = Integer(matrix_of_numbers[i][j]).set_color(BLACK).move_to(self.cells[i][j].get_center())
+					ggroup += num
+				else:
+					ggroup += Integer(0).move_to(8*RIGHT)
+			group += ggroup
+		#self.add(self.numbers)
+		self.updated_numbers = group
+		#self.add(self.updated_numbers)
 
 	def colorful(self, dif):
 		matrix = self.all_numbers
