@@ -1,12 +1,11 @@
 # Video Lessons
 
-In each folder must contain a `README.md` file describing the animations implemented in that folder's `.py` files.
+In each folder must contain a `README.md` file describing the animations implemented in that folder's `.py` files. After completing that animations drag and drop final video in the README.
 
-You can find a template for the Readme files [here](./template/README.md) (just copy and edit it as needed).
-
-DO **NOT** add any directory named `images`, `texts`, etc. (see more in [.gitignore](./.gitignore)).
+DO **NOT** add any directories named `images`, `media` etc. (see more in [.gitignore](./.gitignore)).
 Directories named `test` also will be ignored, so feel free to make `test/` in your computer if you need.
 
+See [`Configs.py`](./Configs.py)
 
 To use functions from Directory/file.py, add the following in your code
 QarakusiFunctions contains every other function file that we write, so importing only QarakusiFunctions will be enough.
