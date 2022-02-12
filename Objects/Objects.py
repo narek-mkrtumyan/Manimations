@@ -4,28 +4,16 @@ import os
 import sys
 sys.path.append('../')
 
+import Objects.helpers as helpers
 
-def relative_path_to_Manimations():
-
-    cwd = os.getcwd()
-    depth = 0
-
-    for i in range(len(cwd)):
-        if cwd[i:(i+11)] == 'Manimations':
-            for j in range(i+1, len(cwd)):
-                if cwd[j] == '/':
-                    depth += 1
-            relative_path = depth * '../'
-
-            return relative_path
-
+path_to_SVG = os.path.join(helpers.root(), 'Objects', 'SVG_files')
 
 
 
 class Pigeon(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        pigeon = SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/pigeon.svg')
+        pigeon = SVGMobject(os.path.join(path_to_SVG, 'pigeon.svg'))
         pigeon.set_color(WHITE).scale(0.5)
 
         self.add(pigeon)
@@ -34,16 +22,18 @@ class Pigeon(VMobject):
 class Rabbit(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        rabbit = SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/rabbit.svg')
+        rabbit = SVGMobject(os.path.join(path_to_SVG, 'rabbit.svg'))
         rabbit.set_color(WHITE).scale(0.55)
 
         self.add(rabbit)
 
 
+
+
 class CageSquare(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        cage_square = SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/cage_square.svg')
+        cage_square = SVGMobject(os.path.join(path_to_SVG, 'cage_square.svg'))
         cage_square.set_color(GOLD).scale(1.5)
 
         self.add(cage_square)
@@ -52,16 +42,16 @@ class CageSquare(VMobject):
 class CageBird(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        cage_bird = SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/cage_bird.svg')
+        cage_bird = SVGMobject(os.path.join(path_to_SVG, 'cage_bird.svg'))
         cage_bird.set_color(GOLD).scale(2)
 
         self.add(cage_bird)
 
 
-class OpenScissors(Mobject):
+class OpenScissors(VMobject):
     def __init__(self):
-        Mobject.__init__(self)
-        open_scissors = SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/open_scissors.svg')
+        VMobject.__init__(self)
+        open_scissors = SVGMobject(os.path.join(path_to_SVG, 'open_scissors.svg'))
         open_scissors.set_color(WHITE).rotate(PI/10).scale(0.5)
 
         self.add(open_scissors)
@@ -70,7 +60,7 @@ class OpenScissors(Mobject):
 class ClosedScissors(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        closed_scissors = SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/closed_scissors.svg')
+        closed_scissors = SVGMobject(os.path.join(path_to_SVG, 'closed_scissors.svg'))
         closed_scissors.set_color(WHITE).scale(0.4).rotate(PI/5)
 
         self.add(closed_scissors)
@@ -84,39 +74,39 @@ class ThinkingBubble(VMobject):
             if from_left_to_right:
                 if style == 1:
                     thinking_bubble = SVGMobject(
-                            relative_path_to_Manimations() + 'Objects/SVG_files/smooth_thinking_bubble_left_1.svg'
+                            os.path.join(path_to_SVG, 'smooth_thinking_bubble_left_1.svg')
                         )
                 else:
                     thinking_bubble = SVGMobject(
-                            relative_path_to_Manimations() + 'Objects/SVG_files/smooth_thinking_bubble_left_2.svg'
+                            os.path.join(path_to_SVG, 'smooth_thinking_bubble_left_2.svg')
                         )
             else:
                 if style == 1:
                     thinking_bubble = SVGMobject(
-                            relative_path_to_Manimations() + 'Objects/SVG_files/smooth_thinking_bubble_right_1.svg'
+                            os.path.join(path_to_SVG, 'smooth_thinking_bubble_right_1.svg')
                         )
                 else:
                     thinking_bubble = SVGMobject(
-                            relative_path_to_Manimations() + 'Objects/SVG_files/smooth_thinking_bubble_right_2.svg'
+                            os.path.join(path_to_SVG, 'smooth_thinking_bubble_right_2.svg')
                         )
         else:
             if from_left_to_right:
                 if style == 1:
                     thinking_bubble = SVGMobject(
-                            relative_path_to_Manimations() + 'Objects/SVG_files/thinking_bubble_left_1.svg'
+                            os.path.join(path_to_SVG, 'thinking_bubble_left_1.svg')
                         )
                 else:
                     thinking_bubble = SVGMobject(
-                            relative_path_to_Manimations() + 'Objects/SVG_files/thinking_bubble_left_2.svg'
+                            os.path.join(path_to_SVG, 'thinking_bubble_left_2.svg')
                         )
             else:
                 if style == 1:
                     thinking_bubble = SVGMobject(
-                            relative_path_to_Manimations() + 'Objects/SVG_files/thinking_bubble_right_1.svg'
+                            os.path.join(path_to_SVG, 'thinking_bubble_right_1.svg')
                         )
                 else:
                     thinking_bubble = SVGMobject(
-                            relative_path_to_Manimations() + 'Objects/SVG_files/thinking_bubble_right_2.svg'
+                            os.path.join(path_to_SVG, 'thinking_bubble_right_2.svg')
                         )
         
         thinking_bubble.set_color(WHITE).scale(0.5)
@@ -124,22 +114,32 @@ class ThinkingBubble(VMobject):
         self.add(thinking_bubble)
 
 
+
+
+
 class Weight(VGroup):
     def __init__(self, kg=1, unit_kg=1):
         VGroup.__init__(self)
-        kettlebell = VGroup(
-            SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/weight.svg').scale(0.5),
+        self.weight = VGroup(
+            SVGMobject(os.path.join(path_to_SVG, 'weight.svg')).scale(0.5),
             MathTex(f"{kg}", color=BLACK, font_size=30)).scale((kg/(2*unit_kg)) ** (1./3.)
         )
 
-        self.add(kettlebell)
+        self.kettlebell = self.weight[0]
+        self.weight_value = self.weight[1]
 
 
-class Scissors:
+
+
+
+
+
+
+class Scissors():
     def __init__(self, cut_point=ORIGIN):
         self.cut_point = cut_point
-        scissor_1 = SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/scissors_1.svg').set_color(WHITE)
-        scissor_2 = SVGMobject(relative_path_to_Manimations() + 'Objects/SVG_files/scissors_2.svg').set_color(WHITE)
+        scissor_1 = SVGMobject(os.path.join(path_to_SVG, 'scissors_1.svg')).set_color(WHITE)
+        scissor_2 = SVGMobject(os.path.join(path_to_SVG, 'scissors_2.svg')).set_color(WHITE)
         dot = Dot().scale(0.2)
         self.__p_end = [a + b for a, b in zip([0, -0.35, 0], cut_point)]
         VGroup(scissor_1, scissor_2).arrange(RIGHT, buff=0.1)
