@@ -1,5 +1,8 @@
 # Scene Problem12525
 
+https://user-images.githubusercontent.com/81069641/153700238-1037aeb4-9e6e-4f31-ac32-6e5600f49fd3.mp4
+
+
 ## Խնդիր
 
     3 կողմով եռանկյան ներսում ընտրված են 10 կետեր։ 
@@ -11,9 +14,6 @@
     http://qarakusi.am/problem/12525/solution
 
 
-
-
-https://user-images.githubusercontent.com/81069641/153700238-1037aeb4-9e6e-4f31-ac32-6e5600f49fd3.mp4
 
 
 
