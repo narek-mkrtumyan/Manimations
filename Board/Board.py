@@ -1,7 +1,6 @@
 from manim import *
 import numpy as np
 import csv
-import pandas as pd
 from numpy import genfromtxt
 
 def matrix_to_VGroup(matrix):
