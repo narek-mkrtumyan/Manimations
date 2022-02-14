@@ -10,6 +10,15 @@ path_to_SVG = os.path.join(helpers.root(), 'Objects', 'SVG_files')
 
 
 
+class Man(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        man = SVGMobject(os.path.join(path_to_SVG, 'people', f'man_{svg_index}')).set_color(WHITE)
+
+        self.add(man)
+
+
 class Pigeon(VMobject):
     def __init__(self):
         VMobject.__init__(self)
@@ -30,22 +39,20 @@ class Rabbit(VMobject):
 
 
 
-class CageSquare(VMobject):
-    def __init__(self):
+class Cage(VMobject):
+    def __init__(self, style='square'):
         VMobject.__init__(self)
-        cage_square = SVGMobject(os.path.join(path_to_SVG, 'cage_square.svg'))
-        cage_square.set_color(GOLD).scale(1.5)
 
-        self.add(cage_square)
+        if style == 'square':
+            cage = SVGMobject(os.path.join(path_to_SVG, 'cage_square.svg'))
+            cage.set_color(GOLD).scale(1.5)
 
+        if style == 'bird':
+            cage = SVGMobject(os.path.join(path_to_SVG, 'cage_bird.svg'))
+            cage.set_color(GOLD).scale(2)
 
-class CageBird(VMobject):
-    def __init__(self):
-        VMobject.__init__(self)
-        cage_bird = SVGMobject(os.path.join(path_to_SVG, 'cage_bird.svg'))
-        cage_bird.set_color(GOLD).scale(2)
+        self.add(cage)
 
-        self.add(cage_bird)
 
 
 class OpenScissors(VMobject):
@@ -109,7 +116,7 @@ class ThinkingBubble(VMobject):
                             os.path.join(path_to_SVG, 'thinking_bubble_right_2.svg')
                         )
         
-        thinking_bubble.set_color(WHITE).scale(0.5)
+        thinking_bubble.set_color(WHITE)
 
         self.add(thinking_bubble)
 

@@ -13,6 +13,23 @@ bounds = VGroup(left_bound, right_bound)
 armenian_tex_template = TexTemplate()
 armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")
 
+months_arm = [
+    'Հունվար',
+    'Փետրվար',
+    'Մարտ',
+    'Ապրիլ',
+    'Մայիս',
+    'Հունիս',
+    'Հուլիս',
+    'Օգոստոս',
+    'Սեպտեմբեր',
+    'Հոկտեմբեր',
+    'Նոյեմբեր',
+    'Դեկտեմբեր'
+]
+
+months_lengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 
+week_days_arm = ['Եկ', 'Եք', 'Չո', 'Հի', 'Ու', 'Շա', 'Կի']
 
