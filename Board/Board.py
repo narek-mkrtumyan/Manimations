@@ -32,22 +32,22 @@ def knight_moves(i,j):
 
 class Board(VMobject):
 	def __init__(self, size=0.75, rows=8, columns=8, color=WHITE, midrows=0, midcolumns=0, stroke_width=0.2):
-		k=[]
+		k=VGroup()
 		for i in range(rows):
-			x=Square(color=color, stroke_width=stroke_width)
+			x = Square(color=color, stroke_width=stroke_width)
 			x.width = size
-			s=[]
+			s = VGroup()
 			for p in range(columns):
 				d=x.copy()
 				d.shift((p * (size + midrows)) * RIGHT)
-				s.append(d)
+				s += d
 				s[p].shift((columns - 1) * (size + midrows) * 0.5 * LEFT)
 			for j in range(columns):
 				s[j].shift((i * (size + midcolumns) * UP))
 				s[j].shift((rows - 1) * (size + midcolumns) * 0.5 * DOWN)
-			k.append(s)
+			k += s
 		self.cells = k
-		self.cells_ = matrix_to_VGroup(k)
+		self.cells_ = self.cells
 		VMobject.__init__(self)
 		for i in range(rows):
 			for j in range(columns):
@@ -86,7 +86,10 @@ class Board(VMobject):
 					self.cells[i][j].set_fill(color_2, opacity=opacity)
 				else:
 					self.cells[i][j].set_fill(color_3, opacity=opacity)
-
+	def color_matrix(self, matrix_of_colors):
+		for i in range(len(matrix_of_colors)):
+			for j in range(len(matrix_of_colors[i])):
+				self.color_cell((i,j), matrix_of_colors[i][j])
 
 	def add_numbers(self, matrix_of_numbers):
 		self.numbers = VGroup()
