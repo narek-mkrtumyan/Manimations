@@ -5,10 +5,7 @@ sys.path.append('../')
 from Functions.GeometryFunctions.GeometryFunctions import *
 from Objects.Objects import *
 from Configs import *
-
-
-
-
+from Board.Board import *
 
 # Մասերով խնդիրների համար ֆունկցիաներ
 
@@ -21,7 +18,7 @@ class SegmentEndmark(VMobject):
         self.add(endmark)
 
 
-class Segment_(VGroup):
+class Segment(VGroup):
     def __init__(self, 
         start=LEFT, end=RIGHT, color=WHITE, stroke_width=DEFAULT_STROKE_WIDTH, endmark_color=WHITE,
         text=False, position=UP
@@ -57,40 +54,6 @@ class Segment_(VGroup):
 
 
         
-
-
-
-
-def Segment(start=[-1, 0, 0], end=[1, 0, 0], mathtex=False, position=UP,
-    color=WHITE, endmark_color=WHITE, stroke_width=DEFAULT_STROKE_WIDTH):
-    '''
-        Returns a segment with endmarks and a label in the middle
-
-        Arguments - start, end, mathtex(Mathtex('')), position(for mathtex), colors for line, endmarks, mathtex
-    '''
-
-    endmark_length = stroke_width / 20
-
-    AB = Line(start, end, color=color, stroke_width=stroke_width)
-
-    endmark_1 = AB.copy().set_color(endmark_color).scale(endmark_length / DistanceBetweenCoordinates(start, end))
-    endmark_1.set_stroke(width=DEFAULT_STROKE_WIDTH)
-    endmark_1.move_to(start).rotate(PI/2)
-
-    endmark_2 = AB.copy().set_color(endmark_color).scale(endmark_length / DistanceBetweenCoordinates(start, end))
-    endmark_2.set_stroke(width=DEFAULT_STROKE_WIDTH)
-    endmark_2.move_to(end).rotate(PI/2)
-
-    line = VGroup(AB, endmark_1, endmark_2)
-
-    if mathtex:
-        mathtex.next_to(line.get_center(), position * 2)
-        return VGroup(line, mathtex)
-
-    else:
-        mathtex = MathTex('.', font_size=1)
-        mathtex.next_to(line.get_center(), position * 2)
-        return VGroup(line, mathtex)
 
 
 
@@ -226,14 +189,8 @@ def MultiplySegmentRotating(self, segment, factor=2, direction=RIGHT, color=GREE
         segments.add(ssegment)
 
     if merge_segments:
-        combined_segment = Segment(
-                segment[0][0].get_start_and_end()[int((rotate_direction * a +1)/2)], 
-                segment_list[-1][0][0].get_start_and_end()[int((factor + int((rotate_direction* a+1)/2) )% 2)],
-                mathtex=sum_mathtexs, position=sum_position, color=segment[0][0].get_color()
-            )
-        self.add(combined_segment[0])
-        self.play(FadeOut(*[seg[0] for seg in segment_list]), FadeOut(segment[0]))
-        self.play(ReplacementTransform(VGroup(*[seg[1] for seg in segments]), combined_segment[1]))
+        combined_segment = MergeSegments(segments, sum_mathtexs=sum_mathtexs, sum_position=sum_position)
+        PlayMergeSegments(self, segments, combined_segment)
         segments = combined_segment
 
     return segments    
