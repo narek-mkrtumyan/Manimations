@@ -9,6 +9,13 @@ left_bound = Line([-3.5, 5, 0], [-3.5, -5, 0])
 right_bound = Line([3.5, 5, 0], [3.5, -5, 0])
 bounds = VGroup(left_bound, right_bound)
 
+white_chess_figures_fill_color = WHITE
+white_chess_figures_stroke_color = BLACK
+black_chess_figures_fill_color = BLACK
+black_chess_figures_stroke_color = WHITE
+chess_figures_stroke_width = 2.5
+chess_figures_scale_factor = 0.3
+
 
 armenian_tex_template = TexTemplate()
 armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")

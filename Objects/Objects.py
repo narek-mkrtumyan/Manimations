@@ -5,8 +5,84 @@ import sys
 sys.path.append('../')
 
 import Objects.helpers as helpers
+from Configs import *
 
 path_to_SVG = os.path.join(helpers.root(), 'Objects', 'SVG_files')
+
+
+
+
+
+class ChessFigures(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+
+
+        self.white_pawn = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'pawn.svg'))
+        self.white_pawn.scale(chess_figures_scale_factor)
+        self.white_pawn.set_fill(white_chess_figures_fill_color)
+        self.white_pawn.set_stroke(white_chess_figures_stroke_color, chess_figures_stroke_width)
+
+        self.black_pawn = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'pawn.svg'))
+        self.black_pawn.scale(chess_figures_scale_factor)
+        self.black_pawn.set_fill(black_chess_figures_fill_color)
+        self.black_pawn.set_stroke(black_chess_figures_stroke_color, chess_figures_stroke_width)
+
+
+        self.white_knight = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'knight.svg'))
+        self.white_knight.scale(chess_figures_scale_factor)
+        self.white_knight.set_fill(white_chess_figures_fill_color)
+        self.white_knight.set_stroke(white_chess_figures_stroke_color, chess_figures_stroke_width)
+
+        self.black_knight = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'knight.svg'))
+        self.black_knight.scale(chess_figures_scale_factor)
+        self.black_knight.set_fill(black_chess_figures_fill_color)
+        self.black_knight.set_stroke(black_chess_figures_stroke_color, chess_figures_stroke_width)
+
+
+        self.white_bishop = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'bishop.svg'))
+        self.white_bishop.scale(chess_figures_scale_factor)
+        self.white_bishop.set_fill(white_chess_figures_fill_color)
+        self.white_bishop.set_stroke(white_chess_figures_stroke_color, chess_figures_stroke_width)
+
+        self.black_bishop = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'bishop.svg'))
+        self.black_bishop.scale(chess_figures_scale_factor)
+        self.black_bishop.set_fill(black_chess_figures_fill_color)
+        self.black_bishop.set_stroke(black_chess_figures_stroke_color, chess_figures_stroke_width)
+
+
+        self.white_rook = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'rook.svg'))
+        self.white_rook.scale(chess_figures_scale_factor)
+        self.white_rook.set_fill(white_chess_figures_fill_color)
+        self.white_rook.set_stroke(white_chess_figures_stroke_color, chess_figures_stroke_width)
+
+        self.black_rook = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'rook.svg'))
+        self.black_rook.scale(chess_figures_scale_factor)
+        self.black_rook.set_fill(black_chess_figures_fill_color)
+        self.black_rook.set_stroke(black_chess_figures_stroke_color, chess_figures_stroke_width)
+
+
+        self.white_queen = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'queen.svg'))
+        self.white_queen.scale(chess_figures_scale_factor)
+        self.white_queen.set_fill(white_chess_figures_fill_color)
+        self.white_queen.set_stroke(white_chess_figures_stroke_color, chess_figures_stroke_width)
+
+        self.black_queen = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'queen.svg'))
+        self.black_queen.scale(chess_figures_scale_factor)
+        self.black_queen.set_fill(black_chess_figures_fill_color)
+        self.black_queen.set_stroke(black_chess_figures_stroke_color, chess_figures_stroke_width)
+
+
+        self.white_king = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'king.svg'))
+        self.white_king.scale(chess_figures_scale_factor)
+        self.white_king.set_fill(white_chess_figures_fill_color)
+        self.white_king.set_stroke(white_chess_figures_stroke_color, chess_figures_stroke_width)
+
+        self.black_king = SVGMobject(os.path.join(path_to_SVG, 'chess_figures', 'king.svg'))
+        self.black_king.scale(chess_figures_scale_factor)
+        self.black_king.set_fill(black_chess_figures_fill_color)
+        self.black_king.set_stroke(black_chess_figures_stroke_color, chess_figures_stroke_width)
+
 
 
 
@@ -22,7 +98,7 @@ class Man(VMobject):
 class Pigeon(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        pigeon = SVGMobject(os.path.join(path_to_SVG, 'pigeon.svg'))
+        pigeon = SVGMobject(os.path.join(path_to_SVG, 'animals', 'pigeon.svg'))
         pigeon.set_color(WHITE).scale(0.5)
 
         self.add(pigeon)
@@ -31,7 +107,7 @@ class Pigeon(VMobject):
 class Rabbit(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        rabbit = SVGMobject(os.path.join(path_to_SVG, 'rabbit.svg'))
+        rabbit = SVGMobject(os.path.join(path_to_SVG, 'animals', 'rabbit.svg'))
         rabbit.set_color(WHITE).scale(0.55)
 
         self.add(rabbit)
@@ -58,7 +134,7 @@ class Cage(VMobject):
 class OpenScissors(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        open_scissors = SVGMobject(os.path.join(path_to_SVG, 'open_scissors.svg'))
+        open_scissors = SVGMobject(os.path.join(path_to_SVG, 'scissors', 'open_scissors.svg'))
         open_scissors.set_color(WHITE).rotate(PI/10).scale(0.5)
 
         self.add(open_scissors)
@@ -67,7 +143,7 @@ class OpenScissors(VMobject):
 class ClosedScissors(VMobject):
     def __init__(self):
         VMobject.__init__(self)
-        closed_scissors = SVGMobject(os.path.join(path_to_SVG, 'closed_scissors.svg'))
+        closed_scissors = SVGMobject(os.path.join(path_to_SVG, 'scissors', 'closed_scissors.svg'))
         closed_scissors.set_color(WHITE).scale(0.4).rotate(PI/5)
 
         self.add(closed_scissors)
@@ -81,39 +157,39 @@ class ThinkingBubble(VMobject):
             if from_left_to_right:
                 if style == 1:
                     thinking_bubble = SVGMobject(
-                            os.path.join(path_to_SVG, 'smooth_thinking_bubble_left_1.svg')
+                            os.path.join(path_to_SVG, 'thinking_bubbles', 'smooth_thinking_bubble_left_1.svg')
                         )
                 else:
                     thinking_bubble = SVGMobject(
-                            os.path.join(path_to_SVG, 'smooth_thinking_bubble_left_2.svg')
+                            os.path.join(path_to_SVG, 'thinking_bubbles', 'smooth_thinking_bubble_left_2.svg')
                         )
             else:
                 if style == 1:
                     thinking_bubble = SVGMobject(
-                            os.path.join(path_to_SVG, 'smooth_thinking_bubble_right_1.svg')
+                            os.path.join(path_to_SVG, 'thinking_bubbles', 'smooth_thinking_bubble_right_1.svg')
                         )
                 else:
                     thinking_bubble = SVGMobject(
-                            os.path.join(path_to_SVG, 'smooth_thinking_bubble_right_2.svg')
+                            os.path.join(path_to_SVG, 'thinking_bubbles', 'smooth_thinking_bubble_right_2.svg')
                         )
         else:
             if from_left_to_right:
                 if style == 1:
                     thinking_bubble = SVGMobject(
-                            os.path.join(path_to_SVG, 'thinking_bubble_left_1.svg')
+                            os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_left_1.svg')
                         )
                 else:
                     thinking_bubble = SVGMobject(
-                            os.path.join(path_to_SVG, 'thinking_bubble_left_2.svg')
+                            os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_left_2.svg')
                         )
             else:
                 if style == 1:
                     thinking_bubble = SVGMobject(
-                            os.path.join(path_to_SVG, 'thinking_bubble_right_1.svg')
+                            os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_right_1.svg')
                         )
                 else:
                     thinking_bubble = SVGMobject(
-                            os.path.join(path_to_SVG, 'thinking_bubble_right_2.svg')
+                            os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_right_2.svg')
                         )
         
         thinking_bubble.set_color(WHITE)
@@ -128,7 +204,7 @@ class Weight(VGroup):
     def __init__(self, kg=1, unit_kg=1):
         VGroup.__init__(self)
         self.weight = VGroup(
-            SVGMobject(os.path.join(path_to_SVG, 'weight.svg')).scale(0.5),
+            SVGMobject(os.path.join(path_to_SVG, 'weight.svg')).set_color(WHITE).scale(0.5),
             MathTex(f"{kg}", color=BLACK, font_size=30)).scale((kg/(2*unit_kg)) ** (1./3.)
         )
 
@@ -145,8 +221,8 @@ class Weight(VGroup):
 class Scissors():
     def __init__(self, cut_point=ORIGIN):
         self.cut_point = cut_point
-        scissor_1 = SVGMobject(os.path.join(path_to_SVG, 'scissors_1.svg')).set_color(WHITE)
-        scissor_2 = SVGMobject(os.path.join(path_to_SVG, 'scissors_2.svg')).set_color(WHITE)
+        scissor_1 = SVGMobject(os.path.join(path_to_SVG, 'scissors', 'scissors_1.svg')).set_color(WHITE)
+        scissor_2 = SVGMobject(os.path.join(path_to_SVG, 'scissors', 'scissors_2.svg')).set_color(WHITE)
         dot = Dot().scale(0.2)
         self.__p_end = [a + b for a, b in zip([0, -0.35, 0], cut_point)]
         VGroup(scissor_1, scissor_2).arrange(RIGHT, buff=0.1)
