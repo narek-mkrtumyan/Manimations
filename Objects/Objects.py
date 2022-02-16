@@ -203,13 +203,19 @@ class ThinkingBubble(VMobject):
 class Weight(VGroup):
     def __init__(self, kg=1, unit_kg=1):
         VGroup.__init__(self)
+        
+        self.weight_value = kg
+
         self.weight = VGroup(
             SVGMobject(os.path.join(path_to_SVG, 'weight.svg')).set_color(WHITE).scale(0.5),
             MathTex(f"{kg}", color=BLACK, font_size=30)).scale((kg/(2*unit_kg)) ** (1./3.)
         )
 
         self.kettlebell = self.weight[0]
-        self.weight_value = self.weight[1]
+        self.weight_text = self.weight[1]
+
+        self.add(self.kettlebell, self.weight_text)
+
 
 
 

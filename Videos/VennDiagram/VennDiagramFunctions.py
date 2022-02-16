@@ -18,7 +18,7 @@ color_intersect = WHITE
 
 def DiagramFrom2Circles(c_1, r_1, c_2, r_2, color_1='#12C10D', color_2='#FF2000', color_intersect=YELLOW, fill_opacity=0.3, crc_colors=False):
     '''
-    This fundtion takes 2 centers and 2 radiuses
+    This function takes 2 centers and 2 radiuses
     Optional arguments are colors of sets and fill opacity
 
     It generates circles, sets, and intersetion for a Venn Diagram

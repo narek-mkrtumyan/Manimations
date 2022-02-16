@@ -1,11 +1,14 @@
+from calendar import calendar
+from hashlib import new
+from re import M
 from manim import *
 import numpy as np
 import sys
 sys.path.append('../')
-from Functions.GeometryFunctions.GeometryFunctions import *
+from Functions.GeometryFunctions import *
 from Objects.Objects import *
 from Configs import *
-from Board.Board import *
+from Functions.Board import *
 
 # Մասերով խնդիրների համար ֆունկցիաներ
 
@@ -204,6 +207,13 @@ class CalendarMonth(VMobject):
         rectangle_height = 2.9
         rectangle_width = 2.35
 
+        self.year = year
+        self.month =  month
+        self.first_weekday = first_weekday
+        self.extra_days_opacity = extra_days_opacity
+        self.background_color = background_color
+        self.weekend_color = weekend_color
+
         self.outline = Rectangle(WHITE, rectangle_height, rectangle_width)
         
         self.background = VGroup()
@@ -211,15 +221,15 @@ class CalendarMonth(VMobject):
         self.background.add(Rectangle(height=0.75, width=rectangle_width).set_stroke(width=0).set_fill(background_color, 0.5))
         self.background[0].next_to(ORIGIN + np.array([[0, rectangle_height / 2, 0]]), DOWN, buff=0)
 
-        self.year = MathTex(rf'{year}', font_size=25)
-        self.year.next_to(self.outline, UP).shift(0.55 * DOWN)
+        self.VMyear = MathTex(rf'{year}', font_size=25)
+        self.VMyear.next_to(self.outline, UP).shift(0.55 * DOWN)
 
-        self.month = MathTex(r'\textrm{' + months_arm[month - 1] + r'}', font_size=25, tex_template=armenian_tex_template)
-        self.month.next_to(self.year, DOWN, buff=0.15)
+        self.VMmonth = MathTex(r'\textrm{' + months_arm[month - 1] + r'}', font_size=25, tex_template=armenian_tex_template)
+        self.VMmonth.next_to(self.VMyear, DOWN, buff=0.15)
 
         self.background.add(
-            MathTex('<<', font_size=20).move_to(self.month.get_center()).shift(0.9 * LEFT),
-            MathTex('>>', font_size=20).next_to(self.month.get_center()).shift(0.5 * RIGHT)
+            MathTex('<<', font_size=20).move_to(self.VMmonth.get_center()).shift(0.9 * LEFT),
+            MathTex('>>', font_size=20).next_to(self.VMmonth.get_center()).shift(0.5 * RIGHT)
         )
 
         self.week_blocks = VGroup(
@@ -257,17 +267,18 @@ class CalendarMonth(VMobject):
 
 
         full_list_of_days = np.concatenate([extra_days_from_start, days_list, extra_days_till_end])
+        self.number_of_rows = int(len(full_list_of_days) / 7)
 
         self.full_days = VGroup(*[MathTex(fr'{int(day)}', font_size=19) for day in full_list_of_days])
         self.full_days.arrange_in_grid(cols=7, buff=0.15)
         self.full_days.next_to(self.week_blocks, DOWN, buff=0.15)
 
         self.extra_days = VGroup(
-                self.full_days[:len(extra_days_from_start)],
-                self.full_days[-len(extra_days_till_end):]
+                *self.full_days[:len(extra_days_from_start)],
+                *self.full_days[-len(extra_days_till_end):]
             )
         
-        self.days = VGroup(self.full_days[len(extra_days_from_start): -len(extra_days_till_end)])
+        self.days = VGroup(*self.full_days[len(extra_days_from_start): -len(extra_days_till_end)])
         
 
         for i in range(len(full_list_of_days)):
@@ -276,7 +287,61 @@ class CalendarMonth(VMobject):
         
         self.extra_days.set_opacity(extra_days_opacity)
 
-        self.add(self.outline, self.background, self.year, self.month, self.week_days, self.week_blocks, self.days, self.extra_days)
+        self.add(self.outline, self.background, self.VMyear, self.VMmonth, self.week_days, self.week_blocks, self.days, self.extra_days)
+    
+
+
+    def shift_weekdays(self, scene):
+
+        shift_amount = self.week_blocks[0].width * RIGHT
+
+        if self.first_weekday != 7:
+            new_calendar = CalendarMonth(
+                    self.year, self.month, self.first_weekday + 1, 
+                    self.weekend_color, self.extra_days_opacity, self.background_color
+                ).scale(2)
+            new_calendar.full_days.move_to(self.full_days.get_center())
+            VGroup(*[new_calendar.full_days[7*i] for i in range(self.number_of_rows)]).set_opacity(0).shift(-shift_amount)
+
+            scene.play(
+                ReplacementTransform(
+                    VGroup(*[self.full_days[7*i + 0] for i in range(self.number_of_rows)]),
+                    VGroup(*[new_calendar.full_days[7*i + 1] for i in range(self.number_of_rows)])
+                ),
+                ReplacementTransform(
+                    VGroup(*[self.full_days[7*i + 1] for i in range(self.number_of_rows)]),
+                    VGroup(*[new_calendar.full_days[7*i + 2] for i in range(self.number_of_rows)])
+                ),
+                ReplacementTransform(
+                    VGroup(*[self.full_days[7*i + 2] for i in range(self.number_of_rows)]),
+                    VGroup(*[new_calendar.full_days[7*i + 3] for i in range(self.number_of_rows)])
+                ),
+                ReplacementTransform(
+                    VGroup(*[self.full_days[7*i + 3] for i in range(self.number_of_rows)]),
+                    VGroup(*[new_calendar.full_days[7*i + 4] for i in range(self.number_of_rows)])
+                ),
+                ReplacementTransform(
+                    VGroup(*[self.full_days[7*i + 4] for i in range(self.number_of_rows)]),
+                    VGroup(*[new_calendar.full_days[7*i + 5] for i in range(self.number_of_rows)])
+                ),
+                ReplacementTransform(
+                    VGroup(*[self.full_days[7*i + 5] for i in range(self.number_of_rows)]),
+                    VGroup(*[new_calendar.full_days[7*i + 6] for i in range(self.number_of_rows)])
+                ),
+                VGroup(*[self.full_days[7*i + 6] for i in range(self.number_of_rows)]).animate.shift(shift_amount).set_opacity(0),
+                VGroup(*[new_calendar.full_days[7*i + 0] for i in range(1, self.number_of_rows)]).animate.shift(shift_amount).set_opacity(1),
+                new_calendar.full_days[0].animate.shift(shift_amount).set_opacity(self.extra_days_opacity),
+            )
+            
+            self.full_days = new_calendar.full_days
+            self.extra_days = new_calendar.extra_days
+            self.days = new_calendar.days
+    
+    
+    def next_month(self, scene):
+
+        print(len(self.extra_days))
+
 
 
 
@@ -320,38 +385,22 @@ class test(Scene):
             return numbers[-1]
 
 
-        cage = Cage(style='bird')
-        self.add(cage)
-        # seg = Segment_().set_text(MathTex('8'))
-        # seg_1 = Segment_(text = MathTex('8'))
-        # seg_2 = Segment_(text = MathTex('8')).shift(DOWN)
+
+        # calendar = CalendarMonth(month=4, first_weekday=3).scale(2)
+
+        # self.add(calendar)
+        # self.wait()
+
+        # calendar.next_month(self)
+
+        we = Weight(2)
+
+        self.play(Create(we))
+
+        print(we.weight_value)
+
         
-        # segments = VGroup(seg_1, seg_2)
-        # self.add(segments[0])
-        # self.wait()
-        # segments[0].set_text(DecimalNumber(2), self)
-        # self.wait()
-        # segments[0].set_text(MathTex('5'), self)
-        # self.wait()
 
-
-        # self.wait(1)
-        # self.play(seg_1[3].animate.shift(LEFT))
-        # self.wait(1)
-        # # seg.set_text(MathTex('2'))
-        # seg_1[3] = MathTex('2')
-        # self.add(seg_1)
-        # self.wait()
-
-
-        # seg.set_text_(MathTex('2'))
-
-        # self.play(Create(seg))
-
-        # self.wait()
-
-        # endm = SegmentEndmark()
-        # self.add(endm)
 
 
         
