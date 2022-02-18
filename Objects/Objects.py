@@ -203,7 +203,7 @@ class ThinkingBubble(VMobject):
 class Weight(VGroup):
     def __init__(self, kg=1, unit_kg=1):
         VGroup.__init__(self)
-        
+
         self.weight_value = kg
 
         self.weight = VGroup(
@@ -218,8 +218,27 @@ class Weight(VGroup):
 
 
 
+class  Apple(VMobject):
+    def __init__(self, color=GREEN,):
+        VMobject.__init__(self)
+
+        if color == GREEN:
+            apple = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'green_apple.svg'))
+        
+        elif color == RED:
+            apple = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'red_apple.svg'))
+
+        self.add(apple)
 
 
+
+class ScaleStar(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+
+        star = SVGMobject(os.path.join(path_to_SVG, 'star.svg')).set_stroke(width=0)
+
+        self.add(star)
 
 
 
