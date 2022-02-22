@@ -218,7 +218,7 @@ class Board(VMobject):
 			cell = self.cells[coord][0].get_center()
 			arr = Arrow(start=cell+2*LEFT,end=cell+0.25*LEFT, color=WHITE)
 		else:
-			cell = self.cells[coord][self.columns].get_center()
+			cell = self.cells[coord][self.columns-1].get_center()
 			arr = Arrow(start=cell-2*LEFT,end=cell-0.25*LEFT, color=WHITE)
 		self.row_arrows[coord] = arr
 		return self
@@ -235,11 +235,11 @@ class Board(VMobject):
         Returns:
             The board
         """
-		if side=='left':
+		if side=='down':
 			cell = self.cells[0][coord].get_center()
 			arr = Arrow(start=cell+2*DOWN,end=cell+0.25*DOWN, color=WHITE)
 		else:
-			cell = self.cells[self.rows][coord].get_center()
+			cell = self.cells[self.rows-1][coord].get_center()
 			arr = Arrow(start=cell-2*DOWN,end=cell-0.25*DOWN, color=WHITE)
 		self.col_arrows[coord] = arr
 		return self
