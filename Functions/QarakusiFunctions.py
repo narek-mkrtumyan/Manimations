@@ -49,10 +49,9 @@ class Segment(VGroup):
     
     def set_text(self, new_text, scene=False):
         if scene:
-            # self.remove(self.text)
             scene.play(ReplacementTransform(self.text, new_text.next_to(self.line.get_center(), self.position)))
-        self.text = new_text.next_to(self.line.get_center(), self.position)
-        self.add(self.text)
+            self.text = new_text.next_to(self.line.get_center(), self.position)
+            self.add(self.text)
         
 
 
@@ -291,7 +290,7 @@ class CalendarMonth(VMobject):
     
 
 
-    def shift_weekdays(self, scene):
+    def shift_weekdays(self, scene, rate_functions):
 
         shift_amount = self.week_blocks[0].width * RIGHT
 
@@ -374,7 +373,7 @@ class test(Scene):
             numbers.move_to(center).set_opacity(0).shift(0.5*UP)
             numbers[0].shift(0.5*DOWN)
 
-            self.play(numbers[0].animate().set_opacity(1))
+            self.play(numbers[0].animate().set_opacity(1), rate_func=linear)
 
             for i in range(len(numbers) - 1):
                 self.play(
@@ -384,23 +383,8 @@ class test(Scene):
 
             return numbers[-1]
 
-
-
-        # calendar = CalendarMonth(month=4, first_weekday=3).scale(2)
-
-        # self.add(calendar)
-        # self.wait()
-
-        # calendar.next_month(self)
-
-        we = Weight(2)
-
-        self.play(Create(we))
-
-        print(we.weight_value)
-
-        
+    
 
 
 
-        
+
