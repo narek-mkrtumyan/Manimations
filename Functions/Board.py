@@ -1,7 +1,6 @@
 from manim import *
 import numpy as np
 import csv
-from numpy import genfromtxt
 
 def matrix_to_VGroup(matrix):
 	'''matrix-ի բոլոր տարրերով VGroup'''
@@ -30,11 +29,35 @@ def knight_moves(i,j):
 
 
 class Board(VMobject):
-	def __init__(self, size=0.75, rows=8, columns=8, color=WHITE, midrows=0, midcolumns=0, stroke_width=0.2):
+	"""Board
+        
+        Note:
+            Also updates ``self.model`` variable
+        Args:
+			size (float): the side length of the cells
+        
+        Returns:
+            SentenceTransformer
+        
+        Raises:
+            NameError: raises if ``model_name`` is not from ``self.available_models`` list 
+        Examples:
+            >>> model = EmbeddingExtractor('nli-mpnet-base-v2', 'some_text')
+            >>> print(model.load_model())
+            SentenceTransformer(
+                    (0): Transformer(
+                    (auto_model): MPNetModel(
+                        (embeddings): MPNetEmbeddings(
+                        (word_embeddings): Embedding(30527, 768, padding_idx=1)
+                        .....
+        """
+	def __init__(self, size=0.75, rows=8, columns=8, color=WHITE, midrows=0, midcolumns=0, stroke_width=0.2, minus_stroke=False):
 		k=VGroup()
 		for i in range(rows):
 			x = Square(color=color, stroke_width=stroke_width)
 			x.width = size
+			if minus_stroke:
+				x.width = size-stroke_width
 			s = VGroup()
 			for p in range(columns):
 				d=x.copy()
@@ -45,16 +68,21 @@ class Board(VMobject):
 				s[j].shift((i * (size + midcolumns) * UP))
 				s[j].shift((rows - 1) * (size + midcolumns) * 0.5 * DOWN)
 			k += s
+		
 		self.cells = k
 		self.cells_ = self.cells
+		
 		VMobject.__init__(self)
 		for i in range(rows):
 			for j in range(columns):
 				self.add(self.cells[i][j])
+		
 		self.rows = rows
 		self.columns = columns
 		self.size = size
 		self.color = color
+		self.row_arrows = VGroup(*[VMobject() for i in range(rows)])
+		self.col_arrows = VGroup(*[VMobject() for i in range(columns)])
 		#self.updated_numbers = VGroup()
 
 	def color_cell(self, coords, color, opacity=1):
@@ -67,12 +95,35 @@ class Board(VMobject):
 		group.set_color(color)
 
 	def make_chess(self, white=WHITE, black=DARK_BROWN, opacity=1):
+		"""Function set_fill as a chess board
+        
+        Note:
+            Also updates ``self.model`` variable
+        Args:
+            white (str): color of the white cells
+			black (str): color of the black cells
+			opacity (float): opacity of the colored cells
+        
+        Returns:
+            The board
+        
+        Examples:
+            >>> model = EmbeddingExtractor('nli-mpnet-base-v2', 'some_text')
+            >>> print(model.load_model())
+            SentenceTransformer(
+                    (0): Transformer(
+                    (auto_model): MPNetModel(
+                        (embeddings): MPNetEmbeddings(
+                        (word_embeddings): Embedding(30527, 768, padding_idx=1)
+                        .....
+        """
 		for i in range(self.rows):
 			for j in range(self.columns):
 				if (i+j)%2==0:
 					self.cells[i][j].set_fill(black, opacity=opacity)
 				else:
 					self.cells[i][j].set_fill(white, opacity=opacity)
+		return self
 	
 	def color4(self, color_0=ORANGE, color_1=PURE_GREEN, color_2=WHITE, color_3=GREY, opacity=1):
 		for i in range(self.rows):
@@ -85,10 +136,13 @@ class Board(VMobject):
 					self.cells[i][j].set_fill(color_2, opacity=opacity)
 				else:
 					self.cells[i][j].set_fill(color_3, opacity=opacity)
+		return self
+
 	def color_matrix(self, matrix_of_colors):
 		for i in range(len(matrix_of_colors)):
 			for j in range(len(matrix_of_colors[i])):
 				self.color_cell((i,j), matrix_of_colors[i][j])
+		return self
 
 	def add_numbers(self, matrix_of_numbers):
 		self.numbers = VGroup()
@@ -146,18 +200,51 @@ class Board(VMobject):
 					self.color_cell([i,j], YELLOW, opacity=matrix[i][j]/dif)
 				if matrix[i][j]<0:
 					self.color_cell([i,j], BLUE, opacity=-matrix[i][j]/dif)
+	def add_row_arrow(self, coord: int, side='left'):
+		"""Function creates an arrow to point a specific row
+        
+        Note:
+            Also updates ``self.row_arrows`` variable
+        Args:
+			self (Board): the board
+            coord (int): color of the white cells
+			side (str): the position of the arrow
 
-	def update_color(self, dif):
-		def my_updater(mobject):
-			#if self.all_numbers[i][j]>0:
-			#	color = YELLOW
-			#else:
-			#	color = BLUE
-			#mobject.set_fill(color, opacity=self.all_numbers[i][j]/dif)
-			mobject.set_fill(YELLOW)
-		for i in range(self.rows):
-			for j in range(self.columns):
-				self.cells[i][j].add_updater(my_updater)
+        Returns:
+            The board
+        """
+		cell = self.cells[coord][0].get_center()
+		if side=='left':
+			cell = self.cells[coord][0].get_center()
+			arr = Arrow(start=cell+2*LEFT,end=cell+0.25*LEFT, color=WHITE)
+		else:
+			cell = self.cells[coord][self.columns].get_center()
+			arr = Arrow(start=cell-2*LEFT,end=cell-0.25*LEFT, color=WHITE)
+		self.row_arrows[coord] = arr
+		return self
+	def add_col_arrow(self, coord: int, side='down'):
+		"""Function creates an arrow to point a specific column
+        
+        Note:
+            Also updates ``self.col_arrows`` variable
+        Args:
+			self (Board): the board
+            coord (int): color of the white cells
+			side (str): the position of the arrow
+
+        Returns:
+            The board
+        """
+		if side=='left':
+			cell = self.cells[0][coord].get_center()
+			arr = Arrow(start=cell+2*DOWN,end=cell+0.25*DOWN, color=WHITE)
+		else:
+			cell = self.cells[self.rows][coord].get_center()
+			arr = Arrow(start=cell-2*DOWN,end=cell-0.25*DOWN, color=WHITE)
+		self.col_arrows[coord] = arr
+		return self
+	def add_arrows(self, coords):
+		return self
 
 class T4(VMobject):
 	'''
