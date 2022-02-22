@@ -11,7 +11,7 @@ To use functions from Directory/file.py, add the following in your code
 QarakusiFunctions contains every other function file that we write, so importing only QarakusiFunctions will be enough.
 ```py
 import sys
-sys.path.append("../../")       # relative path to the root of the repository
+sys.path.append("../../../../")       # relative path to the root of the repository
 from Directory.file import *    # or import specific function
 # example below
 from Functions.QarakusiFunctions import *
