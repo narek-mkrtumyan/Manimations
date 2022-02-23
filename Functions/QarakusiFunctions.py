@@ -63,6 +63,7 @@ class Segment(VGroup):
     ):
 
         VGroup.__init__(self)
+        self.__line_color = color
 
         self.text = text
         self.position = position
@@ -75,6 +76,8 @@ class Segment(VGroup):
         self.endmark_right = SegmentEndmark(length=stroke_width / 20, color=endmark_color)
         self.endmark_right.next_to(self.line, RIGHT, buff=0)
 
+        #self.line.add_updater(lambda d: d.become(Line(self.endmark_left.get_center(),
+        #                                                                   self.endmark_right.get_center())))
 
         self.add(self.line, self.endmark_left, self.endmark_right)
 
@@ -84,12 +87,31 @@ class Segment(VGroup):
     
     def set_text(self, new_text, scene=False):
         if scene:
+            # self.remove(self.text)
             scene.play(ReplacementTransform(self.text, new_text.next_to(self.line.get_center(), self.position)))
-            self.text = new_text.next_to(self.line.get_center(), self.position)
         if new_text:
             self.remove(self.text)
             self.text = new_text.next_to(self.line.get_center(), self.position)
             self.add(self.text)
+
+    def set_text_updater(self):
+        self.remove(self.text)
+        self.text.add_updater(lambda d: d.next_to(self.line.get_center(), self.position))
+        self.add(self.text)
+    
+    
+
+
+    def set_line_updater(self):
+        self.remove(self.line)
+        self.line.add_updater(lambda d: d.become(Line(self.endmark_left.get_center(),
+                                                                           self.endmark_right.get_center(), color = self.__line_color)))
+        self.add(self.line)
+
+    def remove_updater(self):
+        self.remove(self.text)
+        self.clear_updaters()
+        self.add(self.text)
 
 
     ### Մասերով խնդրի մասերը :D
