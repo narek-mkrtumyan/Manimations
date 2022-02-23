@@ -85,11 +85,14 @@ class Segment(VGroup):
     def set_text(self, new_text, scene=False):
         if scene:
             scene.play(ReplacementTransform(self.text, new_text.next_to(self.line.get_center(), self.position)))
-        self.text = new_text.next_to(self.line.get_center(), self.position)
-        self.add(self.text)
+            self.text = new_text.next_to(self.line.get_center(), self.position)
+        if new_text:
+            self.remove(self.text)
+            self.text = new_text.next_to(self.line.get_center(), self.position)
+            self.add(self.text)
 
 
-    ### Մասերով խնդր մասերը :D
+    ### Մասերով խնդրի մասերը :D
 class Diagram(VGroup):
     def __init__(self,
                  parts: List[List],
