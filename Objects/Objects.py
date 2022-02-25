@@ -199,6 +199,15 @@ class ThinkingBubble(VMobject):
 
 
 
+class Pen(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+        pen = SVGMobject(os.path.join(path_to_SVG, 'pen.svg')).set_color(WHITE).scale(0.5).rotate(PI/7)
+
+        self.add(pen)
+
+
+
 
 class Weight(VGroup):
     def __init__(self, kg=1, unit_kg=1):
