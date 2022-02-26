@@ -1,21 +1,15 @@
-# Scene Problem12525
+# Problem 12525
 
 https://user-images.githubusercontent.com/81069641/153700238-1037aeb4-9e6e-4f31-ac32-6e5600f49fd3.mp4
 
 
 ## Խնդիր
 
+http://qarakusi.am/problem/12525/solution
+
     3 կողմով եռանկյան ներսում ընտրված են 10 կետեր։ 
     Ապացուցել, որ դրանց մեջ կգտնվեն այնպիսի 2 կետեր, 
     որոնց հեռավորությունը չի գերազանցում 1-ը։
-
-## Հղում
-
-    http://qarakusi.am/problem/12525/solution
-
-
-
-
 
 
 ## Անիմացիաներ
