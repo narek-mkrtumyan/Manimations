@@ -1,8 +1,5 @@
-from manim import *
-import numpy as np
-
 import sys
-sys.path.append("../../../")
+sys.path.append("../../../../")
 from Functions.QarakusiFunctions import *
 
 
@@ -12,16 +9,22 @@ class Pens(Scene):
 
 # INITS
     # Names
-        Aram = MathTex(r'\textrm{Արամ}', tex_template=armenian_tex_template, font_size=50).set_color(ORANGE)
-        Babken = MathTex(r'\textrm{Բաբկեն}', tex_template=armenian_tex_template, font_size=50).set_color(GREEN)
-        yev = MathTex(r'\textrm{և}', tex_template=armenian_tex_template, font_size=50)
-        aram_yev_babken = VGroup(Aram, yev, Babken).arrange().move_to([0, 2.5, 0])
-        yev.shift(0.05*UP)
+        # Aram = MathTex(r'\textrm{Արամ}', tex_template=armenian_tex_template, font_size=50).set_color(ORANGE)
+        # Babken = MathTex(r'\textrm{Բաբկեն}', tex_template=armenian_tex_template, font_size=50).set_color(GREEN)
+        # yev = MathTex(r'\textrm{և}', tex_template=armenian_tex_template, font_size=50)
+        # aram_yev_babken = VGroup(Aram, yev, Babken).arrange().move_to([0, 2.5, 0])
+        # yev.shift(0.05*UP)
+
+    # Children
+        younger_child = Boy(2).scale(0.7)
+        older_child = Boy(1).scale(1)
+
+        children = VGroup(younger_child, older_child).arrange(aligned_edge=DOWN).move_to([0, 2.5, 0])
 
     # Pens
-        one_pen = SVGMobject('pen.svg').set_color(WHITE).scale(0.5).rotate(PI/7)
+        one_pen = Pen()
         pens = VGroup(*[one_pen.copy() for i in range(6)])
-        pens.arrange().next_to(aram_yev_babken, DOWN, buff=1)
+        pens.arrange().next_to(children, DOWN, buff=0.5)
     
     # Rectangles over pens
         rect = Rectangle(height=1.6, width=3.2).move_to(pens.get_center())
@@ -46,7 +49,17 @@ class Pens(Scene):
 
 
 # ANIMATIONS
-        self.play(Write(aram_yev_babken))
+
+
+
+        self.add(Girl(3))
+        self.wait()
+        self.wait()
+
+
+
+        # self.play(Write(aram_yev_babken))
+        self.play(Create(children))
         self.play(Create(pens))
         self.play(Write(six))
         self.wait(1)
@@ -54,14 +67,19 @@ class Pens(Scene):
         self.play(ReplacementTransform(six, six_over_2[0]))
         self.play(Write(six_over_2[1:]))
         self.play(
-            pens[0:3].animate().shift(2*LEFT),
-            pens[3:6].animate().shift(2*RIGHT),
-            Aram.animate().shift(1.5*LEFT),
-            Babken.animate().shift(1.75*RIGHT),
-            FadeOut(yev),
+            pens[0:3].animate.shift(2 * LEFT),
+            pens[3:6].animate.shift(2 * RIGHT),
+            younger_child.animate.shift(2 * LEFT),
+            older_child.animate.shift(2 * RIGHT),
+            # Aram.animate().shift(1.5*LEFT),
+            # Babken.animate().shift(1.75*RIGHT),
+            # FadeOut(yev),
             rate_func=linear, run_time=1.5
         )
-        self.play(ReplacementTransform(six_over_2[-1].copy(), tree_a), ReplacementTransform(six_over_2[-1].copy(), tree_b))
+        self.play(
+            ReplacementTransform(six_over_2[-1].copy(), tree_a), 
+            ReplacementTransform(six_over_2[-1].copy(), tree_b)
+        )
         self.wait(1)
 
         self.play(FadeOut(six_over_2))
@@ -75,7 +93,7 @@ class Pens(Scene):
         self.wait(1)
 
         self.play(
-            pens[0:4].animate().next_to(Aram, DOWN, buff=1),
+            pens[0:4].animate().next_to(younger_child, DOWN, buff=0.5),
             ReplacementTransform(zero_a, four_a),
             ReplacementTransform(six_b, two_b),
             rate_func=linear, run_time=1.5
@@ -110,6 +128,11 @@ class Pens(Scene):
             right_rect.animate().shift(RIGHT*2).set_color(GREEN),
             rate_func=linear, run_time=1.5
         )    
+
+
+
+
+
 
 
 
