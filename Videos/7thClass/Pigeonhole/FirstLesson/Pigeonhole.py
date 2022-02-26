@@ -4,7 +4,7 @@ from manim import *
 import numpy as np
 import sys
 
-sys.path.append('../../../')
+sys.path.append('../../../../')
 from Functions.QarakusiFunctions import *
 
 
@@ -157,7 +157,7 @@ class Calendar(Scene):
 
         self.play(Create(calendar))
         self.wait()
-        self.play(FadeOut(calendar.year, calendar.outline, calendar.month, calendar.background, calendar.full_days))
+        self.play(FadeOut(calendar.VMyear, calendar.outline, calendar.VMmonth, calendar.background, calendar.full_days))
         self.wait()
 
         self.play(
@@ -179,6 +179,36 @@ class Calendar(Scene):
 
 
 
+class ChessKings(Scene):
+    def construct(self):
+        board = Board().make_chess()
+        board.color4()
+        board.scale(0.8)
+        self.add(board)
+
+        _groups_of_four = [[[], [], [], []], [[], [], [], []], [[], [], [], []], [[], [], [], []]]
+        for i in range(8):
+            for j in range(8):
+                _groups_of_four[int(i/2)][int(j/2)].append(board.cells[i][j])
+        for i in range(len(_groups_of_four)):
+            for j in range(len(_groups_of_four[i])):
+                _groups_of_four[i][j] = VGroup(*_groups_of_four[i][j])
+            _groups_of_four[i] = VGroup(*_groups_of_four[i])
+        groups_of_four = VGroup()
+        for i in range(len(_groups_of_four)-1, -1, -1):
+            for j in range(len(_groups_of_four[i])):
+                groups_of_four.add(_groups_of_four[i][j])
+
+
+
+        white_king = ChessFigures().white_king.scale(0.8).shift(UL*1.2)
+
+        # kings = VGroup(white_king.copy() for i in range(16))
+
+        
+        # self.play(groups_of_four.animate.arrange_in_grid(4, 4, buff=0.5))
+
+        self.wait()
 
 
 
