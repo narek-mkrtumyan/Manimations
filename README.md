@@ -1,6 +1,6 @@
 # Video Lessons
 
-In each folder must contain a `README.md` file describing the animations implemented in that folder's `.py` files. After completing that animations drag and drop final video in the README.
+Each folder must contain a `README.md` file describing the animations implemented in that folder's all `.py` files. After completing that animations drag and drop final video in the README.
 
 DO **NOT** add any directories named `images`, `media` etc. (see more in [.gitignore](./.gitignore)).
 Directories named `test` also will be ignored, so feel free to make `test/` in your computer if you need.
