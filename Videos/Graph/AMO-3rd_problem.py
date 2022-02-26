@@ -99,7 +99,7 @@ tex_template=arm_and_left,font_size=25)
 tex_template=arm_and_left,font_size=25)
         self.problem.to_edge(UP)
 
-        self.add(self.problem)
+        #self.add(self.problem)
         self.add(self.G)
 
         self.play(
@@ -123,11 +123,29 @@ tex_template=arm_and_left,font_size=25)
         for i,j in white_edges:
             self.G.edges[(i,j)].set_color(self.white)
         self.remove(*[self.G.edges[(i,j)] for i,j in white_edges])
+
         self.play(*[
             Transform(whites[i], self.G.edges[white_edges[i]]) for i in range(10)
         ])
         self.add(self.G)
         self.wait()
+
+        black_edges = []
+        for i in range(1,21):
+            for j in range(i,21):
+                if not ( (i,j) in white_edges or (j,i) in white_edges ):
+                    black_edges.append((i,j))
+        self.G.add_edges(*black_edges)
+        for i,j in black_edges:
+            self.G.edges[(i,j)].set_color(self.black)
+        self.remove(*[self.G.edges[(i,j)] for i,j in black_edges])        
+        self.play(*[
+            Create(self.G.edges[pair]) for pair in black_edges
+        ], run_time=2)
+        self.wait()
+
+        
+
     def construct(self):
         self.white = BLUE
         self.black = ORANGE

@@ -1,9 +1,78 @@
-from manim import *
-import numpy as np
 from math import sqrt
-from numpy import genfromtxt
-# Նարեկին ասել norm-ի ֆունկցիա
+import sys
 
+sys.path.append("../../")
+from Functions.QarakusiFunctions import *
+sys.path.insert(1, 'Objects/SVG_files/chess_figures')
+
+class FourKnights(Scene):
+	def construct(self):
+		board = Board(size=1, rows=3, columns=3, stroke_width=2)
+		board.make_chess()
+		black_knight = SVGMobject(r'C:\Users\Tigran\Documents\GitHub\Manimations\Objects\SVG_files\chess_figures\knight.svg')
+		black_knight.width = 0.8
+		white_knight = black_knight.copy().set_color(WHITE)
+		vertices = range(1,10)
+		edges = [(1,8), (1,6), (2,7), (2,9), (3,4), (3,8), (4,9), (6,7)]
+		layout = dict()
+		for i in 0,1,2:
+			for j in 0,1,2:
+				layout[3*i+j+1] = board.cells[i][j]
+		G = Graph(vertices, edges, layout=layout,vertex_config={'color':RED}, edge_config={'stroke_color': GREEN})
+
+		self.add(board)
+		self.play(FadeIn(G))
+		white_knight.move_to(board.cells[2][2])
+		self.play(FadeIn(white_knight))
+
+n=5
+class ThreeColors(Scene):
+	def construct(self):
+		vertices = range(1,n+1)
+		edges = list()
+		for i in range(1,n):
+			edges.append((i,(i+1)))
+		edges.append((n,1))
+
+		G = Graph(vertices,edges, layout="circular")
+
+		edge_config={
+			(-1,1) : {"stroke_color": ORANGE},
+			(-2,1+n//3) : {"stroke_color": GREEN},
+			(-3,1+(2*n)//3) : {"stroke_color": WHITE}
+			}
+		edge_config = dict()
+		G.add_vertices(*[-1,-2,-3], positions={ -1 : [7,7,0], -2 : [-8,3,0], -3: [0,-5,0]})
+		G.add_edges(*[(-1,1), (-2,1+n//3), (-3,1+(2*n)//3)], edge_config=edge_config)
+
+		vedges = list(G.edges.values())
+		edges = list(G.edges.keys())
+
+		vedges[1].set_color(ORANGE)
+		vedges[2].set_color(GREEN)
+
+		self.play(Write(G))
+		self.wait()
+		#self.play(G.animate.change_layout("kamada_kawai"))
+
+		array = np.genfromtxt('vertice_coords.csv', delimiter=',')
+		b = np.zeros((n,3))
+		b[:,:-1] = array
+		print(b[0,:])
+		#for i in range(1,n+1):
+		#	G[i].move_to(b[i-1,:])
+		
+		self.play(
+			*[G[i].animate.move_to(b[i-1,:]) for i in range(1,n+1)]
+		)
+		self.wait()
+		
+
+#arr = np.random.uniform(low=-3.5, high=3.5, size=(n,2))
+#np.savetxt("vertex_coords.csv", arr, delimiter=",")
+#print(arr)
+
+'''
 vertice_r = 0.3
 
 def Vertice(center, radius, phi, color=WHITE):
@@ -83,50 +152,4 @@ class EdgesHope(Scene):
 		#self.play(FadeOut(Edges[1]))
 		self.play(FadeOut(G[3]))
 		self.wait()
-
-n=5
-class ThreeColors(Scene):
-	def construct(self):
-		vertices = range(1,n+1)
-		edges = list()
-		for i in range(1,n):
-			edges.append((i,(i+1)))
-		edges.append((n,1))
-
-		G = Graph(vertices,edges, layout="circular")
-
-		edge_config={
-			(-1,1) : {"stroke_color": ORANGE},
-			(-2,1+n//3) : {"stroke_color": GREEN},
-			(-3,1+(2*n)//3) : {"stroke_color": WHITE}
-			}
-		edge_config = dict()
-		G.add_vertices(*[-1,-2,-3], positions={ -1 : [7,7,0], -2 : [-8,3,0], -3: [0,-5,0]})
-		G.add_edges(*[(-1,1), (-2,1+n//3), (-3,1+(2*n)//3)], edge_config=edge_config)
-
-		vedges = list(G.edges.values())
-		edges = list(G.edges.keys())
-
-		vedges[1].set_color(ORANGE)
-		vedges[2].set_color(GREEN)
-
-		self.play(Write(G))
-		self.wait()
-		#self.play(G.animate.change_layout("kamada_kawai"))
-
-		array = genfromtxt('vertex_coords.csv', delimiter=',')
-		b = np.zeros((n,3))
-		b[:,:-1] = array
-		print(b[0,:])
-		#for i in range(1,n+1):
-		#	G[i].move_to(b[i-1,:])
-		
-		self.play(
-			*[G[i].animate.move_to(b[i-1,:]) for i in range(1,n+1)]
-		)
-		self.wait()
-		
-
-#arr = np.random.uniform(low=-3.5, high=3.5, size=(n,2))
-#np.savetxt("vertex_coords.csv", arr, delimiter=",")
-#print(arr)
+'''

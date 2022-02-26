@@ -485,7 +485,28 @@ class All_Color(Scene):
 	def given(self):
 		pass
 	def example(self):
-		pass
+		matrix = [
+			[COLORS[0], COLORS[1], COLORS[0]],
+			[COLORS[1], COLORS[1], COLORS[0]],
+			[COLORS[0], COLORS[0], COLORS[1]]
+		]
+		self.board3.color_matrix(matrix)
+		self.play(GrowFromCenter(self.board3))
+		self.play(self.board3.animate.shift(3*LEFT))
+		self.wait()
+		white = Tex('Սպիտակ', tex_template=armenian_tex_template)
+		white_cell = Square(side_length=1).set_fill(WHITE, opacity=1)
+		whites = VGroup(white, white_cell).arrange(DOWN)
+		whites.next_to(self.board3, RIGHT)
+		self.play(Write(whites))
+		self.wait()
+		green = Tex('Կանաչ', tex_template=armenian_tex_template)
+		green_cell = Square(side_length=1, color=GREEN).set_fill(GREEN, opacity=1)
+		greens = VGroup(green, green_cell).arrange(DOWN)
+		greens.next_to(whites, RIGHT)
+		self.play(Write(greens))
+		self.wait()
+		
 	def row(self):
 		self.add(self.board5)
 		#COLORS[4]=PURE_BLUE
@@ -798,12 +819,12 @@ class All_Color(Scene):
 			self.algo(board, 0.25)
 			self.play(FadeOut(board))
 	def construct(self):
-		self.board3 = Board(rows=4, columns=4)
+		self.board3 = Board(size=1, rows=4, columns=4, stroke_width=0.1, color=BLACK, minus_stroke=True)
 		self.board5 = Board(rows=5,columns=5, stroke_width=0.1, color=BLACK, minus_stroke=True)
 
 		#self.given()
-		#self.example()
-		self.proof()
+		self.example()
+		#self.proof()
 		#self.final()
 
 
