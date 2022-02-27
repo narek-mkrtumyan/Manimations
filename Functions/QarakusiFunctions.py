@@ -7,8 +7,8 @@ from Configs import *
 
 from Functions.GeometryFunctions import *
 from Functions.Board import *
-from MaserovKhndirnerFunctions import *
-from PeriodicProblemsFunctions import *
+from Functions.MaserovKhndirnerFunctions import *
+from Functions.PeriodicProblemsFunctions import *
 
 
 
