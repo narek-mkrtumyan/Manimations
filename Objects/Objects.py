@@ -234,6 +234,18 @@ class Pen(VMobject):
 
 
 
+class Pencil(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        pencil = SVGMobject(os.path.join(path_to_SVG, 'pencils', f'pencil_{svg_index}'))
+        pencil.scale(0.6).rotate(PI / 12)
+        pencil.set_color(WHITE)
+
+        self.add(pencil)
+
+
+
 
 class Weight(VGroup):
     def __init__(self, kg=1, unit_kg=1):
