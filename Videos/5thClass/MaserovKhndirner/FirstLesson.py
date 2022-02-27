@@ -1,3 +1,31 @@
+'''
+
+    6 մատիտ ստացան
+    փոքրը չհետաքրքրվեց
+    սկսեցին վիճել
+    ավագը վերցրել է 5, միջնեկին տվել 1
+    6 մատիտը դնեին, ում որը պետք էր
+    բաժանեին հավասարաչափ
+    մաթեմում կա բաժանելը
+    6։2 նշանակում է 6 հատը 2 հոգու հավասար բաժանելու համար քանի հատ կստանա
+    6։2=3 => երկուսն էլ կստանան 3-ական
+
+    115սմ պարան, մեկի պարանը մյուսինից 5սմ երկար
+    գծում ենք էրկուսն էլ, երկրորդը մի քիչ երկար
+    առաջինը քոփի ենք անում իջացնում, ավել մասը ներկում նարնջագույն ու գրում 5
+    ձևավոր փակագիծ ենք անում, գրում 115
+    մկրատով կտրում ենք 5սմ-ն, հեռացնում ու օփասիթին փոքրացնում
+    գրում ենք 115-5=110
+    ինդիքեյթ անում էրկուսն էլ
+    110/2=55
+    տանում ենք դրանց վրա
+    էն 5սմն բերում ենք տեղը
+    վրեն գրում 55+5=60
+
+'''
+
+
+
 import sys
 sys.path.append("../../../../")
 from Functions.QarakusiFunctions import *
@@ -188,10 +216,7 @@ class Rope(Scene):
         line_2_is_44 = MathTex(r'=', r'44', font_size=font_size).move_to(new_position_for_3 + np.array([0.75, 0, 0]))
     
     # scissors
-        open_scissors = SVGMobject('../../../Functions/SVG_PNG_files/open_scissors.svg')
-        open_scissors.set_color(WHITE).rotate(PI/10).scale(0.5)
-        closed_scissors = ImageMobject('../../../Functions/SVG_PNG_files/closed_scissors.png')
-        closed_scissors.set_color(WHITE).scale(0.13).shift(0.1*DOWN).rotate(PI/5)
+        scissors = Scissors(extra_point.get_center())
 
 
 # ANIMATIONS
@@ -217,8 +242,9 @@ class Rope(Scene):
         self.wait(0.25)
     
     # cut (split) second line
-        cut_with_scissors(self, open_scissors, closed_scissors, extra_point)
+        scissors.cut(self)
         self.play(VGroup(line_2_right, extra_is_3).animate(rate_func=linear).shift(0.75*RIGHT))
+        scissors.fade_out(self)
         self.wait(0.25)
 
     # write 85-3=82

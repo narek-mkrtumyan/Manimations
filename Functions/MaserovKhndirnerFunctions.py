@@ -6,6 +6,8 @@ sys.path.append('../')
 from Objects.Objects import *
 from Configs import *
 
+path_to_Objects = os.path.join(helpers.root(), 'Objects')
+
 # Մասերով խնդիրների համար ֆունկցիաներ
 
 
@@ -78,8 +80,8 @@ class Segment(VGroup):
     ### Մասերով խնդրի մասերը :D
 class Diagram(VGroup):
     def __init__(self,
-                 parts: List[List],
-                 names: List[MathTex or DecimalNumber],
+                 parts: list[list],
+                 names: list[MathTex or DecimalNumber],
                  brace: bool = False,
                  total: MathTex or DecimalNumber = MathTex(r'.', font_size=1),
                  **kwargs):
@@ -117,7 +119,7 @@ class Diagram(VGroup):
 
     def create_by_copying(self,
                           scene: Scene,
-                          coping_list: List[List]):
+                          coping_list: list[list]):
         assert len(coping_list) == len(self.player), "Length of 'coping_list' must match length of 'self.player'"
         scene.play(AnimationGroup(*[Write(i) for i in self.player_name], lag_ratio=0.5))
         for i in range(len(self.player)):
@@ -152,8 +154,8 @@ class Diagram(VGroup):
     
     def create_by_order_and_steps(self,
                                   scene: Scene,
-                                  order: List[int],
-                                  steps: List[List[int]]):
+                                  order: list[int],
+                                  steps: list[list[int]]):
         #
         #segments must be numbered for each "player", Segments with numbers 0 will not be copied. and the rest will be according to matching numbers
         #
@@ -180,7 +182,7 @@ class Diagram(VGroup):
     def animate_superscale(self,
                            scene: Scene,
                            scale_ratio: float,
-                           move_to_point: List[float] = [0, 0, 0]):
+                           move_to_point: list[float] = [0, 0, 0]):
         self.generate_target()
         self.target.scale(scale_ratio)
         for name in self.target.player_name:
@@ -196,7 +198,7 @@ class Diagram(VGroup):
 
     def show_equal_parts(self,
                          scene: Scene,
-                         equal_list: List[int]):
+                         equal_list: list[int]):
         assert len(equal_list) == len(self.player), "Length of 'equal_parts' must match length of 'self.player'"
         for i in range(len(self.player)):
             assert len(equal_list[i]) == len(self.player[i]), f"Length of 'equal_parts[{i}]' must match length of 'self.player[{i}]'"
@@ -223,7 +225,7 @@ class Diagram(VGroup):
 
     def segment_perpendicular_projection(self,
                            scene: Scene,
-                           project_from: List[int],
+                           project_from: list[int],
                            project_to: int,
                            add: bool = False,
                            subtract: bool = False,
@@ -336,37 +338,13 @@ class Diagram(VGroup):
         scene.play(Uncreate(d_left), Uncreate(d_right), FadeOut(new_line, run_time = 1.5), self.animate.set_opacity(1))        
 
     def update_segment_text(self,
-                            segment_index: List[int],
+                            segment_index: list[int],
                             text: MathTex or DecimalNumber):
         [i, j] = segment_index
         self.remove(self.player[i][j])
         self.player[i][j].set_text(text)
         self.add(self.player[i][j])
         
-
-
-def cut_with_scissors(self, cut_coordinate=ORIGIN):
-
-    cut_coordinate = np.array(cut_coordinate) - np.array([0.2, 0.4, 0])
-
-    open_scissors = OpenScissors()
-    closed_scissors = ClosedScissors()
-    closed_scissors.move_to(cut_coordinate)
-    open_scissors.move_to(cut_coordinate - np.array([0, 0.5, 0]))
-
-    self.play(FadeIn(open_scissors))
-    self.wait(0.25)
-    self.play(open_scissors.animate().move_to(cut_coordinate))
-    self.wait(0.25)
-    self.remove(open_scissors)
-    self.add(closed_scissors)
-    self.wait(0.5)
-    self.remove(closed_scissors)
-    self.add(open_scissors)
-    self.wait(0.25)
-    self.play(open_scissors.animate().move_to(cut_coordinate - np.array([0, 0.5, 0])))
-    self.wait(0.25)
-    self.play(FadeOut(open_scissors))
 
         
 

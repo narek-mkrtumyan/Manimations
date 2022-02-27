@@ -1,3 +1,4 @@
+from click import style
 from manim import *
 from colour import Color
 import os
@@ -8,6 +9,7 @@ import Objects.helpers as helpers
 from Configs import *
 
 path_to_SVG = os.path.join(helpers.root(), 'Objects', 'SVG_files')
+path_to_Objects = os.path.join(helpers.root(), 'Objects')
 
 
 
@@ -277,53 +279,91 @@ class ScaleStar(VMobject):
 
 
 class Scissors():
-    def __init__(self, cut_point=ORIGIN):
-        self.cut_point = cut_point
-        scissor_1 = SVGMobject(os.path.join(path_to_SVG, 'scissors', 'scissors_1')).set_color(WHITE)
-        scissor_2 = SVGMobject(os.path.join(path_to_SVG, 'scissors', 'scissors_2')).set_color(WHITE)
-        dot = Dot().scale(0.2)
-        self.__p_end = [a + b for a, b in zip([0, -0.35, 0], cut_point)]
-        VGroup(scissor_1, scissor_2).arrange(RIGHT, buff=0.1)
-        scissor_1.shift(0.08 * DOWN + 0.6 * RIGHT)
-        scissor_2.shift(0.08 * DOWN - 0.6 * RIGHT)
-        scissors_with_dot = VGroup(scissor_1, scissor_2, dot).scale(0.5)
-        point = scissors_with_dot[2].get_center()
-        scissors_with_dot[0].rotate(angle=-0.02, about_point=point)
-        scissors_with_dot[1].rotate(angle=0.02, about_point=point)
-        scissors_with_dot.move_to(self.__p_end)
-        scissors_with_dot.shift(DOWN)
-        self.siz = scissors_with_dot
+    def __init__(self, cut_coordinate=ORIGIN, style=1):
+        self.style = style
+
+        if style == 1:
+            self.open_scissors = OpenScissors()
+            self.closed_scissors = ClosedScissors()
+            self.cut_coordinate = np.array(cut_coordinate) - np.array([0.2, 0.4, 0])
+            self.closed_scissors.move_to(self.cut_coordinate)
+            self.open_scissors.move_to(self.cut_coordinate - np.array([0, 0.5, 0]))
+
+        if style == 2:
+            self.cut_coordinate = cut_coordinate
+            scissor_1 = SVGMobject(os.path.join(path_to_SVG, 'scissors', 'scissors_1')).set_color(WHITE)
+            scissor_2 = SVGMobject(os.path.join(path_to_SVG, 'scissors', 'scissors_2')).set_color(WHITE)
+            dot = Dot().scale(0.2)
+            self.__p_end = [a + b for a, b in zip([0, -0.35, 0], cut_coordinate)]
+            VGroup(scissor_1, scissor_2).arrange(RIGHT, buff=0.1)
+            scissor_1.shift(0.08 * DOWN + 0.6 * RIGHT)
+            scissor_2.shift(0.08 * DOWN - 0.6 * RIGHT)
+            scissors_with_dot = VGroup(scissor_1, scissor_2, dot).scale(0.5)
+            point = scissors_with_dot[2].get_center()
+            scissors_with_dot[0].rotate(angle=-0.02, about_point=point)
+            scissors_with_dot[1].rotate(angle=0.02, about_point=point)
+            scissors_with_dot.move_to(self.__p_end)
+            scissors_with_dot.shift(DOWN)
+            self.siz = scissors_with_dot
 
 
-    def cut_in(self, screen):
 
-        def cut_with_scissors(mobject, t):
-            dt = 1/60
-            dl= [0, 1/60, 0]
-            if t < 1/2:
-                angle = PI / 6 * dt
-            else:
-                angle = -PI / 6 * dt
-            #p_end = [a+b for a, b in zip([0, -0.25, 0], mobject[3].get_center())]
-            mobject.shift(dl)
-            point = mobject[2].get_center()
-            mobject[0].rotate(angle=angle, about_point=point)
-            mobject[1].rotate(angle=-angle, about_point=point)
-        screen.play(UpdateFromAlphaFunc(self.siz, cut_with_scissors, run_time=1, rate_func=linear))
-        self.siz.move_to(self.__p_end)
+    def cut(self, scene : Scene, run_time=3):
+        if self.style == 1:
+            scene.play(FadeIn(self.open_scissors), run_time=run_time/3)
+            scene.wait(run_time/9)
+            scene.play(self.open_scissors.animate().move_to(self.cut_coordinate), run_time=run_time/3)
+            scene.wait(run_time/9)
+            scene.remove(self.open_scissors)
+            scene.add(self.closed_scissors)
+            scene.add_sound(os.path.join(path_to_Objects, 'sounds', 'scissors_sound'))
+            scene.wait(0.25)
+            scene.remove(self.closed_scissors)
+            scene.add(self.open_scissors)
+            scene.wait(run_time/9)
 
-    def cut_out(self, screen):
-        def cut_with_scissors(mobject, t):
-            dt = 1/60
-            dl = [0, -1/60, 0]
-            angle = PI / 6 * dt
-            mobject.shift(dl)
-            point = mobject[2].get_center()
-            color = Color(hue=1, saturation=t/3, luminance=1-t)
-            mobject.set_color(color)
-            mobject[0].rotate(angle=angle, about_point=point)
-            mobject[1].rotate(angle=-angle, about_point=point)
-        screen.play(UpdateFromAlphaFunc(self.siz, cut_with_scissors, run_time=1, rate_func=linear))
-        screen.remove(self.siz)
+        if self.style == 2:
+            run_time = 1
+            def function_from_time(mobject, t):
+                frame_rate = scene.camera.frame_rate
+                dt = run_time/frame_rate
+                dl = [0, run_time/frame_rate, 0]
+                if t < run_time/2:
+                    angle = PI / 8 * dt
+                else:
+                    angle = -PI / 8 * dt
+                #p_end = [a+b for a, b in zip([0, -0.25, 0], mobject[3].get_center())]
+                mobject.shift(dl)
+                point = mobject[2].get_center()
+                mobject[0].rotate(angle=angle, about_point=point)
+                mobject[1].rotate(angle=-angle, about_point=point)
+            scene.play(UpdateFromAlphaFunc(self.siz, function_from_time, run_time=run_time, rate_func=linear))
+            scene.add_sound(os.path.join(path_to_Objects, 'sounds', 'scissors_sound'))
+            scene.wait(0.2)
+            self.siz.move_to(self.__p_end)
+
+    def fade_out(self, scene : Scene, run_time=1):
+        if self.style == 1:
+            scene.play(
+                self.open_scissors.animate().move_to(self.cut_coordinate - np.array([0, 0.5, 0])).set_opacity(0),
+                run_time=run_time
+            )
+            scene.remove(self.open_scissors)
+        
+        if self.style == 2:
+            def function_from_time(mobject, t):
+                frame_rate = scene.camera.frame_rate
+                dt = run_time/frame_rate
+                dl = [0, -run_time/frame_rate, 0]
+                angle = PI / 10 * dt
+                mobject.shift(dl)
+                point = mobject[2].get_center()
+                color = Color(hue=1, saturation=t/3, luminance=1-t)
+                mobject.set_color(color)
+                mobject[0].rotate(angle=angle, about_point=point)
+                mobject[1].rotate(angle=-angle, about_point=point)
+            scene.play(UpdateFromAlphaFunc(self.siz, function_from_time, run_time=run_time, rate_func=linear))
+            scene.remove(self.siz)
+        
 
 
