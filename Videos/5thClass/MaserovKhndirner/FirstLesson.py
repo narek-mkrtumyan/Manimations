@@ -27,6 +27,7 @@
 
 
 import sys
+from telnetlib import DO
 sys.path.append("../../../")
 from Functions.QarakusiFunctions import *
 
@@ -41,16 +42,16 @@ class Pencils(Scene):
         younger_child = Boy(2).scale(0.7)
         older_child = Boy(1).scale(1)
 
-        children = VGroup(younger_child, older_child).arrange(aligned_edge=DOWN).move_to([0, 2.5, 0])
+        children = VGroup(younger_child, older_child).arrange(aligned_edge=DOWN).move_to([0, 1, 0])
 
-    # Pens
-        # one_pen = Pen()
-        # pens = VGroup(*[one_pen.copy() for i in range(6)])
-        # pens.arrange().next_to(children, DOWN, buff=0.5)
-        # pens_center = pens.get_center()
+        thinking_bubble = ThinkingBubble(False, False, style=1).shift([0.8, 2.75, 0])
+        thinking_bubble[0][-1].scale(1.2)
+        thought = MathTex(r'\textrm{ես շատ եմ}', r'\textrm{նկարում}', tex_template=armenian_tex_template, font_size=25)
+        thought.arrange(DOWN).move_to(thinking_bubble[0][-1].get_center())
 
 
-        pens = VGroup(
+    # pencils
+        pencils = VGroup(
                 Pencil().set_color(RED),
                 Pencil().set_color(BLUE),
                 Pencil().set_color(ORANGE),
@@ -58,22 +59,20 @@ class Pencils(Scene):
                 Pencil().set_color(LIGHT_BROWN),
                 Pencil().set_color(YELLOW)
             )
-        pens.arrange(buff=0.15).next_to(children, DOWN, buff=0.5)
-        pens_center = pens.get_center()
+        pencils.arrange(buff=0.15).next_to(children, DOWN, buff=0.5)
+        pencils_center = pencils.get_center()
 
-
-
-    # Rectangles over pens
-        rect = Rectangle(height=1.6, width=4.4).move_to(pens.get_center())
-        left_rect = Rectangle(height=1.6, width=2.2).move_to(pens.get_center()).shift(1.1 * LEFT)
-        right_rect = Rectangle(height=1.6, width=2.2).move_to(pens.get_center()).shift(1.1 * RIGHT)
+    # Rectangles over pencils
+        rect = Rectangle(height=1.6, width=4.4).move_to(pencils.get_center())
+        left_rect = Rectangle(height=1.6, width=2.2).move_to(pencils.get_center()).shift(1.1 * LEFT)
+        right_rect = Rectangle(height=1.6, width=2.2).move_to(pencils.get_center()).shift(1.1 * RIGHT)
 
     # Numbers
-        six = MathTex(r'6', font_size=75).next_to(pens, DOWN, buff=0.5)
-        six_over_2 = MathTex(r'6', r':2', r'=', r'3', font_size=75).next_to(pens, DOWN, buff=2)
+        six = MathTex(r'6', font_size=75).next_to(pencils, DOWN, buff=0.5)
+        six_over_2 = MathTex(r'6', r':2', r'=', r'3', font_size=75).next_to(pencils, DOWN, buff=1.5)
 
-        left_number_location = pens[0:3].get_center() + np.array([-1.75, -1.5, 0])
-        right_number_location = pens[0:3].get_center() + np.array([3.35, -1.5, 0])
+        left_number_location = pencils[0:3].get_center() + np.array([-1.75, -1.5, 0])
+        right_number_location = pencils[0:3].get_center() + np.array([3.35, -1.5, 0])
 
         tree_a = MathTex(r'3', font_size=75).move_to(left_number_location)
         tree_b = MathTex(r'3', font_size=75).move_to(right_number_location)
@@ -82,18 +81,19 @@ class Pencils(Scene):
         five_b = MathTex(r'5', font_size=75).move_to(right_number_location)
 
 
+
 # ANIMATIONS
 
-    # Draw children and pens
+    # Draw children and pencils
         self.play(Create(children))
-        self.play(Create(pens))
+        self.play(Create(pencils))
         self.play(Write(six))
         self.wait(1)
 
-    # Split pens into groups of 1 and 5
+    # Split pencils into groups of 1 and 5
         self.play(
-            pens[0].animate.shift(1.2 * LEFT),
-            pens[1:6].animate.shift(2.2 * RIGHT),
+            pencils[0].animate.shift(1.2 * LEFT),
+            pencils[1:6].animate.shift(2.2 * RIGHT),
             younger_child.animate.shift(2 * LEFT),
             older_child.animate.shift(2 * RIGHT),
             FadeOut(six),
@@ -106,10 +106,17 @@ class Pencils(Scene):
         self.wait(0.5)
         self.play(Write(one_a))
         self.wait(1)
+    
+    # Thinking bubble
+        self.play(Write(thinking_bubble))
+        self.wait(0.5)
+        self.play(Write(thought))
+        self.wait(1)
+        self.play(FadeOut(thinking_bubble, thought))
 
-    # Bring pens in the middle
+    # Bring pencils in the middle
         self.play(
-            pens.animate.arrange().move_to(pens_center),
+            pencils.animate.arrange().move_to(pencils_center),
             ReplacementTransform(VGroup(five_b, one_a), six),
             run_time=2
         )
@@ -128,9 +135,9 @@ class Pencils(Scene):
         self.remove(rect)
         self.wait(1)
         self.play(
-            pens[0:3].animate().shift(LEFT * 1.5),
+            pencils[0:3].animate().shift(LEFT * 1.5),
             left_rect.animate().shift(LEFT * 1.5),#.set_color(ORANGE),
-            pens[3:6].animate().shift(RIGHT * 1.5),
+            pencils[3:6].animate().shift(RIGHT * 1.5),
             right_rect.animate().shift(RIGHT * 1.5),#.set_color(GREEN),
             rate_func=linear, run_time=1.5
         )

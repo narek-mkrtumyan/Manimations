@@ -204,19 +204,23 @@ class ThinkingBubble(VMobject):
                     thinking_bubble = SVGMobject(
                             os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_left_1')
                         )
+                    thinking_bubble = VGroup(thinking_bubble[1], thinking_bubble[2], thinking_bubble[0])
                 else:
                     thinking_bubble = SVGMobject(
                             os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_left_2')
                         )
+                    thinking_bubble = VGroup(thinking_bubble[1], thinking_bubble[2], thinking_bubble[3], thinking_bubble[0])
             else:
                 if style == 1:
                     thinking_bubble = SVGMobject(
                             os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_right_1')
                         )
+                    thinking_bubble = VGroup(thinking_bubble[1], thinking_bubble[2], thinking_bubble[0])
                 else:
                     thinking_bubble = SVGMobject(
                             os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_right_2')
                         )
+                    thinking_bubble = VGroup(thinking_bubble[1], thinking_bubble[2], thinking_bubble[3], thinking_bubble[0])
         
         thinking_bubble.set_color(WHITE)
 
