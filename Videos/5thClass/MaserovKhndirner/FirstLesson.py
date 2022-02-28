@@ -32,7 +32,7 @@ from Functions.QarakusiFunctions import *
 
 
 
-class Pens(Scene):
+class Pencils(Scene):
     def construct(self):
 
 # INITS
@@ -52,11 +52,11 @@ class Pens(Scene):
 
         pens = VGroup(
                 Pencil().set_color(RED),
-                Pencil().set_color(GREEN),
-                Pencil().set_color(YELLOW),
                 Pencil().set_color(BLUE),
                 Pencil().set_color(ORANGE),
-                Pencil().set_color(PURPLE)
+                Pencil().set_color(GREEN),
+                Pencil().set_color(LIGHT_BROWN),
+                Pencil().set_color(YELLOW)
             )
         pens.arrange(buff=0.15).next_to(children, DOWN, buff=0.5)
         pens_center = pens.get_center()
