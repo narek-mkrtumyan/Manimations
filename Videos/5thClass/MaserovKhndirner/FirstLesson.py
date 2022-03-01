@@ -1,5 +1,4 @@
 '''
-
     6 մատիտ ստացան
     փոքրը չհետաքրքրվեց
     սկսեցին վիճել
@@ -9,25 +8,11 @@
     մաթեմում կա բաժանելը
     6։2 նշանակում է 6 հատը 2 հոգու հավասար բաժանելու համար քանի հատ կստանա
     6։2=3 => երկուսն էլ կստանան 3-ական
-
-    115սմ պարան, մեկի պարանը մյուսինից 5սմ երկար
-    գծում ենք էրկուսն էլ, երկրորդը մի քիչ երկար
-    առաջինը քոփի ենք անում իջացնում, ավել մասը ներկում նարնջագույն ու գրում 5
-    ձևավոր փակագիծ ենք անում, գրում 115
-    մկրատով կտրում ենք 5սմ-ն, հեռացնում ու օփասիթին փոքրացնում
-    գրում ենք 115-5=110
-    ինդիքեյթ անում էրկուսն էլ
-    110/2=55
-    տանում ենք դրանց վրա
-    էն 5սմն բերում ենք տեղը
-    վրեն գրում 55+5=60
-
 '''
 
 
 
 import sys
-from telnetlib import DO
 sys.path.append("../../../")
 from Functions.QarakusiFunctions import *
 
@@ -160,17 +145,33 @@ class Pencils(Scene):
 
 
 
-#################################################################################################################
-#################################################################################################################
-#################################################################################################################
 
+
+
+
+
+'''
+    115սմ պարան, մեկի պարանը մյուսինից 5սմ երկար
+    գծում ենք էրկուսն էլ, երկրորդը մի քիչ երկար
+    առաջինը քոփի ենք անում իջացնում
+    Ավել մասը ինդիքեյթ ենք անում, ներկում նարնջագույն ու գրում 5
+    ձևավոր փակագիծ ենք անում, գրում 115
+    մկրատով կտրում ենք 5սմ-ն, հեռացնում
+    գրում ենք 115-5=110
+    110-ը տանում ձևավոր փակագծի մոտ, ավել 5-ը օփասիթին փոքրացնում
+    ինդիքեյթ անում երկու հատվածները
+    110։2=55
+    տանում ենք դրանց վրա
+    էն 5սմն բերում ենք տեղը
+    վրեն գրում 55+5=60
+'''
 
 
 class Rope(Scene):
     def construct(self):
 
         font_size = 50 # font size for the numbers written in MathTex
-        
+
 
 # INITS
 
@@ -187,98 +188,139 @@ class Rope(Scene):
 
     # 2 parts of the second line (line_2_right is the difference between second and first)
         line_2_left = Segment(start_2, extra_point)
-        line_2_right = Segment(extra_point, end_2, color=RED)
+        line_2_right = Segment(extra_point, end_2, color=ORANGE)
+        line_2_right_white = Segment(extra_point, end_2)
 
     # dashed line goes down from the end of the first line
-        dashed_line = DashedLine(end_1, extra_point)
+        dashed_line_left = DashedLine(end_1, extra_point, dashed_ratio=0.4, dash_length=2 * DEFAULT_DASH_LENGTH)
+        dashed_line_right = DashedLine(start_1, start_2, dashed_ratio=0.4, dash_length=2 * DEFAULT_DASH_LENGTH)
 
-    # brace in the right side of the segments and number '85'
-        brace_together = BraceBetweenPoints(end_1+np.array([1.5, 0.25, 0]), extra_point+np.array([1.5, -0.25, 0]), direction=[1, 0, 0])
-        together_85 = MathTex(r'85', font_size=font_size).next_to(brace_together)
+    # brace in the right side of the segments and number '115'
+        brace_together = BraceBetweenPoints(end_1+np.array([1.25, 0.25, 0]), extra_point+np.array([1.25, -0.25, 0]), direction=[1, 0, 0])
+        together_115 = MathTex(r'115', font_size=font_size + 10).next_to(brace_together)
+        together_110 = MathTex(r'110', font_size=font_size + 10).next_to(brace_together)
 
-    # number '3' on the extra part of the second line
-        extra_is_3 = MathTex(r'3', font_size=font_size).next_to(line_2_right, UP)
+    # number '5' on the extra part of the second line
+        extra_is_5 = MathTex(r'5', font_size=font_size).next_to(line_2_right, UP)
 
-    # '85-3=82', '82:2=41'
-        difference_85_3 = MathTex(r'85', r'-', r'3', r'=', r'82', font_size=font_size).move_to([0, -2, 0])
-        divide_82_2 = MathTex(r'82', r':2=', r'41', font_size=font_size).next_to(difference_85_3, 2*DOWN)
+    # '115-5=110', '110:2=55'
+        difference_115_5 = MathTex(r'115', r'-', r'5', r'=', r'110', font_size=font_size).move_to([0, -2, 0])
+        divide_110_2 = MathTex(r'110', r':2=', r'55', font_size=font_size).next_to(difference_115_5, 2*DOWN)
 
-    # '41's on the lines
-        line_1_is_41 = MathTex(r'41', font_size=font_size).next_to(line_1, UP)
-        line_2_left_is_41 = MathTex(r'41', font_size=font_size).next_to(line_2_left, UP)
+    # '55's on the lines
+        line_1_is_55 = MathTex(r'55', font_size=font_size).next_to(line_1, UP)
+        line_2_left_is_55 = MathTex(r'55', font_size=font_size).next_to(line_2_left, UP)
 
-    # positions for '41+3=44' on the second line
-        new_position_for_2_41 = line_2_left_is_41.get_center() + np.array([-0.75, 0, 0])
-        plus_sign = MathTex(r'+', font_size=font_size).next_to(new_position_for_2_41, 1.5*RIGHT)
-        new_position_for_3 = plus_sign.get_center() + np.array([0.5, 0, 0])
-        line_2_is_44 = MathTex(r'=', r'44', font_size=font_size).move_to(new_position_for_3 + np.array([0.75, 0, 0]))
+    # positions for '55+5=60' on the second line
+        new_position_for_2_55 = line_2_left_is_55.get_center() + np.array([-0.75, 0, 0])
+        plus_sign = MathTex(r'+', font_size=font_size).next_to(new_position_for_2_55, 1.5*RIGHT)
+        new_position_for_5 = plus_sign.get_center() + np.array([0.5, 0, 0])
+        line_2_is_60 = MathTex(r'=', r'60', font_size=font_size).move_to(new_position_for_5 + np.array([0.75, 0, 0]))
     
     # scissors
-        scissors = Scissors(extra_point.get_center())
+        scissors = Scissors(extra_point)
 
 
 # ANIMATIONS
-    # create lines, brace and write 85
+    # create lines, brace and write 115
         self.play(Create(line_1))
-        self.wait(0.25)
+        self.wait(0.5)
         self.play(Create(line_2))
-        self.wait(0.25)
-        self.play(Create(brace_together))
-        self.wait(0.25)
-        self.play(Create(together_85))
+        self.wait(0.5)
 
-    # create dashed line, write 3
-        self.play(Create(dashed_line))
-        self.wait(0.25)
-        self.play(Create(line_2_right[1].reverse_direction())) # revers direction to create from up to bottom
-        self.wait(0.25)
-        self.play(Create(line_2_right[0]))
-        self.add(line_2_right, line_2_left)
+    # create dashed line, write 5
+        self.play(
+            Create(dashed_line_left),
+            Create(dashed_line_right),
+            ReplacementTransform(line_1.copy(), line_2_left),
+            rate_func=linear, run_time=1.5
+        )
+        self.wait(0.5)
+        self.add(line_2_right_white)
         self.remove(line_2)
+        self.play(ApplyWave(line_2_right_white, time_width=2, amplitude=0.25))
+        self.wait(0.5)
+    
+    # color the extra part orange and write 5
+        self.play(Create(line_2_right))
+        self.remove(line_2_right_white)
+        self.wait(0.5)
+        self.play(Write(extra_is_5))
+        self.wait(0.5)
+    
+    # create brace and write 115
+        self.play(Write(brace_together))
         self.wait(0.25)
-        self.play(Create(extra_is_3))
-        self.wait(0.25)
+        self.play(Write(together_115))
+        self.wait(0.5)
     
     # cut (split) second line
         scissors.cut(self)
-        self.play(VGroup(line_2_right, extra_is_3).animate(rate_func=linear).shift(0.75*RIGHT))
+        self.play(VGroup(line_2_right, extra_is_5).animate(rate_func=linear).shift(0.5*RIGHT))
         scissors.fade_out(self)
-        self.wait(0.25)
+        self.wait(0.5)
 
-    # write 85-3=82
-        self.play(ReplacementTransform(together_85.copy(), difference_85_3[0]))
-        self.wait(0.25)
-        self.play(Write(difference_85_3[1]))
-        self.wait(0.25)
-        self.play(ReplacementTransform(extra_is_3.copy(), difference_85_3[2]))
-        self.wait(0.25)
-        self.play(Write(difference_85_3[3:]))
-        self.wait(0.25)
-
-    # write 82:2=41
-        self.play(ReplacementTransform(difference_85_3[-1].copy(), divide_82_2[0]))
-        self.wait(0.25)
-        self.play(Write(divide_82_2[1:]))
-        self.wait(0.25)
-
-    # write 41 on the coressponding lines
-        self.play(ReplacementTransform(divide_82_2[-1].copy(), line_1_is_41))
-        self.play(ReplacementTransform(divide_82_2[-1].copy(), line_2_left_is_41))
+    # write 115-5=110
+        self.play(ReplacementTransform(together_115.copy(), difference_115_5[0:1]))
+        self.wait(0.5)
+        self.play(Write(difference_115_5[1]))
+        self.wait(0.5)
+        self.play(ReplacementTransform(extra_is_5.copy(), difference_115_5[2]))
+        self.wait(0.5)
+        self.play(Write(difference_115_5[3:]))
+        self.wait(0.5)
     
-    # join splitted parts of the second line and write '41+3=44'
-        self.play(FadeOut(dashed_line))
-        self.play(VGroup(line_2_right, extra_is_3).animate(rate_func=linear).shift(0.75*LEFT))
+    # replace 115 with 110
         self.play(
-            line_2_left_is_41.animate().move_to(new_position_for_2_41),
-            extra_is_3.animate().move_to(new_position_for_3),
+            VGroup(line_2_right, extra_is_5).animate.set_opacity(0.25),
+            FadeOut(together_115),
+            ReplacementTransform(difference_115_5[-1:].copy(), together_110),
+            run_time=1.5
+        )
+        self.wait(0.5)
+    
+    # indicate 2 equal segments
+        self.play(ApplyWave(line_1, UP, 0.4, time_width=2, run_time=1.5))
+        self.play(ApplyWave(line_2_left, UP, 0.4, time_width=2, run_time=1.5))
+        self.wait(0.5)
+        self.play(FadeOut(dashed_line_right, dashed_line_left))
+        self.wait(0.5)
+
+    # write 110:2=55
+        self.play(ReplacementTransform(difference_115_5[-1:].copy(), divide_110_2[0:1]))
+        self.wait(0.5)
+        self.play(Write(divide_110_2[1:]), run_time=2)
+        self.wait(0.5)
+
+    # write 55 on the coressponding lines
+        self.play(ReplacementTransform(divide_110_2[-1:].copy(), line_1_is_55))
+        self.play(ReplacementTransform(divide_110_2[-1:].copy(), line_2_left_is_55))
+        self.wait(0.5)
+    
+    # join splitted parts of the second line and write '55+5=60'
+        self.play(
+            VGroup(line_2_right, extra_is_5).animate.set_opacity(1),
+            together_110.animate.shift(DOWN).set_opacity(0),
+            together_115.shift(UP).set_opacity(0).animate.shift(DOWN).set_opacity(1),
+            rate_func=linear, run_time=1.5
+        )
+        self.wait(0.5)
+        self.play(VGroup(line_2_right, extra_is_5).animate(rate_func=linear).shift(0.5*LEFT))
+        self.wait(0.5)
+        self.play(
+            line_2_left_is_55.animate().move_to(new_position_for_2_55),
+            extra_is_5.animate().move_to(new_position_for_5),
             rate_func=linear
         )
+        self.wait(0.5)
         self.play(Write(plus_sign))
-        self.play(Write(line_2_is_44))
-        self.add(line_2)
+        self.wait(0.5)
+        self.play(Write(line_2_is_60))
+        self.add(line_2, line_2_right)
+        self.wait(0.5)
         self.play(
-            FadeOut(line_2_right, line_2_left, line_2_left_is_41, plus_sign, extra_is_3, line_2_is_44[0]),
-            line_2_is_44[1].animate().shift(LEFT),
+            FadeOut(line_2_right, line_2_left, line_2_left_is_55, plus_sign, extra_is_5, line_2_is_60[0]),
+            line_2_is_60[1].animate().shift(LEFT),
             rate_func=linear
         )
         self.wait(1)
@@ -287,11 +329,5 @@ class Rope(Scene):
         self.wait(1)
 
 
-
-
-
-class test(Scene):
-    def construct(self):
-        
-        self.wait()
+        # add --disable_caching flag during rendering for the scissors cutting audio
 
