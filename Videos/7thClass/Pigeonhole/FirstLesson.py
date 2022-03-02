@@ -1,12 +1,6 @@
-from curses.textpad import rectangle
-from symtable import Function
-from manim import *
-import numpy as np
 import sys
-
 sys.path.append('../../../')
 from Functions.QarakusiFunctions import *
-
 
 class Rabbits_4(Scene):
     def construct(self):
