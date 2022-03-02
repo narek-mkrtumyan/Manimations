@@ -27,8 +27,8 @@ class Problem10323(Scene):
 
         women_segments_extention = Segment(
             women_segments[-1][0][0].get_start_and_end()[1], 
-            women_segments[-1][0][0].get_start_and_end()[1] + np.array([0.7, 0, 0]),
-            color=PURE_GREEN, endmark_color=PURE_GREEN, mathtex=MathTex(r'10', font_size=numbers_font_size)
+            women_segments[-1][0][0].get_start_and_end()[1] + np.array([0.7, 0, 0]), 
+            color=PURE_GREEN, endmark_color=PURE_GREEN, text=MathTex(r'10', font_size=numbers_font_size)
         )
 
         women_label = MathTex(r'\textrm{Կ.}', tex_template=armenian_tex_template, font_size=labels_font_size)
@@ -56,8 +56,10 @@ class Problem10323(Scene):
         
         mas = MathTex(r'\textrm{մաս}', tex_template=armenian_tex_template).next_to(numbers[0], RIGHT)
 
-        answer = MathTex(r'103', font_size=numbers_font_size).next_to(children_segment, UP*0.5).shift(0.25*DOWN)
+        answer = MathTex(r'103', font_size=numbers_font_size).next_to(children_segment, UP*0.5)
         answer_rect = SurroundingRectangle(answer, color=PURE_GREEN)
+
+        scissors = Scissors(women_segments_extention[0][0].get_start_and_end()[0])
 
 
 
@@ -94,16 +96,10 @@ class Problem10323(Scene):
 
     # Cut the extra segment and move right
 
-        cut_with_scissors(self, women_segments_extention[0][0].get_start_and_end()[0])
-        # self.play(women_segments_extention.animate().shift(0.25*RIGHT))
-        self.wait(0.5)
-
-        # self.play(women_segments_extention.animate().shift(0.25*LEFT))
-
         scissors = Scissors(women_segments_extention[0][0].get_start_and_end()[0])
-        scissors.cut_in(self)
+        scissors.cut(self)
         self.play(women_segments_extention.animate().shift(0.25*RIGHT))
-        scissors.cut_out(self)
+        scissors.fade_out(self)
 
         self.play(ReplacementTransform(together_525.copy(), together_minus_extra[0]))
         self.play(Write(together_minus_extra[1]))
@@ -146,11 +142,5 @@ class Problem10323(Scene):
         self.wait(0.5)
         self.play(Create(answer_rect))
         self.wait(0.5)
-
-
-class test(Scene):
-    def construct(self):
-        self.add(Segment([-4, 0, 0], [4, 0, 0], stroke_width=8))
-        self.add(Segment([-4, 0, 0], [4, 0, 0]).shift(DOWN))
 
 

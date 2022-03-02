@@ -1,13 +1,5 @@
-from manim import *
-import numpy as np
 import sys
-
-from pyparsing import Or
-
 sys.path.append('../../../')
-sys.path.append('../../')
-sys.path.append('../')
-sys.path.append('../../../Functions')
 from Functions.QarakusiFunctions import *
 
 class Problem12530(Scene):
@@ -33,12 +25,16 @@ class Problem12530(Scene):
         dashed_line = DashedLine(segment_ashot[0][0].get_start_and_end()[1], segment_hasmik_1[0][0].get_start_and_end()[1])
 
     # init and animation (multiply Hasmik's segment by 3)
-        segments_hasmik = MultiplySegmentRotating(self, segment_hasmik_1, factor=3, merge_segments=False)
+        # segments_hasmik = MultiplySegmentRotating(self, segment_hasmik_1, factor=3, merge_segments=False)
+        hasmik_start = segment_hasmik_1[0][0].get_start_and_end()[0]
+        segments_hasmik = VGroup(segment_hasmik_1, segment_hasmik_1.copy(), segment_hasmik_1.copy())
+        segments_hasmik.arrange(buff=0).next_to(hasmik_start, RIGHT, buff=0)
+        self.play(FadeIn(segments_hasmik))
 
     # inits
         extra_is_8 = MathTex(r'8', font_size=50, color=ORANGE)
         segment_extra = Segment(segments_hasmik[0][0][0].get_start_and_end()[1], segments_hasmik[2][0][0].get_start_and_end()[1],
-                            color=ORANGE, mathtex=extra_is_8)
+                            color=ORANGE, text=extra_is_8)
 
         eight_over_2_is_4 = MathTex(r'8', r':2=', r'4', font_size=50, color=ORANGE).next_to(segments_hasmik, DOWN).shift(2.5*DOWN)
         eight_over_2_is_4[1].set_color(WHITE)
@@ -57,7 +53,7 @@ class Problem12530(Scene):
 
         hasmik_is_12 = MathTex(r'12', font_size=50)
         segment_hasmik = Segment(
-                segments_hasmik[0][0][0].get_start_and_end()[0], segments_hasmik[-1][0][0].get_start_and_end()[1], mathtex=hasmik_is_12
+                segments_hasmik[0][0][0].get_start_and_end()[0], segments_hasmik[-1][0][0].get_start_and_end()[1], text=hasmik_is_12
             )
         
         four_plus_12_is_16 = MathTex(r'4', r'+', r'12', r'=', r'16',font_size=50)
@@ -99,7 +95,7 @@ class Problem12530(Scene):
             Write(four_plus_4_plus_4_is_12[-1]),
         )
         self.play(FadeOut(segment_extra, dashed_line))
-        self.add(segment_hasmik[0])
+        self.add(segment_hasmik)
         self.play(
             ReplacementTransform(VGroup(segment_hasmik_1_is_4, half_of_extra_is_4_left, half_of_extra_is_4_right), hasmik_is_12),
             FadeOut(*segments_hasmik)
