@@ -92,7 +92,7 @@ class Man(VMobject):
     def __init__(self, svg_index=1):
         VMobject.__init__(self)
 
-        man = SVGMobject(os.path.join(path_to_SVG, 'people', f'man_{svg_index}'))
+        man = SVGMobject(os.path.join(path_to_SVG, 'people', 'men', f'man_{svg_index}'))
         man.set_color(WHITE)
 
         self.add(man)
