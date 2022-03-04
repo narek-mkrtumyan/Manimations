@@ -51,13 +51,13 @@ class Board(VMobject):
                         (word_embeddings): Embedding(30527, 768, padding_idx=1)
                         .....
         """
-	def __init__(self, size=0.75, rows=8, columns=8, color=WHITE, midrows=0, midcolumns=0, stroke_width=0.2, minus_stroke=False):
+	def __init__(self, size=0.75, rows=8, columns=8, color=WHITE, midrows=0, midcolumns=0, stroke_width=0.2, minus_stroke=False, minus_size=0.2):
 		k=VGroup()
 		for i in range(rows):
 			x = Square(color=color, stroke_width=stroke_width)
 			x.width = size
 			if minus_stroke:
-				x.width = size-stroke_width
+				x.width = size-minus_size
 			s = VGroup()
 			for p in range(columns):
 				d=x.copy()
@@ -84,6 +84,18 @@ class Board(VMobject):
 		self.row_arrows = VGroup(*[VMobject() for i in range(rows)])
 		self.col_arrows = VGroup(*[VMobject() for i in range(columns)])
 		#self.updated_numbers = VGroup()
+		self.Rows = VGroup()
+		self.Cols = VGroup()
+		for i in range(rows):
+			row = VGroup()
+			for j in range(columns):
+				row += self.cells[i][j]
+			self.Rows += row
+		for j in range(columns):
+			col = VGroup()
+			for i in range(rows):
+				col += self.cells[i][j]
+			self.Cols += col
 
 	def color_cell(self, coords, color, opacity=1):
 		self.cells[coords[0]][coords[1]].set_fill(color, opacity=opacity)
