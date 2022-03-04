@@ -92,7 +92,7 @@ class Man(VMobject):
     def __init__(self, svg_index=1):
         VMobject.__init__(self)
 
-        man = SVGMobject(os.path.join(path_to_SVG, 'people', f'man_{svg_index}'))
+        man = SVGMobject(os.path.join(path_to_SVG, 'people', 'men', f'man_{svg_index}'))
         man.set_color(WHITE)
 
         self.add(man)
@@ -204,19 +204,23 @@ class ThinkingBubble(VMobject):
                     thinking_bubble = SVGMobject(
                             os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_left_1')
                         )
+                    thinking_bubble = VGroup(thinking_bubble[1], thinking_bubble[2], thinking_bubble[0])
                 else:
                     thinking_bubble = SVGMobject(
                             os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_left_2')
                         )
+                    thinking_bubble = VGroup(thinking_bubble[1], thinking_bubble[2], thinking_bubble[3], thinking_bubble[0])
             else:
                 if style == 1:
                     thinking_bubble = SVGMobject(
                             os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_right_1')
                         )
+                    thinking_bubble = VGroup(thinking_bubble[1], thinking_bubble[2], thinking_bubble[0])
                 else:
                     thinking_bubble = SVGMobject(
                             os.path.join(path_to_SVG, 'thinking_bubbles', 'thinking_bubble_right_2')
                         )
+                    thinking_bubble = VGroup(thinking_bubble[1], thinking_bubble[2], thinking_bubble[3], thinking_bubble[0])
         
         thinking_bubble.set_color(WHITE)
 
@@ -231,6 +235,18 @@ class Pen(VMobject):
         pen = SVGMobject(os.path.join(path_to_SVG, 'pen')).set_color(WHITE).scale(0.5).rotate(PI/7)
 
         self.add(pen)
+
+
+
+class Pencil(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        pencil = SVGMobject(os.path.join(path_to_SVG, 'pencils', f'pencil_{svg_index}'))
+        pencil.scale(0.6).rotate(PI / 12)
+        pencil.set_color(WHITE)
+
+        self.add(pencil)
 
 
 
