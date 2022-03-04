@@ -2,13 +2,15 @@ from math import sqrt
 import sys
 
 sys.path.append("../../")
-from Functions.QarakusiFunctions import *
+#from Functions.QarakusiFunctions import *
+from manim import *
+from Functions.Board import *
 sys.path.insert(1, 'Objects/SVG_files/chess_figures')
 
 class FourKnights(Scene):
 	def construct(self):
 		board = Board(size=1, rows=3, columns=3, stroke_width=2)
-		board.make_chess()
+		#board.make_chess()
 		black_knight = SVGMobject(r'C:\Users\Tigran\Documents\GitHub\Manimations\Objects\SVG_files\chess_figures\knight.svg')
 		black_knight.width = 0.8
 		white_knight = black_knight.copy().set_color(WHITE)
