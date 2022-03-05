@@ -110,6 +110,7 @@ class All_Color(Scene):
 
 		self.board3.add_row_arrow(0)
 		self.board3.row_arrows[0].shift(0.25*LEFT)
+		self.wait(3)
 		self.play(
 			Create(self.board3.row_arrows[0], run_time=0.5),
 			Circumscribe(self.board3.Rows[0], buff=0.05),
@@ -125,7 +126,7 @@ class All_Color(Scene):
 		self.play(
 			self.board3.animate.color_cell((0,1),WHITE, opacity=1).color_cell((0,3), WHITE, opacity=1),
 		)
-		self.wait()
+		self.wait(3)
 		self.board3.add_col_arrow(3)
 		self.board3.col_arrows[3].shift(0.25*DOWN)
 		self.play(
