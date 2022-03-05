@@ -9,6 +9,7 @@ from Functions.GeometryFunctions import *
 from Functions.Board import *
 from Functions.MaserovKhndirnerFunctions import *
 from Functions.PeriodicProblemsFunctions import *
+from Functions.Board import *
 
 
 
