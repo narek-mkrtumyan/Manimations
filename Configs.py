@@ -20,7 +20,10 @@ chess_figures_scale_factor = 0.3
 armenian_tex_template = TexTemplate()
 armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")
 
-months_arm = [
+ARMTEX = TexTemplate()
+ARMTEX.add_to_preamble(r"\usepackage{armtex}")
+
+MONTHS_ARM = [
     'Հունվար',
     'Փետրվար',
     'Մարտ',
@@ -35,8 +38,8 @@ months_arm = [
     'Դեկտեմբեր'
 ]
 
-months_lengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+MONTHS_LENGTHS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 
-week_days_arm = ['Եկ', 'Եք', 'Չո', 'Հի', 'Ու', 'Շա', 'Կի']
+WEEK_DAYS_ARM = ['Եկ', 'Եք', 'Չո', 'Հի', 'Ու', 'Շա', 'Կի']
 
