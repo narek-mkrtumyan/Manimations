@@ -263,7 +263,7 @@ class All_Color(Scene):
 
 		Dir = Tex('$n$ ', '$>$', ' $n-1$',
 		'\\\\ Ըստ Դիրիխլեի սկզբունքի,', ' \\\\ կգտնվեն 2 նապաստակներ,\\\\ որոնք նույն վանդակում են',
-		tex_template=armenian_tex_template, font_size=30).move_to(5*RIGHT)
+		tex_template=armenian_tex_template, font_size=40).to_edge(RIGHT).shift(0.2*RIGHT)
 		self.play(TransformFromCopy(five, Dir[0]))
 		self.play(Write(Dir[1]), run_time=0.25)
 		self.play(TransformFromCopy(four, Dir[2]))
@@ -294,7 +294,7 @@ class All_Color(Scene):
 		self.wait()
 		
 		d2 = Tex('կգտնվեն 2 վանդակներ, \\\\ որոնք նույն գույնն ունեն։',
-		tex_template=armenian_tex_template, font_size=30)
+		tex_template=armenian_tex_template, font_size=40)
 		d2.next_to(Dir[-1], LEFT)
 		self.play(Write(d2))
 		Dirs = VGroup(Dir[-1],d2)
@@ -464,10 +464,10 @@ class All_Color(Scene):
 		self.wait()
 
 	def proof(self):
-		#self.row()
-		self.color_rows(0.25)
-		self.naive_col(0.25)
-		self.col(0.25)
+		self.row()
+		#self.color_rows(0.25)
+		#self.naive_col(0.25)
+		#self.col(0.25)
 
 	def algo(self, board, time):
 		time *= board.size
@@ -566,8 +566,8 @@ class All_Color(Scene):
 
 		#self.given()
 		#self.example()
-		#self.proof()
-		self.final()
+		self.proof()
+		#self.final()
 
 
 #slaqner Board u avelacnel animaciayum
