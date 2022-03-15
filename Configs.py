@@ -18,10 +18,13 @@ chess_figures_scale_factor = 0.3
 
 
 armenian_tex_template = TexTemplate()
-armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")
+armenian_tex_template.add_to_preamble(r'\usepackage{armtex}')
 
 ARMTEX = TexTemplate()
-ARMTEX.add_to_preamble(r"\usepackage{armtex}")
+ARMTEX.add_to_preamble(r'\usepackage{armtex}')#, r'\setmainfont{Dejavu Serif}')
+
+# test_tex_template = TexTemplate() 
+# test_tex_template.add_to_preamble(r'\\usepackage{fontspec}', r'\\setmainfont{Dejavu Serif}')
 
 MONTHS_ARM = [
     'Հունվար',
@@ -42,4 +45,7 @@ MONTHS_LENGTHS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 
 WEEK_DAYS_ARM = ['Եկ', 'Եք', 'Չո', 'Հի', 'Ու', 'Շա', 'Կի']
+
+WEEK_BLOCK_WIDTH = 0.35
+WEEK_BLOCK_HEIGHT = 0.25
 
