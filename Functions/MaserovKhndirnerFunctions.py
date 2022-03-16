@@ -12,7 +12,11 @@ path_to_Objects = os.path.join(helpers.root(), 'Objects')
 
 
 class SegmentEndmark(VMobject):
-    def __init__(self, length=DEFAULT_ENDMARK_LENGTH, *args, **kwargs):
+    def __init__(
+        self, 
+        length=DEFAULT_ENDMARK_LENGTH, 
+        *args, **kwargs
+    ):
         VMobject.__init__(self)
         endmark = Line([0, length/2, 0], [0, -length/2, 0])
 
@@ -20,27 +24,33 @@ class SegmentEndmark(VMobject):
 
 
 class Segment(VGroup):
-    def __init__(self, 
-        start=LEFT, end=RIGHT, color=WHITE, stroke_width=DEFAULT_STROKE_WIDTH, endmark_color=WHITE,
-        text=False, position=UP
+    def __init__(
+        self,
+        start=LEFT,
+        end=RIGHT,
+        color=WHITE,
+        stroke_width=DEFAULT_STROKE_WIDTH,
+        endmark_color=WHITE,
+        text=False,
+        text_position=UP
     ):
 
         VGroup.__init__(self)
         self.__line_color = color
 
         self.text = text
-        self.position = position
+        self.text_position = text_position
+        self.endmark_color = endmark_color
+        self.color = color
+        self.stroke_width = stroke_width
 
-        self.line = Line(start, end, color=color, stroke_width=stroke_width)
+        self.line = Line(start, end, color=self.color, stroke_width=self.stroke_width)
 
-        self.endmark_left = SegmentEndmark(length=stroke_width / 20, color=endmark_color)
+        self.endmark_left = SegmentEndmark(length=self.stroke_width / 20, color=self.endmark_color)
         self.endmark_left.next_to(self.line, LEFT, buff=0)
 
-        self.endmark_right = SegmentEndmark(length=stroke_width / 20, color=endmark_color)
+        self.endmark_right = SegmentEndmark(length=self.stroke_width / 20, color=self.endmark_color)
         self.endmark_right.next_to(self.line, RIGHT, buff=0)
-
-        #self.line.add_updater(lambda d: d.become(Line(self.endmark_left.get_center(),
-        #                                                                   self.endmark_right.get_center())))
 
         self.add(self.line, self.endmark_left, self.endmark_right)
 
@@ -48,27 +58,30 @@ class Segment(VGroup):
 
 
     
-    def set_text(self, new_text, scene=False):
+    def set_text(
+        self, 
+        new_text, 
+        scene=False
+    ):
         if scene:
             # self.remove(self.text)
-            scene.play(ReplacementTransform(self.text, new_text.next_to(self.line.get_center(), self.position)))
+            scene.play(ReplacementTransform(self.text, new_text.next_to(self.line.get_center(), self.text_position)))
         if new_text:
             self.remove(self.text)
-            self.text = new_text.next_to(self.line.get_center(), self.position)
+            self.text = new_text.next_to(self.line.get_center(), self.text_position)
             self.add(self.text)
+
 
     def set_text_updater(self):
         self.remove(self.text)
-        self.text.add_updater(lambda d: d.next_to(self.line.get_center(), self.position))
+        self.text.add_updater(lambda d: d.next_to(self.line.get_center(), self.text_position))
         self.add(self.text)
-    
-    
-
 
     def set_line_updater(self):
         self.remove(self.line)
-        self.line.add_updater(lambda d: d.become(Line(self.endmark_left.get_center(),
-                                                                           self.endmark_right.get_center(), color = self.__line_color)))
+        self.line.add_updater(lambda d: d.become(Line(
+                        self.endmark_left.get_center(), self.endmark_right.get_center(), color = self.__line_color
+                    )))
         self.add(self.line)
 
     def remove_updater(self):
@@ -77,14 +90,16 @@ class Segment(VGroup):
         self.add(self.text)
 
 
-    ### Մասերով խնդրի մասերը :D
+### Մասերով խնդրի մասերը
 class Diagram(VGroup):
-    def __init__(self,
-                 parts: list[list],
-                 names: list[MathTex or DecimalNumber],
-                 brace: bool = False,
-                 total: MathTex or DecimalNumber = MathTex(r'.', font_size=1),
-                 **kwargs):
+    def __init__(
+            self,
+            parts: list[list],
+            names: list[MathTex or DecimalNumber],
+            brace: bool = False,
+            total: MathTex or DecimalNumber = MathTex(r'.', font_size=1),
+            **kwargs
+        ):
         VGroup.__init__(self)
         assert len(parts) == len(names), "Length of 'parts' must match length of 'names'"
 
@@ -117,9 +132,11 @@ class Diagram(VGroup):
             self.add(self.brace, self.total)
       
 
-    def create_by_copying(self,
-                          scene: Scene,
-                          coping_list: list[list]):
+    def create_by_copying(
+            self,
+            scene: Scene,
+            coping_list: list[list]
+        ):
         assert len(coping_list) == len(self.player), "Length of 'coping_list' must match length of 'self.player'"
         scene.play(AnimationGroup(*[Write(i) for i in self.player_name], lag_ratio=0.5))
         for i in range(len(self.player)):
@@ -152,10 +169,12 @@ class Diagram(VGroup):
             scene.play(Create(self.brace))
             scene.play(Write(self.total))
     
-    def create_by_order_and_steps(self,
-                                  scene: Scene,
-                                  order: list[int],
-                                  steps: list[list[int]]):
+    def create_by_order_and_steps(
+            self,
+            scene: Scene,
+            order: list[int],
+            steps: list[list[int]]
+        ):
         #
         #segments must be numbered for each "player", Segments with numbers 0 will not be copied. and the rest will be according to matching numbers
         #
@@ -179,10 +198,12 @@ class Diagram(VGroup):
         if self.brace:
             scene.play(Create(self.brace))
             scene.play(Write(self.total))
-    def animate_superscale(self,
-                           scene: Scene,
-                           scale_ratio: float,
-                           move_to_point: list[float] = [0, 0, 0]):
+    def animate_superscale(
+        self,
+        scene: Scene,
+        scale_ratio: float,
+        move_to_point: list[float] = [0, 0, 0]
+    ):
         self.generate_target()
         self.target.scale(scale_ratio)
         for name in self.target.player_name:
@@ -190,15 +211,17 @@ class Diagram(VGroup):
         for player in self.target.player:
             for segment in player:
                 if segment.text:
-                    segment.text.scale(1/scale_ratio).next_to(segment.line.get_center(), segment.position)
+                    segment.text.scale(1/scale_ratio).next_to(segment.line.get_center(), segment.text_position)
                 segment.endmark_left.scale(1/scale_ratio)  
                 segment.endmark_right.scale(1/scale_ratio)
         self.target.move_to(move_to_point)
         scene.play(MoveToTarget(self))
 
-    def show_equal_parts(self,
-                         scene: Scene,
-                         equal_list: list[int]):
+    def show_equal_parts(
+        self,
+        scene: Scene,
+        equal_list: list[int]
+    ):
         assert len(equal_list) == len(self.player), "Length of 'equal_parts' must match length of 'self.player'"
         for i in range(len(self.player)):
             assert len(equal_list[i]) == len(self.player[i]), f"Length of 'equal_parts[{i}]' must match length of 'self.player[{i}]'"
@@ -223,25 +246,25 @@ class Diagram(VGroup):
                         if not verifying:
                             break
 
-    def segment_perpendicular_projection(self,
-                           scene: Scene,
-                           project_from: list[int],
-                           project_to: int,
-                           add: bool = False,
-                           subtract: bool = False,
-                           replace: bool = False):
+    def segment_perpendicular_projection(
+        self,
+        scene: Scene,
+        project_from: list[int],
+        project_to: int,
+        add: bool = False,
+        subtract: bool = False,
+        replace: bool = False
+    ):
         p_left = [0, 0, 0]
         p_left[0] = self.player[project_from[0]][project_from[1]].endmark_left.get_center()[0]
         p_left[1] = self.player[project_to][0].endmark_left.get_center()[1]
-        d_left = DashedLine(self.player[project_from[0]][project_from[1]].endmark_left.get_center(),
-                            p_left)
+        d_left = DashedLine(self.player[project_from[0]][project_from[1]].endmark_left.get_center(), p_left)
 
 
         p_right = [0, 0, 0]
         p_right[0] = self.player[project_from[0]][project_from[1]].endmark_right.get_center()[0]
         p_right[1] = self.player[project_to][0].endmark_right.get_center()[1]
-        d_right = DashedLine(self.player[project_from[0]][project_from[1]].endmark_right.get_center(),
-                             p_right)
+        d_right = DashedLine(self.player[project_from[0]][project_from[1]].endmark_right.get_center(), p_right)
         new_line = Line(p_left, p_right, color=self.player[project_from[0]][project_from[1]].line.get_color())
         
         
@@ -254,8 +277,8 @@ class Diagram(VGroup):
         if replace:
             verifying = False
             to_remove = VGroup()
-            cut_segment_start_numbe: int
-            cut_segment_end_numbe: int
+            cut_segment_start_number: int
+            cut_segment_end_number: int
             for i in range(len(self.player[project_to])):
                 #if abs(p_left - segment.endmark_left.get_center()[0]) < 0.1:
                 segment = self.player[project_to][i]
@@ -337,14 +360,13 @@ class Diagram(VGroup):
 
         scene.play(Uncreate(d_left), Uncreate(d_right), FadeOut(new_line, run_time = 1.5), self.animate.set_opacity(1))        
 
-    def update_segment_text(self,
-                            segment_index: list[int],
-                            text: MathTex or DecimalNumber):
+    def update_segment_text(
+        self,
+        segment_index: list[int],
+        text: MathTex or DecimalNumber
+    ):
         [i, j] = segment_index
         self.remove(self.player[i][j])
         self.player[i][j].set_text(text)
         self.add(self.player[i][j])
-        
-
-        
 
