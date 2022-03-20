@@ -464,4 +464,10 @@ class Scissors():
             scene.remove(self.siz)
         
 
+class Paper(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
 
+        self.paper_1 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_1')).set_color(WHITE)
+        self.paper_2 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_2')).set_color(WHITE).scale(0.87)
+        self.paper_3 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_3')).set_color(WHITE).scale(0.77)
