@@ -258,6 +258,25 @@ class Board(VMobject):
 	def add_arrows(self, coords):
 		return self
 
+	def vertex(self):
+		vertices = []
+		board = Board(rows = self.rows+1, columns=self.columns+1)
+		cells = board.cells
+		for i in range(board.rows):
+			p = []
+			for j in range(board.columns):
+				p.append(cells[i][j].get_center()+DL*board.size/2-cells[0][0].get_center()+self.cells[0][0].get_center())
+			p.append
+			vertices.append(p)
+		self.vertices = vertices	
+		return vertices
+		
+	def outline(self, vertex_list, color=ORANGE):
+		line = VGroup()
+		for i in range(len(vertex_list)-1):
+			line += Line(vertex_list[i], vertex_list[i+1], color=color)
+		return line
+
 class T4(VMobject):
 	'''
 	4 հատանոց T-աձև պատկեր
