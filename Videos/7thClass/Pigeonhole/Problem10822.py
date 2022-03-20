@@ -3,7 +3,7 @@ import sys
 sys.path.append('../../../')
 from Functions.QarakusiFunctions import *
 
-class ProblemBoard(Scene):
+class Problem10822(Scene):
     def construct(self):
         
         board = Board().scale(0.7)
