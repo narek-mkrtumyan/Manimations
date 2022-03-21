@@ -5,8 +5,7 @@ from Functions.QarakusiFunctions import *
 
 class prob_11746(Scene):
     def construct(self):
-        armenian_tex_template = TexTemplate()
-        armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")
+
         task = Task(
                 MathTex(r'\#11746', font_size=35), 
                 MathTex(
@@ -28,7 +27,7 @@ class prob_11746(Scene):
             [1],
             [2],
             [1, 2],
-            [0, 0]
+            [-1, -1]
         ]
 
         names = [
@@ -51,7 +50,7 @@ class prob_11746(Scene):
         self.play(Write(task), run_time = 10)
         task.up(self)
         diagram.create_by_copying(self, copy_list)
-        self.wait(2)
+        # self.wait(2)
 
         new_lengths = [
             [2000], 
@@ -66,8 +65,7 @@ class prob_11746(Scene):
             [0, 0]
         ]
         diagram.update_length(self, new_lengths, time = 3)
-        apply = [0, 1, 2]
-        diagram.segment_perpendicular_projection(self, [0, 0], 1, replace=True, apply_to=apply)
+        diagram.segment_perpendicular_projection(self, [0, 0], 1, replace=True, apply_to=[0, 1, 2])
         diagram.show_equal_parts(self, equal_parts)
         
         diagram.player[1][1].set_color(WHITE)
@@ -76,9 +74,10 @@ class prob_11746(Scene):
         diagram.div_segment(self, 2, 1)
 
         self.play(VGroup(*diagram.player[3]).animate.set_opacity(1))
+        # self.add(*diagram.player[3])
 
         diagram.segment_perpendicular_projection(self, project_from=[3, 0], project_to=1, apply_to=[0, 1, 2, 3])
-        diagram.player[3][1].set_text(MathTex(r'20', font_size=25))
+        diagram.player[3][1].set_text(MathTex(r'20', font_size=25), self)
 
         diagram.player[3][1].set_color(WHITE)
 
@@ -89,13 +88,13 @@ class prob_11746(Scene):
                 
         diagram.group(self, 2)
 
-        diagram.player[2][0].set_text(MathTex(r'20', font_size=25))
-        diagram.player[2][1].set_text(MathTex(r'20', font_size=25))
+        diagram.player[2][0].set_text(MathTex(r'20', font_size=25), self)
+        diagram.player[2][1].set_text(MathTex(r'20', font_size=25), self)
 
-        diagram.player[1][0].set_text(MathTex(r'20', font_size=25))
-        diagram.player[1][1].set_text(MathTex(r'20', font_size=25))
+        diagram.player[1][0].set_text(MathTex(r'20', font_size=25), self)
+        diagram.player[1][1].set_text(MathTex(r'20', font_size=25), self)
         
-        diagram.player[0][0].set_text(MathTex(r'20', font_size=25))
+        diagram.player[0][0].set_text(MathTex(r'20', font_size=25), self)
 
         self.wait()
 

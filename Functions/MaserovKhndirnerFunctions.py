@@ -57,25 +57,28 @@ class Segment(VGroup):
     def set_text(
         self,
         new_text,
-        scene=False
+        scene : Scene = False
     ):
         if scene:
-            # self.remove(self.text)
-            scene.play(ReplacementTransform(self.text, new_text.next_to(self.line.get_center(), self.text_position)))
+            if self.text:
+                scene.play(ReplacementTransform(self.text, new_text.next_to(self.line.get_center(), self.text_position)))
+            else:
+                self.text = new_text.next_to(self.line.get_center(), self.text_position)
+                scene.play(Write(self.text))
         if new_text:
             self.remove(self.text)
             self.text = new_text.next_to(self.line.get_center(), self.text_position)
             self.add(self.text)
 
 
-    def set_text_updater(self):
+    def add_text_updater(self):
         if self.text:
             self.remove(self.text)
             self.text.add_updater(lambda d: d.next_to(self.line.get_center(), self.text_position))
             self.add(self.text)
             self.add(self.text)
 
-    def set_line_updater(self):
+    def add_line_updater(self):
         self.remove(self.line)
         self.line.add_updater(
             lambda d: d.become(
@@ -182,17 +185,11 @@ class Diagram(VGroup):
             assert len(coping_list[i]) == len(self.player[i]), f"Length of 'coping_list[{i}]' must match length of 'self.player[{i}]'"
             for j in range(len(self.player[i])):
                 if coping_list[i][j] == 0:
-                    scene.play(
-                        Create(self.player[i][j].line),
-                        Create(self.player[i][j].endmark_left),
-                        Create(self.player[i][j].endmark_right),
-                        run_time = 0.7
-                    )
-                    if self.player[i][j].text:
-                        scene.play(Write(self.player[i][j].text), run_time = 0.5)
-                else:
+                    scene.play(Create(self.player[i][j]))
+
+                elif coping_list[i][j] != -1:
                     verifying = True
-                    for k in range(i+1):
+                    for k in range(i):
                         for l in range(len(self.player[k])):
                             if coping_list[i][j] == coping_list[k][l]:
                                 scene.play(ReplacementTransform(self.player[k][l].copy(), self.player[i][j]))
@@ -202,17 +199,9 @@ class Diagram(VGroup):
                             break
 
                     if verifying:
-                        scene.play(
-                            Create(self.player[i][j].line),
-                            Create(self.player[i][j].endmark_left),
-                            Create(self.player[i][j].endmark_right),
-                            run_time = 0.7
-                        )
-                        if self.player[i][j].text:
-                            scene.play(Write(self.player[i][j].text), run_time = 0.5)
-        if self.brace:
-            scene.play(Create(self.brace))
-            scene.play(Write(self.total))
+                        scene.play(Create(self.player[i][j]))
+
+                scene.wait()
     
 
     def create_by_order_and_steps(
@@ -226,8 +215,11 @@ class Diagram(VGroup):
         # Segments with numbers 0 will not be copied and the rest will be according to matching numbers
         #
         assert len(order) == len(self.player) and len(steps) == len(self.player), "Length of 'order' and 'steps' must match length of 'self.player'"
+
         interation_number = max([len(i) for i in steps])
+
         scene.play(AnimationGroup(*[Write(self.player_name[i]) for i in order], lag_ratio=0.5))
+
         for i in range(interation_number):
             for j in order:
                 if i < len(steps[j]):
@@ -236,14 +228,15 @@ class Diagram(VGroup):
                     else:
                         ran = range(steps[j][i-1], steps[j][i])
                     for k in ran:
-                        scene.play(Create(self.player[j][k].line),
-                                   Create(self.player[j][k].endmark_left),
-                                   Create(self.player[j][k].endmark_right), run_time = 0.7)
-                        if self.player[j][k].text:
-                            scene.play(Write(self.player[j][k].text), run_time = 0.5)
+                        scene.play(Create(self.player[j][k]))
                     scene.wait()
+
+    def crate_brace(
+        self,
+        scene: Scene
+    ):
         if self.brace:
-            scene.play(Create(self.brace))
+            scene.play(Write(self.brace))
             scene.play(Write(self.total))
     
 
@@ -322,8 +315,7 @@ class Diagram(VGroup):
         p_right = [0, 0, 0]
         p_right[0] = self.player[project_from[0]][project_from[1]].endmark_right.get_center()[0]
         p_right[1] = self.player[project_to][0].endmark_right.get_center()[1]
-        d_right = DashedLine(self.player[project_from[0]][project_from[1]].endmark_right.get_center(),
-                             p_right)
+        d_right = DashedLine(self.player[project_from[0]][project_from[1]].endmark_right.get_center(), p_right)
         new_line = Line(p_left, p_right, color=self.player[project_from[0]][project_from[1]].line.get_color())
         
         
@@ -513,8 +505,8 @@ class Diagram(VGroup):
 
 
                 #l = Line(self.player[i][j].endmark_left.get_center(), self.player[i][j].endmark_right.get_center())
-                self.player[i][j].set_line_updater()
-                self.player[i][j].set_text_updater()
+                self.player[i][j].add_line_updater()
+                self.player[i][j].add_text_updater()
                 #self.add(self.player[i][j])
                 scene.add(self.player[i][j].line)
 
