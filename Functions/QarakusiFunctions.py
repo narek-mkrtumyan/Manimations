@@ -12,25 +12,27 @@ from Functions.PeriodicProblemsFunctions import *
 from Functions.Board import *
 
 
-
-
 # Կամյական խնդրի ձևակերպում
 class Task(VGroup):
-    def __init__(self,
-                 number: MathTex,
-                 text: VGroup,
-                 **kwargs):
+    def __init__(
+        self,
+        number: MathTex,
+        text: VGroup,
+        **kwargs
+    ):
         VGroup.__init__(self)
 
         self.number = number.set_color(YELLOW)
         self.text = text.arrange(DOWN, aligned_edge=LEFT)
         #self = VGroup(Task.number, Task.text).arrange(RIGHT, aligned_edge=UP)
 
-        self.add(self.number, self.text)
+        self.add(self.number, self.text.align_to(self.number, UP))
         self.arrange(RIGHT, aligned_edge=UP)
 
-    def up(self,
-           scene: Scene):
+    def up(
+        self,
+        scene: Scene
+    ):
         [x_number_0, y_number_0, z_number_0] = self.number.get_center()
         [x_text_0, y_text_0, z_text_0] = self.text.get_center()
         y_up_number_0 = self.number.get_edge_center(UP)[1]
@@ -48,5 +50,4 @@ class Task(VGroup):
             self.text.move_to(pos_text).set_opacity(1-t/3)
 
         scene.play(UpdateFromAlphaFunc(self, go_up))
-
 
