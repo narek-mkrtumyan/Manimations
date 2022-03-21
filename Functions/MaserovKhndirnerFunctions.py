@@ -218,8 +218,8 @@ class Diagram(VGroup):
     def create_by_order_and_steps(
         self,
         scene: Scene,
-        order: List[int],
-        steps: List[List[int]]
+        order: list[int],
+        steps: list[list[int]]
     ):
         #
         # Segments must be numbered for each "player"
@@ -251,7 +251,7 @@ class Diagram(VGroup):
         self,
         scene: Scene,
         scale_ratio: float,
-        move_to_point: List[float] = [0, 0, 0]
+        move_to_point: list[float] = [0, 0, 0]
     ):
         self.generate_target()
         self.target.scale(scale_ratio)
@@ -271,7 +271,7 @@ class Diagram(VGroup):
     def show_equal_parts(
         self,
         scene: Scene,
-        equal_list: List[int]
+        equal_list: list[int]
     ):
         assert len(equal_list) == len(self.player), "Length of 'equal_parts' must match length of 'self.player'"
         for i in range(len(self.player)):
@@ -306,12 +306,12 @@ class Diagram(VGroup):
     def segment_perpendicular_projection(
         self,
         scene: Scene,
-        project_from: List[int],
+        project_from: list[int],
         project_to: int,
         add: bool = False,
         subtract: bool = False,
         replace: bool = False,
-        apply_to: List or bool = False
+        apply_to: list or bool = False
     ):
         p_left = [0, 0, 0]
         p_left[0] = self.player[project_from[0]][project_from[1]].endmark_left.get_center()[0]
@@ -474,7 +474,7 @@ class Diagram(VGroup):
 
     def update_segment_text(
         self,
-        segment_index: List[int],
+        segment_index: list[int],
         text: MathTex or DecimalNumber
     ):
         [i, j] = segment_index
@@ -577,7 +577,7 @@ class Diagram(VGroup):
         self,
         scene: Scene,
         player: int,
-        order: List[int]
+        order: list[int]
     ):
         # scene.play(
         #     AnimationGroup(
