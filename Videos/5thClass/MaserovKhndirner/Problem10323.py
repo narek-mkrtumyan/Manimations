@@ -1,11 +1,10 @@
 import sys
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 
 class Problem10323(Scene):
     def construct(self):
-        self.add(bounds)
 
 # INITS
         numbers_font_size = 50

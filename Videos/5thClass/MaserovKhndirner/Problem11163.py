@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class paper(VMobject):
     def __init__(self):

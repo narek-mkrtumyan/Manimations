@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 
 class prob_11746(Scene):

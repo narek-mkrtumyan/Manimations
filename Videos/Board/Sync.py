@@ -3,7 +3,7 @@ from venv import create
 
 from numpy import dtype
 sys.path.append('../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class sync(Scene):
     def construct(self):

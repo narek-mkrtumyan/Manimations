@@ -1,11 +1,6 @@
-from manim import *
-import numpy as np
 import sys
-
-sys.path.append('../../../')
 sys.path.append('../../')
-sys.path.append('../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class Problem12525(MovingCameraScene):
     def construct(self):

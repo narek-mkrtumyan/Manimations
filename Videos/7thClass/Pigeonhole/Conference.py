@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class ConferenceTable(VMobject):
     def __init__(self, radius=2, number_of_people=8, hbuff=0.85, nbuff=0.35, labels='default', label_color=RED, numbers='default', number_color=WHITE, **kwargs):

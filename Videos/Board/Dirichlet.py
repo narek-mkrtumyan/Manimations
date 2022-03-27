@@ -1,8 +1,7 @@
 import sys
 
-from numpy import dtype
 sys.path.append('../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class Knights(Scene):
 	def example(self):

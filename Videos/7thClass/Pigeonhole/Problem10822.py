@@ -1,7 +1,6 @@
-from sre_constants import BRANCH
 import sys
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class Problem10822(Scene):
     def construct(self):

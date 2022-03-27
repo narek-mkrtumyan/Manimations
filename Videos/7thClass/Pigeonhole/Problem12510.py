@@ -8,7 +8,7 @@ from turtle import circle
 
 from numpy import squeeze
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class Problem12510(Scene):
 
