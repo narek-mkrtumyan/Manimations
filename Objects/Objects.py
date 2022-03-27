@@ -228,6 +228,16 @@ class ThinkingBubble(VMobject):
 
 
 
+class Book(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        book = SVGMobject(os.path.join(path_to_SVG, 'books', f'book_{svg_index}'))
+        book.set_color(WHITE)
+
+        self.add(book)
+
+
 
 class Pen(VMobject):
     def __init__(self):
