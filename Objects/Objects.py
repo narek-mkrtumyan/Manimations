@@ -302,7 +302,7 @@ class Weight(VGroup):
 
 
 class  Apple(VMobject):
-    def __init__(self, color=GREEN,):
+    def __init__(self, color=GREEN):
         VMobject.__init__(self)
 
         if color == GREEN:

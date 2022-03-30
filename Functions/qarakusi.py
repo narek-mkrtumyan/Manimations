@@ -7,6 +7,7 @@ from Configs import *
 
 from Functions.qarakusiscene import *
 from Functions.maserovkhndirscene import *
+from Functions.scales import *
 
 from Functions.diagram import *
 

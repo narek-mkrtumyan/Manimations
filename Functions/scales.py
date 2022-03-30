@@ -15,61 +15,23 @@ armenian_tex_template = TexTemplate()
 armenian_tex_template.add_to_preamble(r"\usepackage{armtex}")
 
 
-class Scales(Scene):
-    def construct(self):
+class ScalesProblem(Scene):
+    def __init__(
+        self,
+        left_part_list_of_str, right_part_list_of_str, 
+        weight_scale_factor=0.75, fruit_scale_factor=1, scales_scale_factor=1
+    ):
 
+        self.left_part_list_of_str = left_part_list_of_str
+        self.right_part_list_of_str = right_part_list_of_str
 
-        
+        self.weight_scale_factor = weight_scale_factor
+        self.fruit_scale_factor =  fruit_scale_factor
+        self.scales_scale_factor = scales_scale_factor
 
-        self.left_part_list_of_str = ['apple', 'apple', 'apple', 'kb_15_kg']
-        self.right_part_list_of_str = ['apple', 'apple', 'kb_20_kg']
+        self.scale = Scales().scale(scales_scale_factor)
 
-        # print(self.rename_list_to_use_in_dict(self.left_part_list_of_str))
-        # self.left_part_apples = [0, 1, 2]
-        # self.right_part_apples = [0, 1]
-
-        self.add_objects(self.left_part_list_of_str, self.right_part_list_of_str, creation_runtime=0.4)
-
-
-        # kettlebell = Weight(5)
-        # self.play(Create(kettlebell))
-        # print(self.right_part)
-        # kettlebell = self.right_part[2]
-        # print('left', self.left_part)
-        print('right', self.right_part)
-
-        self.split_kettlebell_into_several(2, [5, 15], part='right')
-        self.wait()
-        # print('left after split', self.left_part)
-        print('right after split', self.right_part)
-
-        # self.combine_kettlebells([2,3,4], 'right')
-        # # print('left after combine', self.left_part)
-        # print('right after combine', self.right_part)
-
-        self.remove_objects_from_both_parts(left_part_indexes=[3], right_part_indexes=[3])
-        self.wait()
-        self.remove_objects_from_both_parts(left_part_indexes=[0,1], right_part_indexes=[0,1])
-        # print('left after remove', self.left_part)
-        # print('right after remove', self.right_part)
-        # self.remove_objects_from_both_parts(left_part_indexes=[0,], right_part_indexes=[1])
-        self.show_answer()
-        # # print(new_kbs[0])
-        # # print(self.left_part[3].kg)
-        
-        # print('look here', self.mobjects)
-
-        # to_f = VGroup(self.mobjects[-1][1],  self.left_part[3].weight)
-
-
-        # self.play(FadeOut(to_f))
-
-        # self.remove_obj()
-
-
-
-        # print(new_kbs)
-        # self.combine_kettlebells(new_kbs)
+        Scene.__init__(self)
 
 
     @staticmethod 
@@ -86,13 +48,12 @@ class Scales(Scene):
     def get_indexes_for_removing(mylist):
         return list(j - i for i, j in enumerate(mylist))
 
-    @staticmethod
-    def convert_list_of_items_to_list_of_mobjects(items):
+    def convert_list_of_items_to_list_of_mobjects(self, items):
         """Function takes as input list of strings and converts it to list 
         of mobjects
 
         Note:
-            Options for input are` ['apple', 'kb_{n}_kg'(from 1 to 20), ADD LATER 
+            Options for input are` ['apple', 'weight_{n}_kg'(from 1 to 20), ADD LATER 
     
         Args:
             items (list of strings): items to convert to mobjects
@@ -101,25 +62,25 @@ class Scales(Scene):
             mobjs (list of mobjects)
 
         Examples:
-            convert_list_of_items_to_list_of_mobjects(['apple', 'apple', 'kb_2_kg'])
+            convert_list_of_items_to_list_of_mobjects(['apple', 'apple', 'weight_2_kg'])
         """
         mobjs = []
         for i in items:
-            if i == "apple":
-                mobjs.append(SVGMobject(os.path.join('Objects', 'SVG_files', 'fruits', 'red_apple.svg')).scale(0.25))#.set_color(GREEN))
+            if i == "red_apple":
+                mobjs.append(Apple(RED))
+            if i == "green_apple":
+                mobjs.append(Apple(GREEN))
             if i == "mushroom":
-                mobjs.append(SVGMobject(os.path.join('Objects', 'SVG_files', 'fruits', 'mushroom.svg')).scale(0.25))#.set_color(GREEN))
-            if i.startswith('kb'):
-                kb_weight = int(i.split('_')[1])
-                mobjs.append(Weight(kb_weight).scale(0.6))
+                mobjs.append(Mushroom())
+            if i.startswith('weight'):
+                weight_weight = int(i.split('_')[1])
+                mobjs.append(Weight(weight_weight, scale_factor=self.weight_scale_factor))
         return mobjs
 
 
 
-    def add_objects(self, left_part, right_part, 
-                    left_part_shift=LEFT*4, right_part_shift=RIGHT*3, 
-                    display_option='FadeIn', creation_runtime=0.75):
-        """Function plays the animation of creating items and initilizes 
+    def add_objects(self, display_option=FadeIn, creation_runtime=0.75):
+        """Function plays the animation of creating items and initializes 
         `self.left_part` and `self.right_part` attributes 
 
         Note:
@@ -136,35 +97,31 @@ class Scales(Scene):
         Returns:
             None
         """
-        self.left_part = self.convert_list_of_items_to_list_of_mobjects(left_part)
-        self.right_part = self.convert_list_of_items_to_list_of_mobjects(right_part)
+        self.play(FadeIn(Apple()))
+        self.left_part = self.convert_list_of_items_to_list_of_mobjects(self.left_part_list_of_str)
+        self.right_part = self.convert_list_of_items_to_list_of_mobjects(self.right_part_list_of_str)
 
-        self.left_part = VGroup(*self.left_part).arrange().shift(left_part_shift) 
-        self.right_part = VGroup(*self.right_part).arrange().shift(right_part_shift)
-
-        # bad code, figure out a way to run a loop over both left part and right part, .copy or + or .add() methods didn't work, perhaps I'll never fix this though
+        self.left_part = VGroup(*self.left_part).arrange().next_to(self.scale.left_plate, UP, buff=0.1)
+        self.right_part = VGroup(*self.right_part).arrange().next_to(self.scale.right_plate, UP, buff=0.1)
+        # bad code, figure out a way to run a loop over both left part and right part
+        # .copy or + or .add() methods didn't work, perhaps I'll never fix this though
         for i in self.left_part:
-            if display_option.lower().startswith('cr'):
-                self.play(Create(i), run_time=creation_runtime) 
-            elif display_option.lower().startswith('fade'):
-                self.play(FadeIn(i), run_time=creation_runtime) 
+            self.play(display_option(i), run_time=creation_runtime)
+            # if display_option.lower().startswith('cr'):
+            #     self.play(Create(i), run_time=creation_runtime)
+            # elif display_option.lower().startswith('fade'):
+            #     self.play(FadeIn(i), run_time=creation_runtime)
 
         for i in self.right_part:
-            if display_option.lower().startswith('cr'):
-                self.play(Create(i), run_time=creation_runtime) 
-            elif display_option.lower().startswith('fade'):
-                self.play(FadeIn(i), run_time=creation_runtime) 
-
-
-        # big_kettlebell = self.combine_kettlebells([right_part[-2], right_part[-1]], play_animation=True)
-        # # self.split_kettlebell_into_several(big_kettlebell, [3,3,4])
-        # self.remove_obj()
-
+            self.play(display_option(i), run_time=creation_runtime)
+            # if display_option.lower().startswith('cr'):
+            #     self.play(Create(i), run_time=creation_runtime)
+            # elif display_option.lower().startswith('fade'):
+            #     self.play(FadeIn(i), run_time=creation_runtime)
 
 
     def remove_objects_from_both_parts(self, left_part_indexes, right_part_indexes):
         assert len(left_part_indexes) == len(right_part_indexes), f'when removing from both parts number of items should be equal, left part is {self.left_part} and right part is {self.right_part}'
-        
 
         for i in range(len(left_part_indexes)):
             to_fade_out = VGroup(self.left_part[left_part_indexes[i]], self.right_part[right_part_indexes[i]])
@@ -179,13 +136,6 @@ class Scales(Scene):
         print('removes')
             
         # objs = [i for i, j in enumerate(self.left_part_list_of_str) if j == '']
-
-
-
-
-
-
-
 
 
     # @staticmethod
@@ -236,13 +186,13 @@ class Scales(Scene):
 
     def combine_kettlebells(self, kettlebells_indexes, part='left'):
         kettlebells = list(self.left_part[i] for i in kettlebells_indexes) if part.lower().startswith('le') else list(self.right_part[i] for i in kettlebells_indexes)
-        # kettlebells = VGroup(*[i.weight for i in self.left_part[kettlebells_indexes]]) if part.lower().startswith('le') else VGroup(*[i.weight for i in self.right_part[kettlebells_indexes]])0
         
 
         big_kettlebell_weight = sum([i.kg for i in kettlebells])
 
-        # in centre
+        # # in centre
         # big_kettlebell_position = np.mean([i.weight.get_center() for i in kettlebells], axis=0)
+
         # next to previous
         big_kettlebell_position = kettlebells[0].weight.get_center()
         
@@ -275,23 +225,3 @@ class Scales(Scene):
 
 
 
-class Problem_11417(Scales):
-    def construct(self):
-        a = NumberPlane()
-        self.add(a)
-
-        scale_1 = SVGMobject(os.path.join('Objects', 'SVG_files', 'scales', 'scale_1.svg')).scale(1)#.set_color(WHITE)
-        scale_1.shift(3.5*LEFT)
-        
-        scale_2 = SVGMobject(os.path.join('Objects', 'SVG_files', 'scales', 'scale_1.svg')).scale(1)#.set_color(WHITE)
-        scale_2.shift(3.5*RIGHT)
-
-        self.play(DrawBorderThenFill(VGroup(scale_1, scale_2
-            )))
-        
-
-
-        self.left_part_list_of_str = ['mushroom', 'mushroom']
-        self.right_part_list_of_str = ['kb_6_kg', 'apple', 'apple', 'apple']
-        
-        # self.add_objects(self.left_part_list_of_str, self.right_part_list_of_str, left_part_shift=2*LEFT+0.5*UP,  right_part_shift=RIGHT*2.5+0.5*UP, creation_runtime=0.4)
