@@ -283,15 +283,16 @@ class Scales(VMobject):
 
 
 class Weight(VGroup):
-    def __init__(self, kg=1, unit_kg=1):
+    def __init__(self, kg=1, unit_kg=1, scale_factor = 0.75):
         VGroup.__init__(self)
 
+        self.scale_factor = scale_factor
         self.weight_value = kg
 
         self.weight = VGroup(
             SVGMobject(os.path.join(path_to_SVG, 'weight')).set_color(WHITE).scale(0.5),
             MathTex(f"{kg}", color=BLACK, font_size=35).shift(0.1 * DOWN)
-        ).scale(((kg/(2*unit_kg)) ** (1./3.)) * 0.75)
+        ).scale(((kg/(2*unit_kg)) ** (1./3.)) * self.scale_factor)
 
         self.kettlebell = self.weight[0]
         self.weight_text = self.weight[1]
