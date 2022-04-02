@@ -260,9 +260,28 @@ class Pencil(VMobject):
 
 
 
-class Scales(VMobject):
-    def __init__(self, svg_index=1):
+
+class House(VMobject):
+    def __init__(self):
         VMobject.__init__(self)
+        house = SVGMobject(os.path.join(path_to_SVG, 'house')).set_color(WHITE)
+
+        self.add(house)
+
+class VideoIcon(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+        video_icon = SVGMobject(os.path.join(path_to_SVG, 'video_icon')).set_color(WHITE)
+
+        self.add(video_icon)
+        
+
+
+class Scales(VMobject):
+    def __init__(self, svg_index=1, plate_stretch_factor=1):
+        VMobject.__init__(self)
+
+        self.plate_stretch_factor = plate_stretch_factor
 
         scales = SVGMobject(os.path.join(path_to_SVG, 'scales', f'scale_{svg_index}')).scale(1.2)
         
@@ -277,6 +296,9 @@ class Scales(VMobject):
             self.body = scales[0]
             self.left_plate = scales[2]
             self.right_plate = scales[1]
+        
+        self.left_plate.stretch(self.plate_stretch_factor, 0)
+        self.right_plate.stretch(self.plate_stretch_factor, 0)
 
         self.add(self.body, self.left_plate, self.right_plate)
 
