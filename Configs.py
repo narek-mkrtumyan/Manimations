@@ -25,6 +25,9 @@ DEFAULT_SEGMENT_LENGTH_FONT_SIZE = 50
 DEFAULT_TOTAL_LENGTH_FONT_SIZE = 70
 DEFAULT_EQUATION_FONT_SIZE = 50
 
+# Կշեռքով խնդիրների հաստատուններ
+DEFAULT_SCALES_BUFF = 0
+
 # Շախմատի ֆիգուրների հաստատուններ
 white_chess_figures_fill_color = WHITE
 white_chess_figures_stroke_color = BLACK
