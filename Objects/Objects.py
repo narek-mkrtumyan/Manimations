@@ -349,10 +349,31 @@ class FruitShop(VMobject):
 
         shop = SVGMobject(os.path.join(path_to_SVG, 'fruit_shop'))
         shop.scale(2)
-        shop.add(Rectangle('#9e7f51', 0.5, 3.75).shift([0.07, -1.67, 0]))
+        shop.add(Rectangle('#9e7f51', 0.5, 4.3).shift([0.07, -1.63, 0]))
 
         self.shelf = shop[1]
         self.add(shop)
+
+
+class  BagOfMandarins(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        bag_of_mandarins = SVGMobject(os.path.join(path_to_SVG, 'bags', f'bag_with_mandarins_{svg_index}'))
+        
+        # bag_of_mandarins.scale(0.25)
+
+        self.add(bag_of_mandarins)
+
+class  EmptyBag(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        empty_bag = SVGMobject(os.path.join(path_to_SVG, 'bags', f'empty_bag_{svg_index}'))
+        
+        # bag_of_mandarins.scale(0.25)
+
+        self.add(empty_bag)
 
 
 class  Apple(VMobject):

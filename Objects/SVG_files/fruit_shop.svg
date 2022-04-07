@@ -22,14 +22,14 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="0.24491886"
-     inkscape:cx="146.98746"
-     inkscape:cy="892.1322"
-     inkscape:window-width="1312"
-     inkscape:window-height="835"
+     inkscape:zoom="0.42299136"
+     inkscape:cx="297.87843"
+     inkscape:cy="457.45615"
+     inkscape:window-width="1512"
+     inkscape:window-height="837"
      inkscape:window-x="0"
      inkscape:window-y="38"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="Layer_1" />
   <defs
      id="defs826">
@@ -48,7 +48,8 @@
     </rdf:RDF>
   </metadata>
   <g
-     id="g4052">
+     id="g1337"
+     transform="translate(0,-60)">
     <rect
        class="cls-1"
        x="23.894476"
@@ -181,21 +182,5 @@
        height="106.27861"
        id="rect864-5"
        style="fill:none;stroke:#9e7f51;stroke-width:6.48px;stroke-miterlimit:10" />
-    <g
-       id="g2528-8"
-       transform="translate(-32.105428,7.324085)">
-      <rect
-         class="cls-19"
-         x="248.12"
-         y="2.6400001"
-         width="560"
-         height="129"
-         id="rect1140-4" />
-      <text
-         class="cls-20"
-         id="text1142-8"
-         x="422.63171"
-         y="94.400002">Միրգ</text>
-    </g>
   </g>
 </svg>
