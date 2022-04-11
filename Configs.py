@@ -1,14 +1,19 @@
 from manim import *
 
+
+# Հիմնական գույներ
+COLORS = [WHITE, GREEN, ORANGE, RED, BLUE, YELLOW]
+
+
 # Հայերեն գրելու համար tex_template (նույն բանն են)
 armenian_tex_template = TexTemplate()
 armenian_tex_template.add_to_preamble(r'\usepackage{armtex}')
+
 ARMTEX = TexTemplate()
 ARMTEX.add_to_preamble(r'\usepackage{armtex}')
 
-
-COLORS = [WHITE, GREEN, ORANGE, RED, BLUE, YELLOW]
-
+Tex.set_default(tex_template=ARMTEX)
+MathTex.set_default(tex_template=ARMTEX)
 
 
 # Մասերով խնդիրների հաստատուններ
@@ -25,8 +30,10 @@ DEFAULT_SEGMENT_LENGTH_FONT_SIZE = 50
 DEFAULT_TOTAL_LENGTH_FONT_SIZE = 70
 DEFAULT_EQUATION_FONT_SIZE = 50
 
+
 # Կշեռքով խնդիրների հաստատուններ
 DEFAULT_SCALES_BUFF = 0
+
 
 # Շախմատի ֆիգուրների հաստատուններ
 white_chess_figures_fill_color = WHITE
@@ -36,9 +43,8 @@ black_chess_figures_stroke_color = WHITE
 chess_figures_stroke_width = 2.5
 chess_figures_scale_factor = 0.3
 
-# test_tex_template = TexTemplate() 
-# test_tex_template.add_to_preamble(r'\\usepackage{fontspec}', r'\\setmainfont{Dejavu Serif}')
 
+# Ամիսներ, շաբաթներ, օրեր
 MONTHS_ARM = [
     'Հունվար',
     'Փետրվար',
@@ -55,7 +61,6 @@ MONTHS_ARM = [
 ]
 
 MONTHS_LENGTHS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
 
 WEEK_DAYS_ARM = ['ԵԿ', 'ԵՔ', 'ՉՈ', 'ՀԻ', 'Ու', 'ՇԱ', 'ԿԻ']
 WEEK_DAYS_ARM_LONG = ['ԵՐԿ', 'ԵՐՔ', 'ՉՐՔ', 'ՀՆԳ', 'ՈւՐԲ', 'ՇԲԹ', 'ԿԻՐ']
