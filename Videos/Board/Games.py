@@ -1,5 +1,7 @@
-from manim import *
-from Table import Board
+import sys
+
+sys.path.append('../../')
+from Functions.qarakusi import *
 from manim.mobject.geometry import ArrowTriangleTip, ArrowTriangleFilledTip, ArrowSquareFilledTip,\
                                 ArrowCircleTip, ArrowCircleFilledTip
 from Board import Board, T4

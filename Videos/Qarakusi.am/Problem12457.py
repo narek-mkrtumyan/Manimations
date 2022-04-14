@@ -1,7 +1,6 @@
-from manim import *
-from manim.mobject import value_tracker
-import numpy as np
-from numpy.core.numeric import moveaxis
+import sys
+sys.path.append('../../')
+from Functions.qarakusi import *
 
 def ConstructPolygonLine(n, delta_x, delta_y, line_y, vertices):
 

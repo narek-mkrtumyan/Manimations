@@ -140,7 +140,6 @@ class Rabbit(VMobject):
 
 
 
-
 class Cage(VMobject):
     def __init__(self, style='square'):
         VMobject.__init__(self)
@@ -228,6 +227,15 @@ class ThinkingBubble(VMobject):
 
 
 
+class Book(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        book = SVGMobject(os.path.join(path_to_SVG, 'books', f'book_{svg_index}'))
+        book.set_color(WHITE)
+
+        self.add(book)
+
 
 class Pen(VMobject):
     def __init__(self):
@@ -235,7 +243,6 @@ class Pen(VMobject):
         pen = SVGMobject(os.path.join(path_to_SVG, 'pen')).set_color(WHITE).scale(0.5).rotate(PI/7)
 
         self.add(pen)
-
 
 
 class Pencil(VMobject):
@@ -249,10 +256,37 @@ class Pencil(VMobject):
         self.add(pencil)
 
 
+class Paper(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+
+        self.paper_1 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_1')).set_color(WHITE)
+        self.paper_2 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_2')).set_color(WHITE).scale(0.87)
+        self.paper_3 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_3')).set_color(WHITE).scale(0.77)
+
+
+
+class House(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+        house = SVGMobject(os.path.join(path_to_SVG, 'house')).set_color(WHITE)
+
+        self.add(house)
+
+class VideoIcon(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+        video_icon = SVGMobject(os.path.join(path_to_SVG, 'video_icon')).set_color(WHITE)
+
+        self.add(video_icon)
+
+
 
 class Scales(VMobject):
-    def __init__(self, svg_index=1):
+    def __init__(self, svg_index=1, plate_stretch_factor=1):
         VMobject.__init__(self)
+
+        self.plate_stretch_factor = plate_stretch_factor
 
         scales = SVGMobject(os.path.join(path_to_SVG, 'scales', f'scale_{svg_index}')).scale(1.2)
         
@@ -262,26 +296,46 @@ class Scales(VMobject):
             self.left_plate = scales[4]
             self.right_plate = scales[5]
         
+        elif svg_index == 5:
+            scales[0].set_color('#8c6239')
+            scales[1].set_color('#764d26')
+            scales[2].set_color('#603813')
+            scales[3].set_color('#00786f')
+            scales[4].set_color('#00a99d')
+            scales[5].set_color('#8c6239').set_stroke(BLACK, 0.4)
+            scales[6].set_color(BLACK)
+            scales[7].set_color('#00786f')
+            scales[8].set_color('#4a2c06')
+            scales[9].set_color('#4a2c06')
+            scales[10].set_color('#00786f')
+            scales[11].set_color('#00786f')
+            self.body = VGroup(*scales[: 10])
+            self.left_plate = VGroup(scales[-4]) # scales[-2], 
+            self.right_plate = VGroup( scales[-3]) # scales[-1], 
+        
         else:
             scales.set_color(WHITE)
             self.body = scales[0]
             self.left_plate = scales[2]
             self.right_plate = scales[1]
+        
+        self.left_plate.stretch(self.plate_stretch_factor, 0)
+        self.right_plate.stretch(self.plate_stretch_factor, 0)
 
         self.add(self.body, self.left_plate, self.right_plate)
 
 
-
 class Weight(VGroup):
-    def __init__(self, kg=1, unit_kg=1):
+    def __init__(self, kg=1, unit_kg=1, scale_factor = 0.75):
         VGroup.__init__(self)
 
+        self.scale_factor = scale_factor
         self.weight_value = kg
 
         self.weight = VGroup(
             SVGMobject(os.path.join(path_to_SVG, 'weight')).set_color(WHITE).scale(0.5),
             MathTex(f"{kg}", color=BLACK, font_size=35).shift(0.1 * DOWN)
-        ).scale(((kg/(2*unit_kg)) ** (1./3.)) * 0.75)
+        ).scale(((kg/(2*unit_kg)) ** (1./3.)) * self.scale_factor)
 
         self.kettlebell = self.weight[0]
         self.weight_text = self.weight[1]
@@ -289,9 +343,41 @@ class Weight(VGroup):
         self.add(self.kettlebell, self.weight_text)
 
 
+class FruitShop(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+
+        shop = SVGMobject(os.path.join(path_to_SVG, 'fruit_shop'))
+        shop.scale(2)
+        shop.add(Rectangle('#9e7f51', 0.5, 4.3).shift([0.07, -1.63, 0]))
+
+        self.shelf = shop[1]
+        self.add(shop)
+
+
+class  BagOfMandarins(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        bag_of_mandarins = SVGMobject(os.path.join(path_to_SVG, 'bags', f'bag_with_mandarins_{svg_index}'))
+        
+        # bag_of_mandarins.scale(0.25)
+
+        self.add(bag_of_mandarins)
+
+class  EmptyBag(VMobject):
+    def __init__(self, svg_index=1):
+        VMobject.__init__(self)
+
+        empty_bag = SVGMobject(os.path.join(path_to_SVG, 'bags', f'empty_bag_{svg_index}'))
+        
+        # bag_of_mandarins.scale(0.25)
+
+        self.add(empty_bag)
+
 
 class  Apple(VMobject):
-    def __init__(self, color=GREEN,):
+    def __init__(self, color=GREEN):
         VMobject.__init__(self)
 
         if color == GREEN:
@@ -304,9 +390,6 @@ class  Apple(VMobject):
 
         self.add(apple)
 
-
-
-
 class Mushroom(VMobject):
     def __init__(self):
         VMobject.__init__(self)
@@ -315,7 +398,6 @@ class Mushroom(VMobject):
         mushroom.scale(0.25)
 
         self.add(mushroom)
-
 
 class Tomato(VMobject):
     def __init__(self):
@@ -326,7 +408,6 @@ class Tomato(VMobject):
 
         self.add(tomato)
 
-
 class Carrot(VMobject):
     def __init__(self):
         VMobject.__init__(self)
@@ -335,8 +416,6 @@ class Carrot(VMobject):
         carrot.scale(0.25)
 
         self.add(carrot)
-
-
 
 class Banana(VMobject):
     def __init__(self):
@@ -347,7 +426,6 @@ class Banana(VMobject):
 
         self.add(banana)
 
-
 class Pear(VMobject):
     def __init__(self):
         VMobject.__init__(self)
@@ -356,6 +434,23 @@ class Pear(VMobject):
         pear.scale(0.25)
 
         self.add(pear)
+
+class Mandarin(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+
+        mandarin = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'mandarin'))
+
+        self.add(mandarin)
+
+class Mandarins(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+
+        mandarins = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'mandarins'))
+        mandarins.scale(0.35)
+
+        self.add(mandarins)
 
 
 
@@ -367,11 +462,6 @@ class ScaleStar(VMobject):
         star.scale(0.25)
 
         self.add(star)
-
-
-
-
-
 
 
 
@@ -463,11 +553,3 @@ class Scissors():
             scene.play(UpdateFromAlphaFunc(self.siz, function_from_time, run_time=run_time, rate_func=linear))
             scene.remove(self.siz)
         
-
-class Paper(VMobject):
-    def __init__(self):
-        VMobject.__init__(self)
-
-        self.paper_1 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_1')).set_color(WHITE)
-        self.paper_2 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_2')).set_color(WHITE).scale(0.87)
-        self.paper_3 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_3')).set_color(WHITE).scale(0.77)

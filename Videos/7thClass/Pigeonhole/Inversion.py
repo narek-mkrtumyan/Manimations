@@ -2,7 +2,7 @@ from manim import *
 import sys
 
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class ApplyFuncExample(Scene):
     def construct(self):

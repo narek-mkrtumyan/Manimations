@@ -1,10 +1,9 @@
 import sys
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 class Problem12530(Scene):
     def construct(self):
-        self.add(bounds)
 
     # init segments and names
         segment_ashot = Segment([-3, 2, 0], [-1.5, 2, 0])

@@ -1,5 +1,6 @@
-from manim import *
-import numpy as np
+import sys
+sys.path.append('../../')
+from Functions.qarakusi import *
 
 class problem_11037(Scene):
     def construct(self):

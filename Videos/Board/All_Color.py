@@ -2,7 +2,7 @@ import sys
 
 from numpy import dtype
 sys.path.append('../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 def write_random_knights():
 	table = np.random.choice(2, 64)

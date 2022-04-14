@@ -3,7 +3,7 @@ from gc import get_stats
 from lib2to3.pgen2.token import RIGHTSHIFT
 import sys
 sys.path.append('../../../')
-from Functions.QarakusiFunctions import *
+from Functions.qarakusi import *
 
 
 

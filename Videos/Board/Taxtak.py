@@ -1,9 +1,11 @@
-from manim import *
-import numpy as np
+import sys
+
+sys.path.append('../../')
+from Functions.qarakusi import *
 import csv
 import pandas as pd
 from numpy import genfromtxt
-from Board import Board, T4
+
 
 # --------- IMPORTS
 from pathlib import Path
