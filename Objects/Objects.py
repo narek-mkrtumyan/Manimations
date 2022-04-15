@@ -260,7 +260,7 @@ class Paper(VMobject):
     def __init__(self, svg_index=1):
         VMobject.__init__(self)
 
-        paper = SVGMobject(os.path.join(path_to_SVG, 'papers', f'paper_{svg_index}'))#.set_color(WHITE)
+        paper = SVGMobject(os.path.join(path_to_SVG, 'papers', f'paper_{svg_index}')).set_color(WHITE)
 
         if svg_index == 2:
             paper.scale(0.87)
