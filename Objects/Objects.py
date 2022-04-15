@@ -257,12 +257,36 @@ class Pencil(VMobject):
 
 
 class Paper(VMobject):
-    def __init__(self):
+    def __init__(self, svg_index=1):
         VMobject.__init__(self)
 
-        self.paper_1 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_1')).set_color(WHITE)
-        self.paper_2 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_2')).set_color(WHITE).scale(0.87)
-        self.paper_3 = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_3')).set_color(WHITE).scale(0.77)
+        paper = SVGMobject(os.path.join(path_to_SVG, 'papers', f'paper_{svg_index}'))#.set_color(WHITE)
+
+        if svg_index == 2:
+            paper.scale(0.87)
+        elif svg_index == 3:
+            paper.scale(0.77)
+
+        self.add(paper)
+
+
+
+class WhitePaper(VMobject):
+    def __init__(self, number_of_pages=3):
+        VMobject.__init__(self)
+
+        if number_of_pages == 3 or number_of_pages == 6:
+            paper = SVGMobject(os.path.join(path_to_SVG, 'papers', 'white_papers', f'paper_{number_of_pages}'))
+
+        if number_of_pages == 6:
+            VMobject.scale_to_fit_width(paper, WhitePaper(3).width)
+        
+        if number_of_pages == 9:
+            p_1 = WhitePaper(6)
+            p_4 = WhitePaper(3).next_to(p_1, UP, buff=-1.7)
+            paper = VGroup(p_1, p_4)
+
+        self.add(paper)
 
 
 
@@ -356,12 +380,15 @@ class FruitShop(VMobject):
 
 
 class  BagOfMandarins(VMobject):
-    def __init__(self, svg_index=1):
+    def __init__(self, size : str = 'normal', svg_index=1):
         VMobject.__init__(self)
 
-        bag_of_mandarins = SVGMobject(os.path.join(path_to_SVG, 'bags', f'bag_with_mandarins_{svg_index}'))
-        
-        # bag_of_mandarins.scale(0.25)
+        if size == 'normal':
+            bag_of_mandarins = SVGMobject(os.path.join(path_to_SVG, 'bags', f'bag_with_mandarins_{svg_index}'))
+            bag_of_mandarins.scale(0.5)
+        else:
+            bag_of_mandarins = SVGMobject(os.path.join(path_to_SVG, 'bags', f'bag_with_mandarins_{svg_index}_large'))
+            bag_of_mandarins.scale(0.66)
 
         self.add(bag_of_mandarins)
 
@@ -370,11 +397,20 @@ class  EmptyBag(VMobject):
         VMobject.__init__(self)
 
         empty_bag = SVGMobject(os.path.join(path_to_SVG, 'bags', f'empty_bag_{svg_index}'))
-        
-        # bag_of_mandarins.scale(0.25)
 
         self.add(empty_bag)
 
+class  BucketOfMandarins(VMobject):
+    def __init__(self, size : str ='normal'):
+        VMobject.__init__(self)
+    
+        # if size == 'normal':
+        bucket_of_mandarins = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'bucket_of_mandarins'))
+        bucket_of_mandarins.scale(0.4)
+        # else:
+        #     bucket_of_mandarins = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'bucket_of_mandarins'))
+
+        self.add(bucket_of_mandarins)
 
 class  Apple(VMobject):
     def __init__(self, color=GREEN):
