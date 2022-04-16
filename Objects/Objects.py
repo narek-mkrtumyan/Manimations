@@ -256,37 +256,45 @@ class Pencil(VMobject):
         self.add(pencil)
 
 
-class Paper(VMobject):
-    def __init__(self, svg_index=1):
+
+class Papers(VMobject):
+    def __init__(self, number_of_pages=1):
         VMobject.__init__(self)
-
-        paper = SVGMobject(os.path.join(path_to_SVG, 'papers', f'paper_{svg_index}')).set_color(WHITE)
-
-        if svg_index == 2:
-            paper.scale(0.87)
-        elif svg_index == 3:
-            paper.scale(0.77)
-
-        self.add(paper)
-
-
-
-class WhitePaper(VMobject):
-    def __init__(self, number_of_pages=3):
-        VMobject.__init__(self)
-
-        if number_of_pages == 3 or number_of_pages == 6:
-            paper = SVGMobject(os.path.join(path_to_SVG, 'papers', 'white_papers', f'paper_{number_of_pages}'))
-
-        if number_of_pages == 6:
-            VMobject.scale_to_fit_width(paper, WhitePaper(3).width)
         
-        if number_of_pages == 9:
-            p_1 = WhitePaper(6)
-            p_4 = WhitePaper(3).next_to(p_1, UP, buff=-1.7)
-            paper = VGroup(p_1, p_4)
+        if number_of_pages == 1:
+            paper = SVGMobject(os.path.join(path_to_SVG, 'papers', 'paper_1'))
 
-        self.add(paper)
+            self.colors = paper[0]
+            self.outlines = paper[1]
+            self.texts = paper[2]
+            self.papers = VGroup(self.colors, self.outlines)
+
+            # self.outlines.set_z(self.colors.get_z() + 1)
+            # self.texts.set_z(self.outlines.get_z() + 1)
+
+            self.add(self.colors, self.outlines, self.texts)
+
+        else:
+            self.colors = VGroup()
+            self.outlines = VGroup()
+            self.texts = VGroup()
+            self.papers = VGroup()
+
+            for i in range(number_of_pages):
+                paper = Papers()
+                if i > 0:
+                    # paper.colors.set_z(self.texts[i - 1].get_z())
+                    # paper.outlines.set_z(paper.colors.get_z() + 1)
+                    # paper.texts.set_z(paper.outlines.get_z() + 1)
+                    paper.move_to(self.papers[i - 1].get_center() + DEFAULT_PAPERS_BUFF * UP)
+
+                self.colors.add(paper.colors)
+                self.outlines.add(paper.outlines)
+                self.texts.add(paper.texts)
+                self.papers.add(paper.papers)
+
+                self.add(paper)
+
 
 
 

@@ -68,3 +68,10 @@ WEEK_DAYS_ARM_LONG = ['ԵՐԿ', 'ԵՐՔ', 'ՉՐՔ', 'ՀՆԳ', 'ՈւՐԲ', 'ՇԲ�
 WEEK_BLOCK_WIDTH = 0.35
 WEEK_BLOCK_HEIGHT = 0.25
 
+
+
+
+# ԽԱՌԸ
+
+DEFAULT_PAPERS_BUFF = 0.125
+
