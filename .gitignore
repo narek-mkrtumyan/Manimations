@@ -21,3 +21,4 @@ media/
 */test.py
 
 .VSCodeCounter/
+.venv

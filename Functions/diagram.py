@@ -1,5 +1,5 @@
 from .maserovkhndirscene import *
-
+from typing import List
 
 
 
@@ -7,8 +7,8 @@ from .maserovkhndirscene import *
 class Diagram(VGroup):
     def __init__(
         self,
-        parts: list[list],
-        names: list[MathTex or DecimalNumber],
+        parts: List[list],
+        names: List[MathTex or DecimalNumber],
         brace: bool = False,
         total: MathTex or DecimalNumber = MathTex(r'.', font_size=1),
         **kwargs
@@ -77,7 +77,7 @@ class Diagram(VGroup):
     def create_by_copying(
         self,
         scene: Scene,
-        coping_list: list[list]
+        coping_list: List[list]
     ):
         assert len(coping_list) == len(self.player), "Length of 'coping_list' must match length of 'self.player'"
         scene.play(AnimationGroup(*[Write(i) for i in self.player_name], lag_ratio=0.5))
@@ -107,8 +107,8 @@ class Diagram(VGroup):
     def create_by_order_and_steps(
         self,
         scene: Scene,
-        order: list[int],
-        steps: list[list[int]]
+        order: List[int],
+        steps: List[List[int]]
     ):
         #
         # Segments must be numbered for each "player"
@@ -144,7 +144,7 @@ class Diagram(VGroup):
         self,
         scene: Scene,
         scale_ratio: float,
-        move_to_point: list[float] = [0, 0, 0]
+        move_to_point: List[float] = [0, 0, 0]
     ):
         self.generate_target()
         self.target.scale(scale_ratio)
@@ -164,7 +164,7 @@ class Diagram(VGroup):
     def show_equal_parts(
         self,
         scene: Scene,
-        equal_list: list[int]
+        equal_list: List[int]
     ):
         assert len(equal_list) == len(self.player), "Length of 'equal_parts' must match length of 'self.player'"
         for i in range(len(self.player)):
@@ -199,7 +199,7 @@ class Diagram(VGroup):
     def segment_perpendicular_projection(
         self,
         scene: Scene,
-        project_from: list[int],
+        project_from: List[int],
         project_to: int,
         add: bool = False,
         subtract: bool = False,
@@ -366,7 +366,7 @@ class Diagram(VGroup):
 
     def update_segment_text(
         self,
-        segment_index: list[int],
+        segment_index: List[int],
         text: MathTex or DecimalNumber
     ):
         [i, j] = segment_index
@@ -469,7 +469,7 @@ class Diagram(VGroup):
         self,
         scene: Scene,
         player: int,
-        order: list[int]
+        order: List[int]
     ):
         # scene.play(
         #     AnimationGroup(
