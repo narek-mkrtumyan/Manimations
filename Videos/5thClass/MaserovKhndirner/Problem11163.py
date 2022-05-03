@@ -290,7 +290,7 @@ class Problem_11163(Scene):
 
 
         
-
+## ԷՍ ԷԼ ՀԵՉ
 class Problem__11163(Scene):
     def construct(self):
         
@@ -351,7 +351,7 @@ class Problem__11163(Scene):
 
 
 
-class test(Scene):
+class final_Problem11163(Scene):
     def construct(self):
 
         papers = Papers(48).scale(0.8).shift(3*DL)
