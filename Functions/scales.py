@@ -1,10 +1,11 @@
 from .qarakusiscene import *
+from typing import List
 
 
 class ScalesWithItems(VGroup):
     def __init__(
         self,
-        left_mobs_list_of_str : list[str], right_mobs_list_of_str : list[str], 
+        left_mobs_list_of_str : List[str], right_mobs_list_of_str : List[str], 
         weight_scale_factor=0.75, fruit_scale_factor=1, scales_scale_factor=1, scales_plate_stretch_factor=1
     ):
         VGroup.__init__(self)
@@ -109,7 +110,7 @@ class ScalesScene(QarakusiScene):
                         
 
 
-    def split_weight(self, scales_with_items : ScalesWithItems, side : str, weight_index : int, new_weights : list[int]):
+    def split_weight(self, scales_with_items : ScalesWithItems, side : str, weight_index : int, new_weights : List[int]):
         """Function splits given weight into new ones with given weights
 
         Args:
@@ -169,7 +170,7 @@ class ScalesScene(QarakusiScene):
 
 
 
-    def combine_weights(self, scales_with_items : ScalesWithItems, side, kettlebells_indexes : list[int], new_place : str = 'center'):
+    def combine_weights(self, scales_with_items : ScalesWithItems, side, kettlebells_indexes : List[int], new_place : str = 'center'):
 
         if side.lower().startswith('le'):
             kettlebells = list(scales_with_items.left_mobs[i] for i in kettlebells_indexes)

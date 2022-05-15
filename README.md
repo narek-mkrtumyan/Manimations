@@ -21,3 +21,29 @@ To render the animation implemented in `file.py` just type `'manim -pql file_nam
 the directory containing the file.
 
 To make it work the computer must have `manimCE`, `miktex`, etc. installed.
+
+## Linux Setup
+
+First, install the following packages
+```bash
+sudo apt-get install sox ffmpeg libcairo2 libcairo2-dev texlive-full python3.8 python3-pip python3.8-venv
+```
+
+Afterwards, you can create a virtual environment by
+```bash
+python3.8 -mvenv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Each time you open a terminal, activate your virtual environment by
+```bash
+source .venv/bin/activate
+```
+
+Run a script by
+```bash
+PYTHONPATH=. manim -pql Videos/path/to/file.py SceneClassName
+```
+
+With PYTHONPATH set to the root of the repository, the sys.path.append part is not needed.
