@@ -258,7 +258,7 @@ class Pencil(VMobject):
 
 
 class Papers(VMobject):
-    def __init__(self, number_of_pages=1):
+    def __init__(self, number_of_pages=1, buff=DEFAULT_PAPERS_BUFF):
         VMobject.__init__(self)
         
         if number_of_pages == 1:
@@ -286,7 +286,7 @@ class Papers(VMobject):
                     # paper.colors.set_z(self.texts[i - 1].get_z())
                     # paper.outlines.set_z(paper.colors.get_z() + 1)
                     # paper.texts.set_z(paper.outlines.get_z() + 1)
-                    paper.move_to(self.papers[i - 1].get_center() + DEFAULT_PAPERS_BUFF * UP)
+                    paper.move_to(self.papers[i - 1].get_center() + buff * UP)
 
                 self.colors.add(paper.colors)
                 self.outlines.add(paper.outlines)
@@ -509,6 +509,18 @@ class ScaleStar(VMobject):
 
 
 
+class Check(VMobject):
+    def __init__(self, color=GREEN):
+        VMobject.__init__(self)
+
+        check = SVGMobject(os.path.join(path_to_SVG, 'check'))
+        check.set_color(color)
+        check.scale(1)
+
+        self.add(check)
+
+
+
 
 class Scissors():
     def __init__(self, cut_coordinate=ORIGIN, style=1):
@@ -548,7 +560,7 @@ class Scissors():
             scene.wait(run_time/9)
             scene.remove(self.open_scissors)
             scene.add(self.closed_scissors)
-            scene.add_sound(os.path.join(path_to_Objects, 'sounds', 'scissors_sound'))
+            scene.add_sound(os.path.join(path_to_Objects, 'sounds', 'scissors'))
             scene.wait(0.25)
             scene.remove(self.closed_scissors)
             scene.add(self.open_scissors)
