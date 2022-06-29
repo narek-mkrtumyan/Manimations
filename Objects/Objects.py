@@ -315,7 +315,7 @@ class VideoIcon(VMobject):
 
 
 class Scales(VMobject):
-    def __init__(self, svg_index=1, plate_stretch_factor=1):
+    def __init__(self, svg_index=5, plate_stretch_factor=1):
         VMobject.__init__(self)
 
         self.plate_stretch_factor = plate_stretch_factor
@@ -341,9 +341,24 @@ class Scales(VMobject):
             scales[9].set_color('#4a2c06')
             scales[10].set_color('#00786f')
             scales[11].set_color('#00786f')
-            self.body = VGroup(*scales[: 10])
-            self.left_plate = VGroup(scales[-4]) # scales[-2], 
-            self.right_plate = VGroup( scales[-3]) # scales[-1], 
+
+            self.rotation_dot = scales[6]
+
+            # self.fixed_part = always_redraw(lambda: VGroup(scales[3], scales[4], scales[5], scales[6], scales[7]))
+
+            # self.rotating_part = always_redraw(lambda:
+            #     VGroup(scales[0], scales[1], scales[2], scales[8], scales[9])
+            #     .rotate(self.rotation_angle.get_value() * DEGREES, about_point=self.rotation_center)
+            # )
+
+            self.fixed_part = VGroup(scales[3], scales[4], scales[5], scales[6], scales[7])
+            self.rotating_part = VGroup(scales[0], scales[1], scales[2], scales[8], scales[9])
+            self.left_plate = always_redraw(lambda: scales[10].next_to(scales[8], UP, buff=0.01))
+            self.right_plate = always_redraw(lambda: scales[11].next_to(scales[9], UP, buff=0.01))
+
+            self.fixed_part.set_z_index(self.rotating_part.get_z() + 1)
+
+            self.body = VGroup(self.rotating_part, self.fixed_part)
         
         else:
             scales.set_color(WHITE)
@@ -366,13 +381,24 @@ class Weight(VGroup):
 
         self.weight = VGroup(
             SVGMobject(os.path.join(path_to_SVG, 'weight')).set_color(WHITE).scale(0.5),
-            MathTex(f"{kg}", color=BLACK, font_size=35).shift(0.1 * DOWN)
+            MathTex(f"{kg:,}", color=BLACK, font_size=35).shift(0.1 * DOWN)
         ).scale(((kg/(2*unit_kg)) ** (1./3.)) * self.scale_factor)
 
         self.kettlebell = self.weight[0]
         self.weight_text = self.weight[1]
 
+        self.weight_text.scale_to_fit_width(self.kettlebell.width * 0.92)
+
         self.add(self.kettlebell, self.weight_text)
+
+
+class Box(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+
+        box = SVGMobject(os.path.join(path_to_SVG, 'box')).scale(0.27)
+
+        self.add(box)
 
 
 class FruitShop(VMobject):
@@ -419,6 +445,26 @@ class  BucketOfMandarins(VMobject):
         #     bucket_of_mandarins = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'bucket_of_mandarins'))
 
         self.add(bucket_of_mandarins)
+
+
+class  BucketOfOranges(VMobject):
+    def __init__(self, size : str ='normal'):
+        VMobject.__init__(self)
+    
+        bucket_of_oranges = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'bucket_of_oranges'))
+        bucket_of_oranges.scale(0.4)
+
+        self.add(bucket_of_oranges)
+
+
+class BoxOfOranges(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+
+        box_of_oranges = SVGMobject(os.path.join(path_to_SVG, 'fruits', 'box_of_oranges'))
+        box_of_oranges.scale(0.75)
+
+        self.add(box_of_oranges)
 
 class  Apple(VMobject):
     def __init__(self, color=GREEN):

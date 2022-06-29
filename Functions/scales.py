@@ -1,18 +1,18 @@
 from .qarakusiscene import *
-from typing import List
 
 
 class ScalesWithItems(VGroup):
     def __init__(
         self,
-        left_mobs_list_of_str : List[str], right_mobs_list_of_str : List[str], 
-        weight_scale_factor=0.75, fruit_scale_factor=1, scales_scale_factor=1, scales_plate_stretch_factor=1
+        left_mobs_list_of_str : list[str], right_mobs_list_of_str : list[str], 
+        weight_scale_factor=0.75, fruit_scale_factor=1, scales_scale_factor=1, scales_plate_stretch_factor=1, equality_sign_font_size=100
     ):
         VGroup.__init__(self)
 
         self.weight_scale_factor = weight_scale_factor
         self.fruit_scale_factor = fruit_scale_factor
         self.scales_plate_stretch_factor = scales_plate_stretch_factor
+        self.equality_sign_font_size = equality_sign_font_size
 
         self.scales = Scales(5, scales_plate_stretch_factor).scale(scales_scale_factor)
         
@@ -22,7 +22,10 @@ class ScalesWithItems(VGroup):
         self.right_mobs = self.convert_list_of_items_to_list_of_mobjects(right_mobs_list_of_str)
         self.right_mobs = VGroup(*self.right_mobs).arrange(aligned_edge=DOWN).next_to(self.scales.right_plate, UP, buff=DEFAULT_SCALES_BUFF)
 
-        self.add(self.scales, self.left_mobs, self.right_mobs)
+        self.equality_sign = Tex('=', font_size=self.equality_sign_font_size)
+        self.equality_sign.move_to(VGroup(self.scales.left_plate, self.scales.right_plate).get_center()).shift(0.4 * UP)
+
+        self.add(self.scales, self.left_mobs, self.right_mobs, self.equality_sign)
 
     def convert_list_of_items_to_list_of_mobjects(self, items):
         """Function takes as input list of strings and converts it to list 
@@ -63,11 +66,19 @@ class ScalesWithItems(VGroup):
 
 class ScalesScene(QarakusiScene):
 
+    def fadein_scales_with_items(self, scales_with_items : ScalesWithItems):
+
+        self.play(FadeIn(scales_with_items.scales))
+        self.wait(0.25)
+        self.add_scales_items(scales_with_items)
+
+
     @staticmethod
     def get_indexes_for_removing(mylist):
         return list(j - i for i, j in enumerate(mylist))
 
-    def add_scales_items(self, scales_with_items : ScalesWithItems, display_option=FadeIn, unit_creation_runtime : float=0.75):
+
+    def add_scales_items(self, scales_with_items : ScalesWithItems, display_option=FadeIn, item_creation_runtime : float=0.25):
         """Function plays the animation of creating items and initializes 
         `self.left_mobs` and `self.right_mobs` attributes 
 
@@ -80,17 +91,19 @@ class ScalesScene(QarakusiScene):
             left_mobs_shift (np.array): where to position left plate default` LEFT * 4
             right_mobs_shift (np.array): where to position right plate default` RIGHT * 3
             display_option (str): one of ['Create', "FadeIn"] default is FadeIn
-            unit_creation_runtime (float): creation time for each item default` 0.75
+            item_creation_runtime (float): creation time for each item default` 0.75
 
         Returns:
             None
         """
 
         for i in scales_with_items.left_mobs:
-            self.play(display_option(i), run_time=unit_creation_runtime)
+            self.play(display_option(i), run_time=item_creation_runtime)
+        self.wait(0.25)
 
         for i in scales_with_items.right_mobs:
-            self.play(display_option(i), run_time=unit_creation_runtime)
+            self.play(display_option(i), run_time=item_creation_runtime)
+        self.wait(0.25)
 
     
     def remove_objects_from_both_sides(self, scales_with_items : ScalesWithItems, left_mobs_indexes, right_mobs_indexes):
@@ -101,16 +114,16 @@ class ScalesScene(QarakusiScene):
         self.play(to_fade_out.animate.shift(UP))
         self.play(FadeOut(to_fade_out))
         self.remove(to_fade_out)
+        self.wait(0.25)
 
         for i in self.get_indexes_for_removing(left_mobs_indexes):
             scales_with_items.left_mobs.remove(scales_with_items.left_mobs[i])
 
         for i in self.get_indexes_for_removing(right_mobs_indexes):
             scales_with_items.right_mobs.remove(scales_with_items.right_mobs[i])
-                        
 
 
-    def split_weight(self, scales_with_items : ScalesWithItems, side : str, weight_index : int, new_weights : List[int]):
+    def split_weight(self, scales_with_items : ScalesWithItems, side : str, weight_index : int, new_weights : list[int]):
         """Function splits given weight into new ones with given weights
 
         Args:
@@ -146,6 +159,8 @@ class ScalesScene(QarakusiScene):
             scales_with_items.right_mobs = VGroup(*new_weights_vgroup, *temporary_mobs)
             self.add(scales_with_items.right_mobs)
 
+            self.wait(0.25)
+
         
         elif side == 'left':
             weight : Weight = scales_with_items.left_mobs[weight_index]
@@ -167,10 +182,10 @@ class ScalesScene(QarakusiScene):
             scales_with_items.left_mobs = VGroup(*new_weights_vgroup, *temporary_mobs)
             self.add(scales_with_items.left_mobs)
 
+            self.wait(0.25)
 
 
-
-    def combine_weights(self, scales_with_items : ScalesWithItems, side, kettlebells_indexes : List[int], new_place : str = 'center'):
+    def combine_weights(self, scales_with_items : ScalesWithItems, side, kettlebells_indexes : list[int], new_place : str = 'center'):
 
         if side.lower().startswith('le'):
             kettlebells = list(scales_with_items.left_mobs[i] for i in kettlebells_indexes)
@@ -218,11 +233,31 @@ class ScalesScene(QarakusiScene):
             *[weights[j].animate.move_to(new_order_places[j + len(fruits)] + UP) for j in range(len(weights))]
         )
         self.play(weights.animate.shift(DOWN))
+        self.wait(0.25)
 
         for mob in scales_side_mobs:
             scales_side_mobs.remove(mob)
 
         scales_side_mobs.add(*fruits, *weights)
+
+    
+    def move_scales_items_to_center(self, scales_with_items : ScalesWithItems):
+        self.play(
+            scales_with_items.left_mobs.animate.next_to(scales_with_items.scales.left_plate, UP, buff=DEFAULT_SCALES_BUFF),
+            scales_with_items.right_mobs.animate.next_to(scales_with_items.scales.right_plate, UP, buff=DEFAULT_SCALES_BUFF)
+        )
+        self.wait(0.25)
+
+
+    def show_equality(self, scales_with_items : ScalesWithItems):
+        self.play(FadeOut(scales_with_items.scales))
+        self.wait(0.25)
+        self.play(
+            Write(scales_with_items.equality_sign),
+            scales_with_items.left_mobs.animate.next_to(scales_with_items.equality_sign, LEFT),
+            scales_with_items.right_mobs.animate.next_to(scales_with_items.equality_sign, RIGHT)
+        )
+        self.wait(0.25)
 
 
 
