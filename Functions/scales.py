@@ -66,6 +66,11 @@ class ScalesWithItems(VGroup):
 
 class ScalesScene(QarakusiScene):
 
+    def rotate_scales(self, scales : Scales, direction=1, angle=PI/14):
+
+        self.play(scales.rotating_part.animate.rotate(direction * angle, about_point=scales.rotation_dot.get_center()))
+
+
     def fadein_scales_with_items(self, scales_with_items : ScalesWithItems):
 
         self.play(FadeIn(scales_with_items.scales))
