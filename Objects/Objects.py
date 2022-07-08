@@ -1,4 +1,3 @@
-from click import style
 from manim import *
 from colour import Color
 import os
@@ -87,7 +86,7 @@ class ChessFigures(VMobject):
 
 
 
-
+# PEOPLE
 class Man(VMobject):
     def __init__(self, svg_index=1):
         VMobject.__init__(self)
@@ -120,7 +119,7 @@ class Girl(VMobject):
         self.add(girl)
 
 
-
+# ANIMALS
 class Pigeon(VMobject):
     def __init__(self):
         VMobject.__init__(self)
@@ -137,6 +136,25 @@ class Rabbit(VMobject):
         rabbit.set_color(WHITE).scale(0.55)
 
         self.add(rabbit)
+
+
+class Duck(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+        duck = SVGMobject(os.path.join(path_to_SVG, 'animals', 'duck'))
+        duck.scale(0.5)
+
+        self.add(duck)
+
+
+class Goose(VMobject):
+    def __init__(self):
+        VMobject.__init__(self)
+        goose = SVGMobject(os.path.join(path_to_SVG, 'animals', 'goose'))
+        goose.scale(0.6)
+
+        self.add(goose)
+
 
 
 
