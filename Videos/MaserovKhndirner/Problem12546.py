@@ -1,5 +1,5 @@
 import sys
-sys.path.append("../../../")
+sys.path.append("../../")
 from Functions.qarakusi import *
 
 class Problem12546(MaserovKhndirScene):

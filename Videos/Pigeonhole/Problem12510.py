@@ -1,13 +1,6 @@
-from ctypes.wintypes import DWORD
-from distutils.util import run_2to3
-from shutil import move
 import sys
-from tkinter import W
-from tokenize import Exponent, Number
-from turtle import circle
 
-from numpy import squeeze
-sys.path.append('../../../')
+sys.path.append('../../')
 from Functions.qarakusi import *
 
 class Problem12510(Scene):

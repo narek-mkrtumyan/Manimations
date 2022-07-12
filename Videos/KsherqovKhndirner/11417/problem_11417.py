@@ -37,7 +37,7 @@ circumscribe կշռաքար
 
 import sys
 
-sys.path.append('../../../../')
+sys.path.append('../../../')
 from Functions.qarakusi import *
 from arm_texs import *
 

@@ -9,7 +9,7 @@ from Configs import *
 
 
 class CircularVGroup(VGroup):
-    def __init__(self, *vmobjects, radius=1.5, first_item_angle=90, **kwargs):
+    def __init__(self, *vmobjects, radius=1.5, first_item_angle=90, surrounding_rectangle_color=YELLOW, **kwargs):
         super().__init__(*vmobjects, **kwargs)
         self.add(*vmobjects)
     
@@ -19,10 +19,85 @@ class CircularVGroup(VGroup):
 
         self.unit_angle = 360 / self.number_of_items
 
-        path_circle = Circle(self.radius)
+        self.circle = Circle(self.radius)
+
+        small_circle = self.circle.copy().scale(0.995)
+
+        self.paths = VGroup()
+        for i in range(self.number_of_items):
+            item_angle = first_item_angle - i * self.unit_angle
+            self[i].move_to(self.circle.point_at_angle((item_angle % 360) * DEGREES))
+        
+
+        self.rectangles = VGroup(*[SurroundingRectangle(mob, color=surrounding_rectangle_color) for mob in self])
+        self.arcs = VGroup()
+        self.arrows = VGroup()
 
         for i in range(self.number_of_items):
-            self[i].move_to(path_circle.point_at_angle(((first_item_angle - i * self.unit_angle) % 360) * DEGREES))
+            points_big_arc = []
+            points_small_arc = []
+
+            for j in range(20):
+                points_big_arc.append(
+                    self.circle.point_at_angle(
+                        ((first_item_angle - (i + 1) * self.unit_angle + j * self.unit_angle / 20) % 360) * DEGREES
+                    )
+                )
+            for j in range(20):
+                points_small_arc.append(
+                    small_circle.point_at_angle(
+                        ((first_item_angle - i * self.unit_angle - j * self.unit_angle / 20) % 360) * DEGREES
+                    )
+                )
+
+            closing_points = Line(points_small_arc[0], points_big_arc[-1]).points
+            opening_points = Line(points_small_arc[-1], points_big_arc[0]).points
+
+            points = [
+                *opening_points,
+                *points_big_arc,
+                *closing_points,
+                *points_small_arc
+            ]
+
+            filled_arc = Difference(
+                VMobject().set_points_smoothly(points).set_fill(WHITE, 1),
+                Union(*[rect.copy().set_fill(opacity=1).set_stroke(WHITE) for rect in self.rectangles])
+            ).set_fill(WHITE, 1)
+
+            arc_start_and_end = [filled_arc.points[int(len(filled_arc.points)/2)], filled_arc.points[0]]
+
+
+            arc = ArcBetweenPoints(arc_start_and_end[1], arc_start_and_end[0], radius=self.radius).reverse_direction()
+            arrow = CurvedArrow(arc_start_and_end[0], arc_start_and_end[1], radius=-self.radius)
+
+            if sum((arc.get_arc_center() - ORIGIN)**2) > 1:
+                arc = ArcBetweenPoints(arc_start_and_end[0], arc_start_and_end[1], radius=self.radius).reverse_direction()
+                arrow = CurvedArrow(arc_start_and_end[1], arc_start_and_end[0], radius=-self.radius)
+            
+            path = ArcBetweenPoints(
+                self.circle.point_at_angle(((first_item_angle - i * self.unit_angle) % 360) * DEGREES),
+                self.circle.point_at_angle(((first_item_angle - (i + 1) * self.unit_angle) % 360) * DEGREES),
+                radius=self.radius
+            ).reverse_direction()
+
+            if sum((path.get_arc_center() - ORIGIN)**2) > 1:
+                path = ArcBetweenPoints(
+                    self.circle.point_at_angle(((first_item_angle - (i + 1) * self.unit_angle) % 360) * DEGREES),
+                    self.circle.point_at_angle(((first_item_angle - i * self.unit_angle) % 360) * DEGREES),
+                    radius=self.radius
+                ).reverse_direction()
+
+            self.arcs.add(arc)
+            self.arrows.add(arrow)
+            self.paths.add(path)
+        
+        self.vmobjects = VGroup(*self, *self.arcs, *self.arrows, *self.paths, *self.rectangles, self.circle)
+
+
+
+
+        
 
 
 class Week(VMobject):
