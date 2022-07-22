@@ -459,8 +459,12 @@ class Problem11159_SecondSolution(ScalesScene):
 
 
     # Equations
-        eq_1 = MathTex("7000+6700=13700").shift(3*UR+RIGHT)
+        eq_1 = MathTex("7000 + 6700 = 13700").shift(3*UR+RIGHT)
         eq_2 = MathTex("13700 : 5 = 2740").next_to(eq_1, DOWN, buff=0.3)
+        eq_3 = Tex("Սագ - $1220$ գ").next_to(eq_2, DOWN, buff=1)
+        eq_4 = Tex("Բադ - $1520$ գ").next_to(eq_3, DOWN, buff=0.5)
+
+        ans_box = SurroundingRectangle(VGroup(eq_3, eq_4), color=GREEN)
 
 
 
@@ -508,6 +512,7 @@ class Problem11159_SecondSolution(ScalesScene):
 
 
     # առաջին հարց և կշռաքարերի համապատասխան միավորում
+
         self.play(Write(eq_1))
         self.wait()
 
@@ -658,7 +663,18 @@ class Problem11159_SecondSolution(ScalesScene):
         )
         self.wait()
 
-    # բադի կշիռ
+    # Սագի կշիռ
+        
+        self.play(Circumscribe(sc_4_left_mobs_1[2], Circle))
+        self.wait()
+
+        self.play(Circumscribe(sc_4_right_mobs_2[1], Circle))
+        self.wait()
+
+        self.play(Write(eq_3))
+        self.wait()
+
+    # Բադի կշիռ
         
         self.play(sc_3.animate.shift(0.5*DOWN))
         self.wait()
@@ -692,3 +708,11 @@ class Problem11159_SecondSolution(ScalesScene):
             sc_3_right_mobs_1[1].animate.next_to(sc_3.right_plate, UP, buff=0)
         )
         self.wait()
+
+        self.play(Write(eq_4))
+        self.wait()
+
+        self.play(Create(ans_box))
+        self.wait()
+
+
