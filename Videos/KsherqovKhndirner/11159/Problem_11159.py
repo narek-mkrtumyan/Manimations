@@ -102,6 +102,8 @@ class Problem11159_FirstSolution(ScalesScene):
         eq_2 = MathTex("6700 - 2 \\cdot 300 = 6100", font_size=DEFAULT_FONT_SIZE).shift([4, 2, 0])
         eq_3 = MathTex("6100 : 5 = 1220", font_size=DEFAULT_FONT_SIZE).next_to(eq_2, DOWN, buff=0.5).align_to(eq_2, LEFT)
         eq_4 = MathTex("1220 + 300 = 1520", font_size=DEFAULT_FONT_SIZE).next_to(eq_3, DOWN, buff=0.5).align_to(eq_3, LEFT)
+        
+
     
 
 
@@ -220,7 +222,7 @@ class Problem11159_FirstSolution(ScalesScene):
         replace = Tex("Փոխարինենք").next_to(arrow_1, LEFT, buff=0.05).set_color(BLUE)
 
         arrow_2 = Arrow(sc_2_right_mobs_2[1].get_left(), sc_1_right_mobs.get_bottom())
-        plus = MathTex("+").next_to(arrow_2.get_center(), RIGHT, buff=0.1).scale(0.8)
+        increase = Tex("Կավելանա").next_to(arrow_2.get_center(), RIGHT, buff=0.3)
 
 
 
@@ -241,7 +243,7 @@ class Problem11159_FirstSolution(ScalesScene):
         self.wait()
         
         self.play(GrowArrow(arrow_2))
-        self.play(Write(plus))
+        self.play(Write(increase))
         self.wait()
 
         self.play(
@@ -249,7 +251,7 @@ class Problem11159_FirstSolution(ScalesScene):
             FadeOut(arrow_1),
             FadeOut(replace),
             FadeOut(arrow_2),
-            FadeOut(plus)
+            FadeOut(increase)
         )
         self.wait()
 
