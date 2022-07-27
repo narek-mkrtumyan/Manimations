@@ -99,7 +99,7 @@ class Problem11159_FirstSolution(ScalesScene):
     # Equations
 
         eq_1 = MathTex("7000 - 6700 =", " 300", font_size=DEFAULT_FONT_SIZE).shift([4.5, 3, 0])
-        eq_2 = MathTex("6700 - 2 \\cdot 300 = 6100", font_size=DEFAULT_FONT_SIZE).shift([4, 2, 0])
+        eq_2 = MathTex("6700 - 600 = 6100", font_size=DEFAULT_FONT_SIZE).shift([4, 1, 0]).align_to(eq_1, LEFT)
         eq_3 = MathTex("6100 : 5 = 1220", font_size=DEFAULT_FONT_SIZE).next_to(eq_2, DOWN, buff=0.5).align_to(eq_2, LEFT)
         eq_4 = MathTex("1220 + 300 = 1520", font_size=DEFAULT_FONT_SIZE).next_to(eq_3, DOWN, buff=0.5).align_to(eq_3, LEFT)
         
@@ -108,7 +108,7 @@ class Problem11159_FirstSolution(ScalesScene):
 
 
     # scales 3
-        sc_3 = Scales(5, 1.2).scale(0.5).shift(4.15*RIGHT)
+        sc_3 = Scales(5, 1.2).scale(0.5).shift(4.15 * RIGHT + 0.5 * DOWN)
 
         sc_3_left_mobs = duck.copy()
         sc_3_left_mobs.arrange(aligned_edge=DOWN, buff=0.1).next_to(sc_3.left_plate, UP, buff=0)
@@ -120,8 +120,8 @@ class Problem11159_FirstSolution(ScalesScene):
 
     # Given
 
-        first = Tex("$2$ բադը", " և ", "$3$ սագը", " միասին", " կշռում են ", "$6700$ գ", font_size=DEFAULT_FONT_SIZE)
-        first.shift(3*UP+1.85*LEFT)
+        first = Tex("$3$ սագը", " և ", "$2$ բադը", " միասին", " կշռում են ", "$6700$ գ", font_size=DEFAULT_FONT_SIZE)
+        first.shift(3 * UP + 1.85 * LEFT)
         second = Tex("$2$ սագը", " և ", "$3$ բադը", " միասին", " կշռում են ", "$7$ կգ", font_size=DEFAULT_FONT_SIZE)
         second.next_to(sc_1, DOWN, buff=0.1)
         second.align_to(first, LEFT)
@@ -146,15 +146,15 @@ class Problem11159_FirstSolution(ScalesScene):
         self.wait()
         
         x = first[0].copy()
-        self.play(x.animate.move_to(sc_1_ducks))
-        self.play(ReplacementTransform(x, sc_1_ducks))
+        self.play(x.animate.move_to(sc_1_geese))
+        self.play(ReplacementTransform(x, sc_1_geese))
         self.rotate_scales(sc_1, 0.4)
         self.wait()
 
 
         y = first[2].copy()
-        self.play(y.animate.move_to(sc_1_geese.get_center() - np.array([0, 0.25, 0])))
-        self.play(ReplacementTransform(y, sc_1_geese))
+        self.play(y.animate.move_to(sc_1_ducks.get_center() - np.array([0, 0.25, 0])))
+        self.play(ReplacementTransform(y, sc_1_ducks))
         self.rotate_scales(sc_1, 0.4)
         self.wait()
 
@@ -185,8 +185,8 @@ class Problem11159_FirstSolution(ScalesScene):
         self.play(
             FadeOut(first),
             FadeOut(second),
-            sc_1.animate.shift(2.35*LEFT+UP),
-            sc_2.animate.shift(2.35*LEFT)
+            sc_1.animate.shift(2.35 * LEFT + 0.5 * UP),
+            sc_2.animate.shift(2.35 * LEFT)
         )
         self.wait()
 
@@ -204,56 +204,69 @@ class Problem11159_FirstSolution(ScalesScene):
         )
         self.wait()
 
-# INIT
 
-    # box
-        box_1 = SurroundingRectangle(sc_1_left_mobs[4], color=ORANGE)
+    # Սագը փոխարինում ենք սագով
+
+# INIT
 
     # scale
         sc_2_right_mobs_2 = VGroup(Weight(6700, 600), Weight(300, 150))
-        sc_2_right_mobs_2.arrange(aligned_edge=DOWN).next_to(sc_2.right_plate, UP, buff=0)
+        sc_2_right_mobs_2.arrange(aligned_edge=DOWN, buff=0.6).next_to(sc_2.right_plate, UP, buff=0)
         sc_2_right_mobs_2.add_updater(lambda mobs: mobs.next_to(sc_2.right_plate, UP, buff=0))
 
-    # arrows
-        arrow_1 = Arrow(sc_2_left_mobs[4].get_top(), sc_1_left_mobs[4].get_bottom()).set_color(color=[DARK_BROWN, WHITE])
-        arrow_1.tip.set_color(WHITE)
-        arrow_1.set_z_index(sc_1.get_z() + 1)
-    
-        replace = Tex("Փոխարինենք").next_to(arrow_1, LEFT, buff=0.05).set_color(BLUE)
+        kshraqar = sc_2_right_mobs_2[1].copy()
 
-        arrow_2 = Arrow(sc_2_right_mobs_2[1].get_left(), sc_1_right_mobs.get_bottom())
-        increase = Tex("Կավելանա").next_to(arrow_2.get_center(), RIGHT, buff=0.3)
+        
 
+        sc_1_birds = sc_1_left_mobs[0:4].copy()
+        sc_1_birds.add_updater(lambda mobs: mobs.next_to(sc_1.left_plate, UP, buff=0).align_to(sc_1_left_mobs[0:4], LEFT))
 
+        duck = sc_2_left_mobs[4].copy()
+        goose = sc_1_left_mobs[4].copy()
 
+        
 # ANIMATIONS
 
-        self.play(Create(box_1))
+        self.play(sc_1_left_mobs.animate.shift(0.0001 * UP))
+        self.add(goose, sc_1_birds)
+        self.remove(sc_1_left_mobs)
+
+        self.play(goose.animate.shift(UP))
+        self.play(goose.animate.shift(0.8 * RIGHT).set_opacity(0.5))
         self.wait()
 
-        self.play(GrowArrow(arrow_1))
-        self.wait()
-        self.play(Write(replace))
+        self.play(duck.animate.next_to(sc_1.left_plate, UP, buff=0).align_to(sc_2_left_mobs[4], RIGHT))
         self.wait()
 
-        self.play(Write(eq_1))
-        self.wait()
+        duck.add_updater(lambda mobs: mobs.next_to(sc_1.left_plate, UP, buff=0).align_to(sc_2_left_mobs[4], RIGHT))
+        self.add(sc_1_birds)
 
-        self.play(ReplacementTransform(sc_2_right_mobs, sc_2_right_mobs_2))
-        self.wait()
-        
-        self.play(GrowArrow(arrow_2))
-        self.play(Write(increase))
+        self.rotate_scales(sc_1, 0.25)
         self.wait()
 
         self.play(
-            FadeOut(box_1),
-            FadeOut(arrow_1),
-            FadeOut(replace),
-            FadeOut(arrow_2),
-            FadeOut(increase)
+            Write(eq_1),
+            ReplacementTransform(sc_2_right_mobs, sc_2_right_mobs_2),
+            run_time=2
+        )
+
+        self.play(kshraqar.animate.next_to(sc_1_right_mobs, RIGHT, aligned_edge=DOWN))
+        self.wait()
+
+        kshraqar.add_updater(lambda x: x.align_to(sc_1_right_mobs, DOWN))
+        
+        self.rotate_scales(sc_1, -0.25)
+        self.wait()
+
+        self.play(
+            goose.animate.shift(0.8 * LEFT +DOWN).set_opacity(1),
+            FadeOut(duck, kshraqar)
         )
         self.wait()
+
+        self.play(sc_1_left_mobs.animate.shift(0.0001 * DOWN))
+        self.add(sc_1_left_mobs)
+        self.remove(goose, sc_1_birds)
 
 
     # Երրորդ կշեռք
@@ -275,6 +288,7 @@ class Problem11159_FirstSolution(ScalesScene):
 
         self.rotate_scales(sc_3, -0.4)
         self.wait()
+
 
 
     # Երկրորդ կշեռքը ֆեյդ աութ
@@ -332,8 +346,7 @@ class Problem11159_FirstSolution(ScalesScene):
     # Երկրորդ հարց
 
 
-        # self.play(Write(eq_2))
-        self.wait()
+        self.play(Write(eq_2))
         self.wait()
 
     # 600, 300-նոցները հանում ենք
@@ -419,6 +432,9 @@ class Problem11159_SecondSolution(ScalesScene):
         sc_2_right_mobs_2.arrange(aligned_edge=DOWN).next_to(sc_2.right_plate, UP, buff=0)
 
         sc_2_right_mobs_3 = Weight(13700, 400).next_to(sc_2.right_plate, UP, buff=0)
+
+        sc_2_right_mobs_4 = VGroup(Weight(2740, 300), Weight(2740, 300), Weight(2740, 300), Weight(2740, 300), Weight(2740, 300))
+        sc_2_right_mobs_4.arrange(aligned_edge=DOWN).next_to(sc_2.right_plate, UP, buff=0)
 
     # scales 3
         sc_3 = Scales(5, 1).scale(0.6).shift(1.5*UL+0.5*LEFT)
@@ -552,19 +568,23 @@ class Problem11159_SecondSolution(ScalesScene):
         self.wait()
 
     # Երրորդ կշեռք
+        
+        self.play(ReplacementTransform(sc_2_right_mobs_3, sc_2_right_mobs_4))
+        self.wait()
 
         self.play(FadeIn(sc_3))
         x = sc_1_left_mobs[0].copy()
         y = sc_2_left_mobs[0].copy()
         z = box_0.copy()
+        t = sc_2_right_mobs_4[0].copy()
         self.play(
             x.animate.move_to(sc_3_left_mobs[0]),
             y.animate.move_to(sc_3_left_mobs[1]),
             Transform(z, box_5),
-            FadeIn(sc_3_right_mobs)
+            t.animate.move_to(sc_3_right_mobs)
         )
-        self.add(sc_3_left_mobs, box_5)
-        self.remove(x, y, z) # ֆսյո, էս x, y, z-ները էլ չկան, եթե ինչ
+        self.add(sc_3_left_mobs, sc_3_right_mobs, box_5)
+        self.remove(x, y, z, t) # ֆսյո, էս x, y, z, t-ները էլ չկան, եթե ինչ
         self.wait()
 
         self.play(FadeOut(box_5))
@@ -577,7 +597,7 @@ class Problem11159_SecondSolution(ScalesScene):
         self.play(
             FadeOut(sc_2),
             FadeOut(sc_2_left_mobs),
-            FadeOut(sc_2_right_mobs_3),
+            FadeOut(sc_2_right_mobs_4),
             FadeOut(box_0),
             FadeOut(box_1),
             FadeOut(box_2),
@@ -716,5 +736,6 @@ class Problem11159_SecondSolution(ScalesScene):
 
         self.play(Create(ans_box))
         self.wait()
+
 
 
